@@ -2,13 +2,13 @@
 
 ## ÍNDICE
 
-- [Tipos de Usuario](#👤-tipos-de-usuario)
-- [Entidades](#🔑-entidades)
-- [Imágenes](#🌄-imágenes)
-- [Gráficos](#📊-gráficos)
-- [Tecnologías complementarias](#🔮-tecnologías-complementarias))
-- [Algoritmos avanzados](#🔧-algoritmos-avanzados)
-- [Colaboradores](#👥-colaboradores)
+- [Tipos de Usuario](#-tipos-de-usuario)
+- [Entidades](#-entidades)
+- [Imágenes](#-imágenes)
+- [Gráficos](#-gráficos)
+- [Tecnologías complementarias](#-tecnologías-complementarias))
+- [Algoritmos avanzados](#-algoritmos-avanzados)
+- [Colaboradores](#-colaboradores)
 
 ### Descripción general
 
