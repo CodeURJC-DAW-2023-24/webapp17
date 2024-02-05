@@ -6,7 +6,7 @@
 - [Entidades](#-entidades)
 - [Imágenes](#-imágenes)
 - [Gráficos](#-gráficos)
-- [Tecnologías complementarias](#-tecnologías-complementarias))
+- [Tecnologías complementarias](#-tecnologías-complementarias)
 - [Algoritmos avanzados](#-algoritmos-avanzados)
 - [Colaboradores](#-colaboradores)
 
@@ -27,6 +27,8 @@ Los administradores podrán dar de alta temáticas, editar temáticas, banear us
 ### 🔑 Entidades 
 
 La aplicación tendrá diferentes tipos de entidades: usuarios, temáticas, posts, comentarios, tabla de suscripciones a usuarios y tabla de suscripciones a temáticas.
+
+![Diagrama de entidades](images/entidades.svg "Diagrama de entidades")
 
 ### 🌄 Imágenes
 
