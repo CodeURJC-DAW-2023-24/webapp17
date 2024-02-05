@@ -1,4 +1,4 @@
-# FORO SOFTWARE
+# EL RINCÓN DEL SOFTWARE
 
 ## ÍNDICE
 
@@ -12,7 +12,7 @@
 
 ### Descripción general
 
-Foro software es una aplicación web que trata de servir como un espacio colaborativo donde los usuarios puedan compartir sus experencias, preguntar dudas o debatir sobre temas realcionados con el software. La aplicación trata de ofrecer la mejor experiencia al usuario mostrando recomendaciones, tendencias o manteniéndole informado de las novedades.
+El rincón del software es una aplicación web que trata de servir como un espacio colaborativo donde los usuarios puedan compartir sus experencias, preguntar dudas o debatir sobre temas relacionados con el software. La aplicación trata de ofrecer la mejor experiencia al usuario mostrando recomendaciones, tendencias o manteniéndole informado de las novedades.
 
 ### 👤 Tipos de Usuario
 
