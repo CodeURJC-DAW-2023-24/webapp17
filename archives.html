@@ -4,6 +4,12 @@
 <title>El Rincón del Software</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 <link type="text/css" rel="stylesheet" href="style.css" media="screen,projection" />
+<style>
+    canvas {
+        border: 1px solid #ccc;
+        margin: 20px;
+    }
+</style>
 </head>
 <body>
 <div id="container">
@@ -11,23 +17,36 @@
     <h1><a href="#">El rincón del software</a></h1>
     <h2></h2>
   </div>
-  <div id="menu"> <a href="#">home</a> <a href="#">archives</a> <a href="#">profile</a> <a href="#">gallery</a> <a href="adminComp.html">admin</a> <a href="#">contact</a> </div>
+  <div id="menu"> <a href="index.html">home</a> <a href="#">archives</a> <a href="user.html">profile</a> <a href="#">gallery</a> <a href="adminComp.html">admin</a> <a href="#">contact</a> </div>
   <div id="content">
     <div id="left">
       <div class="entry">
-        <h2><a href="ejemplo.html">Java vs C</a></h2>
-        <img class="entryphoto" src="images/entryphoto.png" width="160" height="213" alt="Entry photo example" />
-        <p>El debate entre Java y C es emblemático en el mundo del desarrollo de software. Java destaca por su portabilidad y seguridad, ideal para aplicaciones empresariales. Por otro lado, C ofrece eficiencia y velocidad, siendo óptimo para sistemas operativos y aplicaciones de alto rendimiento. Java utiliza una máquina virtual para su ejecución, mientras que C es un lenguaje compilado de bajo nivel.</p>
-        <h3>Rendimiento</h3>
-        <p> En términos de rendimiento, C supera a Java debido a su compilación directa. Sin embargo, la elección entre ambos depende de los requisitos del proyecto: Java es preferible para portabilidad y seguridad, mientras que C es ideal para aplicaciones que requieren máximo rendimiento y control del hardware. En última instancia, ambos lenguajes son poderosos y útiles en diferentes contextos dentro del desarrollo de software.</p>
-        <h3>Tipado</h3>
-        <p>Además del rendimiento y la portabilidad, otra diferencia significativa entre Java y C radica en su sistema de tipado. Java es un lenguaje de programación de tipado estático, lo que significa que los tipos de datos se verifican en tiempo de compilación, lo que ayuda a detectar errores antes de la ejecución del programa. En cambio, C es un lenguaje de tipado débil y dinámico, lo que brinda mayor flexibilidad pero también aumenta el riesgo de errores. Esta diferencia en el sistema de tipado afecta la seguridad y la estabilidad del código, siendo un factor importante a considerar al elegir entre ambos lenguajes.</p>
-        <p class="meta"><span class="date">July 15, 2006</span> Posted by Andreas | Tags: Design, XHTML, CSS | 19 comments</p>
-        <div class="entry">
-            <h2>usuario123</h2>
-            <p>¡Excelente artículo! Me encanta la comparación entre Java y C. Personalmente, he trabajado con ambos lenguajes y creo que cada uno tiene su lugar en el mundo del desarrollo de software. Java es genial para aplicaciones empresariales y proyectos donde la portabilidad es fundamental, mientras que C brilla en aplicaciones de alto rendimiento y sistemas operativos. La discusión sobre el sistema de tipado también es muy interesante y muestra cómo cada lenguaje aborda la seguridad y la estabilidad de manera diferente. ¡Gracias por compartir esta información!</p>
-            <p class="meta"><span class="date">February 12, 2024</span> Posted by Usuario123</p>
-          </div>
+        <h2>Temáticas más comentadas</h2>
+        <canvas id="myChart" width="400" height="300"></canvas>
+
+<script>
+    // Datos de ejemplo: temáticas y número de discusiones
+    var topics = ["Java", "OpenSource", "JavaScript", "C++", "SSOO"];
+    var discussions = [30, 25, 20, 15, 10];
+
+    var canvas = document.getElementById('myChart');
+    var ctx = canvas.getContext('2d');
+
+    // Dibujar el gráfico de barras
+    var barWidth = 30;
+    var startX = 50;
+    var startY = 250;
+
+    for (var i = 0; i < topics.length; i++) {
+        var barHeight = discussions[i] * 5;
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(startX, startY - barHeight, barWidth, barHeight);
+        ctx.fillStyle = 'black';
+        ctx.fillText(topics[i], startX, startY + 20);
+        startX += 70; // Ajuste el espaciado entre barras
+    }
+</script>
+        
       </div>
 
       <p class="pagenav"><a href="#">Older entries</a> | Newer entries</p>
