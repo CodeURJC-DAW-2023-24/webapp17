@@ -1,0 +1,92 @@
+/* Estilos globales */
+
+/* Estilos para el contenido */
+#content {
+    padding: 50px 20px; /* Espacio interno */
+    background: linear-gradient(45deg, #ebebeb, #927979); /* Fondo con gradiente */
+    color: #fff; /* Color de texto */
+    font-family: 'Arial', sans-serif; /* Familia de fuente */
+}
+
+.container {
+    display: flex; /* Distribución flexbox */
+    flex-wrap: wrap; /* Envoltura de elementos */
+    justify-content: space-between; /* Espacio entre elementos */
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 0 auto; /* Centra el contenedor */
+}
+
+h2 {
+    color: #fff; /* Color de texto blanco */
+}
+
+p {
+    margin-bottom: 60px; /* Espacio inferior para los párrafos */
+}
+.form{
+margin-bottom: 30px;    
+}
+
+/* Estilos para el formulario de contacto */
+.form-group {
+    margin-bottom: 10px; /* Espacio inferior para los grupos de formulario */
+    width: 100%; /* Ancho completo para los grupos de formulario */
+    background-color: #fff; /* Fondo blanco */
+    padding: 15px; /* Espacio interno */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+.form-control {
+    width: 100%; /* Ancho completo para los campos de formulario */
+    padding: 10px; /* Espacio interno */
+    border-radius: 5px; /* Bordes redondeados */
+    border: 1px solid #ccc; /* Borde del campo */
+    box-sizing: border-box; /* Tamaño de la caja incluye borde */
+}
+
+label {
+    color: #000; /* Color de texto negro */
+}
+
+.btn-primary {
+    padding: 10px 20px; /* Espacio interno */
+    background-color: #007bff; /* Color de fondo del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    color: #fff; /* Color del texto */
+    cursor: pointer; /* Cambio de cursor al pasar */
+    transition: background-color 0.3s; /* Transición de color de fondo */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el cursor */
+}
+
+/* Estilos para la información de contacto */
+.contact-info {
+    margin-bottom: 30px; /* Espacio inferior para la información de contacto */
+    flex: 1; /* Distribución flexible */
+    padding-right: 20px; /* Espacio a la derecha */
+}
+
+.contact-info h3 {
+    margin-bottom: 15px; /* Espacio inferior para el título de información de contacto */
+}
+
+.contact-info p {
+    margin-bottom: 10px; /* Espacio inferior para los elementos de información */
+}
+
+/* Estilos para el mapa */
+.map {
+    margin-bottom: 60px; /* Espacio inferior para el mapa */
+    flex: 1; /* Distribución flexible */
+    height: auto; /* Altura automática */
+}
+
+.map iframe {
+    width: 100%; /* Ancho completo para el mapa */
+    height: 100%; /* Altura ajustada */
+    border: none; /* Sin borde */
+    margin-bottom: 10px
+}

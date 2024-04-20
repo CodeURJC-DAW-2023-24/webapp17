@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+<div id="content">
+    <div class="container">
+        <h2>Contacto</h2>
+        <p>¿Tienes alguna pregunta o comentario? ¡Nos encantaría escucharte!</p>
+
+        <!-- Formulario de contacto -->
+        <form id="contact-form" method="post" action="#">
+            <div class="form-group">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Mensaje:</label>
+                <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+
+        <!-- Información de contacto -->
+        <div class="contact-info">
+            <h3>Información de Contacto</h3>
+            <p><i class="fas fa-map-marker-alt"></i> Dirección: Calle Falsa 123, Ciudad, País</p>
+            <p><i class="fas fa-phone-alt"></i> Teléfono: +123 456 789</p>
+            <p><i class="fas fa-envelope"></i> Email: info&#64;el_rincon_del_software.com</p>
+        </div>
+
+        <!-- Mapa -->
+        <div class="map">
+            <!-- Aquí puedes insertar el mapa de Google Maps o cualquier otro mapa que prefieras -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387571.1576720361!2d-74.25819531666656!3d40.70531197787285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2590dfa7b00b7%3A0xe1271b7c0c40bdc8!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1616624701094!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</div>

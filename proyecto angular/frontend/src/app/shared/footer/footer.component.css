@@ -1,0 +1,37 @@
+/* Estilos para el footer */
+#footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content {
+    display: flex; /* Utilizamos flexbox */
+    justify-content: center; /* Centramos los elementos horizontalmente */
+    align-items: center; /* Centramos los elementos verticalmente */
+}
+
+.footer-content p {
+    margin: 0 10px; /* Espacio entre los elementos */
+    display: inline-block; /* Mostramos los elementos en línea */
+}
+
+.footer-icons .icon {
+    margin: 0 10px;
+    font-size: auto;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+.footer-icons .icon:hover {
+    color: #007bff;
+}
+
+/* Estilos para ocultar el h2 */
+.hide {
+    display: none;
+}
