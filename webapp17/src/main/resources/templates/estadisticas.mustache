@@ -1,0 +1,90 @@
+{{>header}}
+<body>
+    <div id="content">
+        <div id="left">
+            <div class="entry">
+                <h2>Temáticas más comentadas</h2>
+                <canvas id="myChart" width="400" height="300"></canvas>
+            </div>
+            <div class="entry">
+                <h2>Posts con más comentarios (polémicos)</h2>
+                <canvas id="myChart2" width="400" height="300"></canvas>
+            </div>
+        </div>
+    <h1>  {{topics}}  </h1> 
+        <p class="pagenav"><a href="#">Older entries</a> | Newer entries</p>
+    </div>
+    <div id="right">
+        <h2>¿Quiénes somos?</h2>
+        <p class="intro">El rincón del software es una plataforma en línea donde los usuarios pueden discutir, intercambiar ideas y resolver problemas relacionados con el desarrollo, la programación y el uso de software. Estos foros proporcionan un espacio para que los desarrolladores, ingenieros de software y entusiastas de la tecnología compartan sus experiencias, consejos y soluciones técnicas. Los temas de discusión pueden variar desde preguntas específicas sobre lenguajes de programación hasta debates sobre las últimas tendencias en tecnología. Los foros de software suelen ser comunidades activas y colaborativas donde los usuarios pueden obtener ayuda, aprender nuevas habilidades y participar en debates sobre diversos aspectos del mundo del software.</p>
+        <h2>Latest photos</h2>
+        <p class="thumbs"> <a href="#"><img src="../css/images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> <a href="#"><img src="images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> <a href="#"><img src="images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> <a href="#"><img src="images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> </p>
+        <div class="subcontainer">
+            <div class="rightsub">
+                <h2>Popular tags</h2>
+                <a class="link" href="#">XHTML</a><br class="hide" />
+                <a class="link" href="#">Music</a><br class="hide" />
+                <a class="link" href="#">Podcast</a><br class="hide" />
+                <a class="link" href="#">Photos</a><br class="hide" />
+                <a class="link" href="#">CSS</a><br class="hide" />
+                <a class="link" href="#">Webdesign</a><br class="hide" />
+                <h2>RSS Feeds</h2>
+                <a class="link" href="#">Blog entries</a><br class="hide" />
+                <a class="link" href="#">Comments</a><br class="hide" />
+                <a class="link" href="#">Podcasts</a><br class="hide" />
+            </div>
+            <div class="rightsub2">
+                <h2>Latest entries</h2>
+                <a class="link" href="#">With a touch fr...</a><br class="hide" />
+                <a class="link" href="#">Open source</a><br class="hide" />
+                <a class="link" href="#">Hello world!</a><br class="hide" />
+                <h2>Favorite links</h2>
+                <a class="link" href="#">Free templates</a><br class="hide" />
+                <a class="link" href="#">Open Web Design</a><br class="hide" />
+                <a class="link" href="#">Made in Jokkmokk</a><br class="hide" />
+                <a class="link" href="#">Solucija.com</a><br class="hide" />
+                <a class="link" href="#">OSWD.org</a><br class="hide" />
+            </div>
+        </div>
+    </div>
+</body>
+{{>footer}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var topics = {{topics}};
+        var discussions = {{discussions}};
+        var titles = {{titles}};
+        var comments = {{comments}};
+
+        // Dibujar el gráfico de barras
+        var canvas1 = document.getElementById('myChart');
+        var ctx1 = canvas1.getContext('2d');
+        var barWidth = 30;
+        var startX = 50;
+        var startY = 250;
+
+        for (var i = 0; i < topics.length; i++) {
+            var barHeight = discussions[i] * 5;
+            ctx1.fillStyle = 'blue';
+            ctx1.fillRect(startX, startY - barHeight, barWidth, barHeight);
+            ctx1.fillStyle = 'black';
+            ctx1.fillText(topics[i], startX, startY + 20);
+            startX += 70; // Ajuste el espaciado entre barras
+        }
+
+        // Dibujar el segundo gráfico de barras
+        var canvas2 = document.getElementById('myChart2');
+        var ctx2 = canvas2.getContext('2d');
+        startX = 50; // Reiniciar startX
+        for (var i = 0; i < titles.length; i++) {
+            var barHeight = comments[i] * 3;
+            ctx2.fillStyle = 'red';
+            ctx2.fillRect(startX, startY - barHeight, barWidth, barHeight);
+            ctx2.fillStyle = 'black';
+            ctx2.fillText(titles[i], startX, startY + 20);
+            startX += 150; // Ajuste el espaciado entre barras
+        }
+    });
+</script>
+

@@ -2,11 +2,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-DemoJwtApplication<demo-jwt>",
+            "name": "Spring Boot-Webapp17Application<webapp17>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.example.demojwt.DemoJwtApplication",
-            "projectName": "demo-jwt",
+            "mainClass": "es.codeurjc.webapp17.Webapp17Application",
+            "projectName": "webapp17",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
