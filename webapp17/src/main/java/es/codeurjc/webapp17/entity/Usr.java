@@ -1,6 +1,6 @@
 package es.codeurjc.webapp17.entity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -31,11 +31,11 @@ public class Usr {
 
     @JsonManagedReference
     @OneToMany(mappedBy="usr")
-    private ArrayList<Post> posts;
+    private List<Post> posts;
 
     @JsonManagedReference
     @OneToMany(mappedBy="usr")
-    private ArrayList<Comment> comments;
+    private List<Comment> comments;
 
     public enum Role {
         USER, ADMIN

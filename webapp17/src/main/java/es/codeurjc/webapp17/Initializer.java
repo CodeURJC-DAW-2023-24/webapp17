@@ -10,7 +10,7 @@ import es.codeurjc.webapp17.entity.Comment;
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.repository.CommentRepository;
-import es.codeurjc.webapp17.repository.IssuesRepository;
+import es.codeurjc.webapp17.repository.IssueRepository;
 import es.codeurjc.webapp17.repository.PostRepository;
 import es.codeurjc.webapp17.repository.UsrRepository;
 import jakarta.annotation.PostConstruct;
@@ -18,7 +18,7 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class Initializer {
     @Autowired
-    private IssuesRepository issuesRepository;
+    private IssueRepository issueRepository;
     @Autowired
     private UsrRepository usrRepository;
     @Autowired
@@ -28,7 +28,7 @@ public class Initializer {
 
     @PostConstruct
     public void init() {
-        
+        /*
         Usr usr = new Usr();
         usr.setRole(Usr.Role.ADMIN);
         usr.setUsername("usr1");
@@ -63,5 +63,6 @@ public class Initializer {
         post3.setContent("content3");
         post3.setDate(LocalDateTime.now());
         postRepository.save(post3);
+        */
     }
 }

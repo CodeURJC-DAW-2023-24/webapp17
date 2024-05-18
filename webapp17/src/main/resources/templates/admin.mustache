@@ -10,6 +10,13 @@
         <a class="link" href="#">Editar temática</a><br class="hide" />
         <a class="link" href="#">Revisar y eliminar posts</a><br class="hide" />
       </div>
+      {{#issues}}
+  <div class="entry">
+    <h2>Mensaje</a></h2>
+    <p>{{content}}</p>
+    <p class="meta"><span class="date">date</span> Issued by {{name}} </p>
+  </div>
+  {{/issues}}
     </div>
   </div>
   </div>

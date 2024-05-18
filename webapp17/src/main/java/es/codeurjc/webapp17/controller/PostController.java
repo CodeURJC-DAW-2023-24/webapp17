@@ -1,8 +1,6 @@
 package es.codeurjc.webapp17.controller;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,9 @@
 package es.codeurjc.webapp17.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
+import es.codeurjc.webapp17.entity.Comment;
+import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -20,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 @Entity
@@ -39,8 +41,8 @@ public class Post {
     private Usr usr;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="post")
-    private ArrayList<Comment> comments;
+    @OneToMany(mappedBy="post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -55,7 +57,10 @@ public class Post {
     private LocalDateTime date;
 
 
-    private String tags;
+    private String tag;
 
+    public List<Comment> getComments() {
+        return comments;
+    }
 
 }
