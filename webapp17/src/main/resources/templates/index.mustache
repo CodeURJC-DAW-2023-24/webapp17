@@ -58,6 +58,30 @@
           <p class="meta"><span class="date">November 22, 2005</span> Posted by Adrian | Tags: Information, Themes | No
             comments</p>
         </div>
+        {{#posts}}
+  <div class="entry">
+    <h2><a href="{{url}}">{{title}}</a></h2>
+    <img class="entryphoto" src="{{imageSrc}}" width="{{imageWidth}}" height="{{imageHeight}}" alt="{{imageAlt}}" />
+    <p>{{content}}</p>
+    <h3>{{heading}}</h3>
+    <p>{{paragraph}}</p>
+    <p class="meta"><span class="date">{{date}}</span> Posted by {{author}} | Tags: {{tags}} | {{comments}} comments</p>
+  </div>
+  {{/posts}}
+  <h1>Create a New Post</h1>
+    <form action="/create-post" method="post" enctype="multipart/form-data">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title"><br>
+        
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content" rows="4" cols="50"></textarea><br>
+        
+        <label for="image">Image:</label><br>
+        <input type="file" id="image" name="image"><br>
+        
+        <button type="submit">Create Post</button>
+    </form>
+
         <p class="pagenav"><a href="#">Older entries</a> | Newer entries</p>
       </div>
       <div id="right">

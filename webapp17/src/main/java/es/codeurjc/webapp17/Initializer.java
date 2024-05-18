@@ -1,8 +1,13 @@
 package es.codeurjc.webapp17;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import es.codeurjc.webapp17.entity.Comment;
+import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.repository.CommentRepository;
 import es.codeurjc.webapp17.repository.IssuesRepository;
@@ -38,5 +43,25 @@ public class Initializer {
         usr2.setEmail("user");
         usrRepository.save(usr2);
 
+        Post post = new Post();
+        post.setUsr(usr);
+        post.setTitle("title");
+        post.setContent("content");
+        post.setDate(LocalDateTime.now());
+        postRepository.save(post);
+
+        Post post2 = new Post();
+        post2.setUsr(usr2);
+        post2.setTitle("title2");
+        post2.setContent("content2");
+        post2.setDate(LocalDateTime.now());
+        postRepository.save(post2);
+
+        Post post3 = new Post();
+        post3.setUsr(usr2);
+        post3.setTitle("title3");
+        post3.setContent("content3");
+        post3.setDate(LocalDateTime.now());
+        postRepository.save(post3);
     }
 }

@@ -21,6 +21,19 @@
     </div>
     <div id="content">
       <div id="left">
+        <h1>Create a New Post</h1>
+        <form action="/create-post" method="post">
+            <label for="title">Title:</label><br>
+            <input type="text" id="title" name="title"><br>
+            
+            <label for="date">Date:</label><br>
+            <input type="text" id="date" name="date"><br>
+            
+            <label for="content">Content:</label><br>
+            <textarea id="content" name="content" rows="4" cols="50"></textarea><br>
+            
+            <button type="submit">Create Post</button>
+        </form>
         <div class="entry">
           <h2><a href="ejemplo.html">Java vs C</a></h2>
           <img class="entryphoto" src="../images/entryphoto.png" width="160" height="213" alt="Entry photo example" />
@@ -74,7 +87,7 @@
             comments</p>
         </div>
         <p class="pagenav"><a href="#">Older entries</a> | Newer entries</p>
-      </div>
+      
       {{#posts}}
   <div class="entry">
     <h2><a href="{{url}}">{{title}}</a></h2>
@@ -85,6 +98,8 @@
     <p class="meta"><span class="date">{{date}}</span> Posted by {{author}} | Tags: {{tags}} | {{comments}} comments</p>
   </div>
   {{/posts}}
+
+</div>
       <div id="right">
         <h2>¿Quiénes somos?</h2>
         <p class="intro">El rincón del software es una plataforma en línea donde los usuarios pueden discutir,

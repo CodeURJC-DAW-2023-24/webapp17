@@ -25,6 +25,7 @@ public class PostService {
 
     // Método para obtener todos los posts
     public List<Post> getAllPost() {
+        System.out.println("DEBUG");
         return PostRepository.findAll();
     }
 

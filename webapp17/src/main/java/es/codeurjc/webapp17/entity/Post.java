@@ -1,6 +1,9 @@
 package es.codeurjc.webapp17.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -9,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -34,31 +38,24 @@ public class Post {
     @ManyToOne
     private Usr usr;
 
-    @JsonBackReference
-    @ManyToOne
-    private Issues forum;
-
     @JsonManagedReference
     @OneToMany(mappedBy="post")
     private ArrayList<Comment> comments;
 
+    @Column(nullable = false, length = 100)
     private String title;
 
-    private String link;
+    @Lob
+    private byte[] image;
 
-    private String image;
-
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", length = 300)
     private String content;
 
-    private String date;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // Formato de fecha
+    private LocalDateTime date;
 
 
     private String tags;
-
-
-
-    // hashCode, equals y toStri
 
 
 }

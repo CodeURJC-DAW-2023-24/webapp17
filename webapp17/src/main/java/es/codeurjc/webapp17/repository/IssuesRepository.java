@@ -16,7 +16,7 @@ public interface IssuesRepository extends JpaRepository<Issues, Long>{
 
     void deleteById(long id);
 
-    void save(Issues issues);
+    Issues save(Issues issues);
 
     void delete(Issues issues);
 

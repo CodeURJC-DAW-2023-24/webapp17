@@ -20,9 +20,7 @@ public class HomeController {
 
     public HomeController(PostService postService) {
         this.postService = postService;
-        // Creamos algunos posts de prueba
-        postService.addPost(new Post(null, null, null, null, "Java vs C", "July 15, 2006", "Andreas", "El debate entre Java y C...", null, null));
-        postService.addPost(new Post(null, null, null, null, "Open source", "November 22, 2005", "Adrian", "El movimiento de código abierto...", null, null));
+        
     }
     
     @GetMapping("/")
