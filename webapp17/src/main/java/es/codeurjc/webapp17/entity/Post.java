@@ -61,17 +61,4 @@ public class Post {
     // hashCode, equals y toStri
 
 
-    @Override
-    public String toString() {
-        return "Entry{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", link='" + link + '\'' +
-                ", image='" + image + '\'' +
-                ", content='" + content + '\'' +
-                ", date='" + date + '\'' +
-                ", tags='" + tags + '\'' +
-                ", comments=" + comments +
-                '}';
-    }
 }

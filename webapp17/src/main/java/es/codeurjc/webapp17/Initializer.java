@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.repository.CommentRepository;
-import es.codeurjc.webapp17.repository.ForumRepository;
+import es.codeurjc.webapp17.repository.IssuesRepository;
 import es.codeurjc.webapp17.repository.PostRepository;
 import es.codeurjc.webapp17.repository.UsrRepository;
 import jakarta.annotation.PostConstruct;
@@ -13,7 +13,7 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class Initializer {
     @Autowired
-    private ForumRepository forumRepository;
+    private IssuesRepository issuesRepository;
     @Autowired
     private UsrRepository usrRepository;
     @Autowired

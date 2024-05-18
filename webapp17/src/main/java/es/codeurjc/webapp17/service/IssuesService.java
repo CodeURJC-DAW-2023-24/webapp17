@@ -6,16 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.codeurjc.webapp17.entity.Issues;
-import es.codeurjc.webapp17.repository.ForumRepository;
+import es.codeurjc.webapp17.repository.IssuesRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ForumService {
+public class IssuesService {
     @Autowired
-    private ForumRepository forumRepository;
+    private IssuesRepository IssuesRepository;
 
     public List<Issues> getForums() {
-        return forumRepository.findAll();
+        return (List<Issues>) IssuesRepository.findAll();
     }
 }
