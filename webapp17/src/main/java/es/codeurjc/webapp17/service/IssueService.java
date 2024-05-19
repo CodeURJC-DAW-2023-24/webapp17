@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import es.codeurjc.webapp17.entity.Issue;
 import es.codeurjc.webapp17.repository.IssueRepository;
+import es.codeurjc.webapp17.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,5 +28,9 @@ public class IssueService {
     public ArrayList<Issue> getAllIssues() {
         return new ArrayList<Issue>(IssueRepository.findAll());
         
+    }
+
+     public void deleteIssue(Long id) {
+        IssueRepository.delete(IssueRepository.findById(id).get());
     }
 }

@@ -1,9 +1,11 @@
 package es.codeurjc.webapp17.repository;
 
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import es.codeurjc.webapp17.entity.Issue;
 import es.codeurjc.webapp17.entity.Usr;
 
 public interface UsrRepository extends JpaRepository<Usr, Long>{
@@ -20,5 +22,7 @@ public interface UsrRepository extends JpaRepository<Usr, Long>{
     void delete(Usr usr);
 
     void deleteById(long id);
+
+   
 
 }

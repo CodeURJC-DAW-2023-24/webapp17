@@ -1,5 +1,6 @@
 package es.codeurjc.webapp17.repository;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,6 +19,8 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
     Issue save(Issue Issue);
 
     void delete(Issue Issue);
+
+    List<Issue> findByDateOrderByDate(Date date);
 
 
    

@@ -1,13 +1,15 @@
 package es.codeurjc.webapp17.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +34,7 @@ public class PostController {
 
 
     @PostMapping("/create-post")
-    public String createPost(@RequestParam String title, @RequestParam String content, @RequestParam String tag, @RequestParam(value = "image", required = false)MultipartFile image) {
+    public String createPost(@RequestParam String title, @RequestParam String content, @RequestParam String tag, @RequestParam(value = "image", required = false)MultipartFile image) throws IOException {
         
         LocalDateTime now = LocalDateTime.now();
 
@@ -42,12 +44,19 @@ public class PostController {
         post.setDate(now);
         post.setTag(tag);
 
+        if (image != null && !image.isEmpty()) {
+            post.setImage(image.getBytes());
+        }
+
         postService.addPost(post);
     
-
         
+        return "redirect:/";
+    }
 
-        
-        return "index";
+    @PostMapping("/{id}/delete")
+    public String deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+        return "redirect:/";
     }
 }

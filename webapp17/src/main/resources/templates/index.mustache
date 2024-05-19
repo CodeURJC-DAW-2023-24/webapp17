@@ -63,11 +63,15 @@
     <h2>{{title}}</a></h2>
     <img class="entryphoto"  />
     <p>{{content}}</p>
-    <p class="meta"><span class="date">date</span> Posted by {{usr.username}} | Tags: tag | {{comments}} comments</p>
+    <p class="meta"><span class="date"></span> Posted by username | Tags: tag | numcomments comments</p>
+    <form action="/{{id}}/delete" method="POST">
+      <button class="button danger" type="submit">Borrar Post</button>
+  </form>
   </div>
+
   {{/posts}}
   <h1>Create a New Post</h1>
-    <form action="/create-post" method="post" enctype="multipart/form-data">
+    <form action="/create-post" method="POST" enctype="multipart/form-data">
         <label for="title">Title:</label><br>
         <input type="text"  name="title"><br>
         <label for="tag">Temática:</label><br>

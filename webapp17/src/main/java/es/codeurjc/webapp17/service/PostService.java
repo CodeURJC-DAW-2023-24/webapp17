@@ -33,4 +33,9 @@ public class PostService {
     public void addPost(Post post) {
         PostRepository.save(post);
     }
+
+    // Método para borrar un post
+    public void deletePost(Long id) {
+        PostRepository.delete(PostRepository.findById(id).get());
+    }
 }

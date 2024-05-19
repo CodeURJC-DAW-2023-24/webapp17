@@ -1,4 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estilo para botones */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color del texto */
+    transition: background-color 0.3s; /* Transición suave del color de fondo */
+  }
+  
+  /* Estilo cuando el cursor está sobre el botón */
+  .button:hover {
+    background-color: #45a049; /* Cambio de color de fondo al pasar el cursor */
+  }
+  
+  /* Estilo para botones secundarios */
+  .button.secondary {
+    background-color: #008CBA; /* Color de fondo para botones secundarios */
+  }
+  
+  /* Estilo cuando el cursor está sobre el botón secundario */
+  .button.secondary:hover {
+    background-color: #0073e6; /* Cambio de color de fondo al pasar el cursor */
+  }
+  
+  /* Estilo para botones de peligro */
+  .button.danger {
+    background-color: #f44336; /* Color de fondo para botones de peligro */
+  }
+  
+  /* Estilo cuando el cursor está sobre el botón de peligro */
+  .button.danger:hover {
+    background-color: #d32f2f; /* Cambio de color de fondo al pasar el cursor */
+  }
+  /* You can add global styles to this file, and also import other style files */
 body {
     margin: 0;
     padding: 0;

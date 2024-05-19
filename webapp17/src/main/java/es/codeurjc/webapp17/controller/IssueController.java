@@ -3,6 +3,7 @@ package es.codeurjc.webapp17.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,5 +21,12 @@ public class IssueController {
         issueService.createIssue(content, name, email);
         return "/contacto"; // Redirige a la página principal después de crear el issue
     }
+
+     @PostMapping("issue/{id}/delete")
+    public String deletePost(@PathVariable Long id) {
+        issueService.deleteIssue(id);
+        return "redirect:/admin";
+    }
+
 
 }
