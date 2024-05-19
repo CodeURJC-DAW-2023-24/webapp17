@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import es.codeurjc.webapp17.entity.Post;
 
 import es.codeurjc.webapp17.service.PostService;
+import jakarta.persistence.Lob;
 
 @Controller
 public class HomeController {
@@ -31,6 +32,7 @@ public class HomeController {
         model.addAttribute("posts", posts);
         return "index"; // Devuelve la plantilla index.html
     }
+
 
     
 }

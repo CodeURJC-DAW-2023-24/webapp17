@@ -2,7 +2,7 @@ package es.codeurjc.webapp17.entity;
 
 import java.time.LocalDateTime;
 
-import es.codeurjc.webapp17.entity.Comment;
+
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 

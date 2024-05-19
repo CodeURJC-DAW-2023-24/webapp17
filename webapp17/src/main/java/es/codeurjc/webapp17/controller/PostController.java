@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.webapp17.entity.Post;
-import es.codeurjc.webapp17.entity.Usr;
+
 import es.codeurjc.webapp17.service.PostService;
 
 @Controller
@@ -30,17 +32,22 @@ public class PostController {
 
 
     @PostMapping("/create-post")
-    public String createPost(@ModelAttribute Post post, Usr principal) {
-        // Establecer automáticamente la fecha actual
-        post.setDate(LocalDateTime.now());
+    public String createPost(@RequestParam String title, @RequestParam String content, @RequestParam String tag, @RequestParam(value = "image", required = false)MultipartFile image) {
+        
+        LocalDateTime now = LocalDateTime.now();
 
-        // Establecer el autor basado en el usuario autenticado
-        post.setUsr(principal);
+        Post post = new Post();
+        post.setTitle(title);
+        post.setContent(content);
+        post.setDate(now);
+        post.setTag(tag);
 
-        // Guardar el post en la base de datos
         postService.addPost(post);
+    
 
-        // Redireccionar a una página de confirmación u otra página apropiada
-        return "redirect:/";
+        
+
+        
+        return "index";
     }
 }

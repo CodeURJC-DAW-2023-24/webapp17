@@ -31,6 +31,6 @@ public class PostService {
 
     // Método para agregar un nuevo post
     public void addPost(Post post) {
-        posts.add(post);
+        PostRepository.save(post);
     }
 }

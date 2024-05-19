@@ -1,6 +1,7 @@
 package es.codeurjc.webapp17.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,9 @@ public class IssueService {
     public void createIssue(String content, String name, String email) {
         Issue issue =  new Issue(content, name, email, LocalDateTime.now());
         IssueRepository.save(issue);
+    }
+    public ArrayList<Issue> getAllIssues() {
+        return new ArrayList<Issue>(IssueRepository.findAll());
+        
     }
 }
