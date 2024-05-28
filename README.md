@@ -18,21 +18,21 @@ El rincón del software es una aplicación web que trata de servir como un espac
 
 La aplicación tendrá diferentes tipos de usuarios: no registrados, registrados y administradores.
 
-Los usuarios no registrados podrán acceder al foro y ver los posts.
+Los usuarios no registrados podrán acceder al foro , ver los posts y enviar mensajes directamente a los administradores.
 
-Los usuarios registrados, además de acceder al foro, podrán publicar contenido, suscribirse a temáticas, suscribirse a posts, reportar comentarios ofensivos.
+Los usuarios registrados, además de acceder al foro, podrán publicar contenido.
 
-Los administradores podrán dar de alta temáticas, editar temáticas, banear usuarios, eliminar posts.
+Los administradores podrán  editar temáticas, banear usuarios, eliminar posts y emplear LLM para la autogeneración de post.
 
 ### 🔑 Entidades 
 
-La aplicación tendrá diferentes tipos de entidades: usuarios, temáticas, posts, comentarios, tabla de suscripciones a usuarios y tabla de suscripciones a temáticas.
+La aplicación tendrá diferentes tipos de entidades: usuarios, temáticas, posts, comentarios.
 
 ![Diagrama de entidades](images/entidades.svg "Diagrama de entidades")
 
 ### 🌄 Imágenes
 
-La aplicación tendrá la opción de subir imágenes en los posts como parte del contenido. También estará la posibilidad de subir una foto de avatar en el perfil del usuario
+La aplicación tendrá la opción de subir imágenes en los posts como parte del contenido. 
 
 ### 📊 Gráficos
 
@@ -40,11 +40,11 @@ La aplicación tendrá gráficos de tendencias sobre las temáticas con más pub
 
 ### 🔮 Tecnologías complementarias
 
-La aplicación enviará correos a los usuarios cuando se publique contenido de una temática o de un usuario al que se han suscrito.
+La aplicación  dispondrá de un LLM local para la autogeneración de post.
 
 ### 🔧 Algoritmos avanzados
 
-La aplicación mostrará recomendaciones al usuario basadas en los tags seguidos, las tendencias y los posts más polémicos.
+-Por definir-
 
 ### 👥 Colaboradores
 
