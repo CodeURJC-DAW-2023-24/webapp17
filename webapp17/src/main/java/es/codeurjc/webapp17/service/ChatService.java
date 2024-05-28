@@ -16,8 +16,11 @@ import java.util.UUID;
 
 @Service
 public class ChatService {
-    private static final Logger logger = LoggerFactory.getLogger(ChatService.class);
+
     private final OllamaChatClient chatClient;
+    
+    private static final Logger logger = LoggerFactory.getLogger(ChatService.class);
+  
    
 
     public ChatService(OllamaChatClient chatClient) {
@@ -25,19 +28,5 @@ public class ChatService {
         
     }
 
-    public String establishChat() {
-        String chatId = UUID.randomUUID().toString();
-        logger.debug("Establishing chat with chatId: {}", chatId);
-       
-        return chatId;
-    }
-
-    public Flux<ChatResponse> chat(String chatId, String message) {
-        
-        UserMessage userMessage = new UserMessage(message);
-       
-        logger.debug("Chatting with chatId: {} and message: {}", chatId, message);
-        Prompt prompt = new Prompt(List.of(userMessage));
-        return chatClient.stream(prompt);
-    }
+   
 }

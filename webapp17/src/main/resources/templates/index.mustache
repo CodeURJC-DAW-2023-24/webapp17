@@ -70,7 +70,7 @@
   </div>
 
   {{/posts}}
-  <h1>Create a New Post</h1>
+  <h1>Publica un nuevo Post</h1>
     <form action="/create-post" method="POST" enctype="multipart/form-data">
         <label for="title">Title:</label><br>
         <input type="text"  name="title"><br>
@@ -82,9 +82,20 @@
         
         <label for="image">Image:</label><br>
         <input type="file"  name="image"><br>
-        
-        <button type="submit">Create Post</button>
+        <br>
+        <button class="button" type="submit">Create Post</button>
     </form>
+
+    <h1>Genera un nuevo post</h1>
+    <form action="/generate-post" method="POST" enctype="multipart/form-data">
+      
+      <label for="tag">Temática:</label><br>
+     
+      <input type="text"  name="tag"><br>
+      
+      
+      <button class="button" type="submit">Autogeneración de Post</button>
+  </form>
 
         <p class="pagenav"><a href="#">Older entries</a> | Newer entries</p>
       </div>
