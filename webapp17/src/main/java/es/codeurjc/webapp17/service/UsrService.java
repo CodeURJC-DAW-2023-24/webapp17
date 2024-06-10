@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.codeurjc.webapp17.entity.Issue;
@@ -16,13 +17,23 @@ public class UsrService {
     @Autowired
     private UsrRepository userRepository;
 
+   @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    
     public boolean authenticate(String email, String password) {
         Usr user = userRepository.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            return true;
+        if (user != null) {
+            System.out.println("Usuario encontrado: " + user.getEmail());
+            System.out.println("Contraseña codificada: " + user.getPassword());
+            boolean matches = passwordEncoder.matches(password, user.getPassword());
+            System.out.println("Las contraseñas coinciden: " + matches);
+            return matches;
         }
+        System.out.println("Usuario no encontrado");
         return false;
     }
+    
 
 
     public void deleteUsr(Long id) {
@@ -36,12 +47,15 @@ public class UsrService {
 
 
     public void createUsr( String name, String email, String password, Boolean admin) {
-        Usr usuario =  new Usr(name, email, password,admin);
+        String encodedPassword = passwordEncoder.encode(password);
+
+        Usr usuario =  new Usr(name, email, encodedPassword,admin);
         userRepository.save(usuario);
     }
 
 
     public void createUsr(Usr newUser) {
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword())); // Codifica la contraseña
         userRepository.save(newUser);
     }
 

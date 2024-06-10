@@ -28,6 +28,10 @@ public class ChatController {
     private PostService postService;
 
 
+    private static final String LLM_IMAGE_PATH = "/images/LLM.png";
+
+
+
 
     
     public ChatController(OllamaChatClient chatClient) {
@@ -61,6 +65,8 @@ public class ChatController {
         post.setContent(content);
         post.setDate(now);
         post.setTag(tag);
+        post.setImage(LLM_IMAGE_PATH);
+        //post.setUsr(LLM);
 
 
         postService.addPost(post);

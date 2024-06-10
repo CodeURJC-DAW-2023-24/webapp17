@@ -46,9 +46,9 @@ public class Post {
 
     @Column(nullable = false, length = 100)
     private String title;
-
-    @Lob
-    private byte[] image;
+    
+    @Column(length = 200) // La longitud puede variar según tus necesidades
+    private String image;
 
     @Column(columnDefinition = "TEXT", length = 300)
     private String content;

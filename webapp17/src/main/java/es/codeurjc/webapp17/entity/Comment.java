@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,7 +32,11 @@ public class Comment {
     @JsonBackReference
     @ManyToOne
     private Post post;
-
-     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // Formato de fecha
+    
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime date;
+
+
+    @Column(columnDefinition = "TEXT", length = 3000)
+    private String text;
 }

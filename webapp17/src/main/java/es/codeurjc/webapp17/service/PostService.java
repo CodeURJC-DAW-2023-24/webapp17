@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import es.codeurjc.webapp17.entity.Comment;
 import es.codeurjc.webapp17.entity.Post;
 
 import es.codeurjc.webapp17.repository.PostRepository;
@@ -25,7 +25,6 @@ public class PostService {
 
     // Método para obtener todos los posts
     public List<Post> getAllPost() {
-        System.out.println("DEBUG");
         return PostRepository.findAll();
     }
 
@@ -38,4 +37,9 @@ public class PostService {
     public void deletePost(Long id) {
         PostRepository.delete(PostRepository.findById(id).get());
     }
+
+    public Post getPostById(Long id) {
+        return PostRepository.findById(id).get();
+    }
+
 }

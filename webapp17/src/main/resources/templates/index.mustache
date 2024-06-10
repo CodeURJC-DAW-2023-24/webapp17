@@ -36,40 +36,42 @@
             comments
           </p>
         </div>
-        <div class="entry">
-          <h2><a href="#">Open source</a></h2>
-          <p>El movimiento de código abierto es indudablemente una fuerza poderosa que ha impulsado la innovación y la
-            colaboración en el mundo del software. Sin embargo, también tiene sus desafíos y limitaciones. Una crítica
-            común
-            es que, si bien la apertura del código puede generar una comunidad de desarrolladores entusiastas, también
-            puede
-            resultar en una fragmentación del proyecto y una falta de coherencia en la dirección del desarrollo. Además,
-            la
-            naturaleza abierta del código puede exponerlo a riesgos de seguridad si no se gestionan adecuadamente las
-            contribuciones y revisiones. Además, algunos críticos argumentan que el modelo de código abierto puede no
-            ser
-            adecuado para todos los tipos de software, especialmente para aquellos que requieren una protección más
-            estricta
-            de la propiedad intelectual o que dependen de modelos de negocio basados en licencias propietarias. En
-            última
-            instancia, mientras que el código abierto tiene sus ventajas, es importante abordar estas críticas y
-            desafíos de
-            manera efectiva para maximizar su potencial y mitigar sus riesgos.</p>
-          <p class="meta"><span class="date">November 22, 2005</span> Posted by Adrian | Tags: Information, Themes | No
-            comments</p>
-        </div>
         {{#posts}}
-  <div class="entry">
-    <h2>{{title}}</a></h2>
-    <img class="entryphoto"  />
-    <p>{{content}}</p>
-    <p class="meta"><span class="date"></span> Posted by username | Tags: tag | numcomments comments</p>
-    <form action="/{{id}}/delete" method="POST">
-      <button class="button danger" type="submit">Borrar Post</button>
+<div class="entry">
+  <h2>{{title}}</h2>
+  {{#usr}}
+  <p>Posted by {{usr.username}}</p>
+  {{/usr}}
+  {{#image}}
+  <img class="entryphoto" src="{{image}}" />
+  {{/image}}
+  <p>{{content}}</p>
+  <p class="meta"><span class="date">{{date}}</span> Posted by {{#usr}}{{username}}{{/usr}} | Tags: {{tag}} | {{comments.size}} comments</p>
+  
+  <!-- Botón para desplegar los comentarios asociados -->
+  <button class="button" onclick="toggleComments('{{id}}')">Ver Comentarios</button>
+  
+  <!-- Formulario para agregar un comentario -->
+  <form action="/{{id}}/comment" method="POST">
+    <textarea name="comment" rows="4" cols="50" placeholder="Escribe tu comentario aquí..."></textarea><br>
+    <button class="button" type="submit">Comentar</button>
   </form>
+  
+  <!-- Lista de comentarios (inicialmente oculta) -->
+  <div id="comments_{{id}}" style="display: none;">
+    {{#comments}}
+    <div class="comment">
+      <p>{{text}}</p>
+      <p class="meta">Posted by {{#usr}}{{username}}{{/usr}} | {{date}}</p>
+    </div>
+    {{/comments}}
   </div>
-
-  {{/posts}}
+  
+  <form action="/{{id}}/delete" method="POST">
+    <button class="button danger" type="submit">Borrar Post</button>
+  </form>
+</div>
+{{/posts}}
   <h1>Publica un nuevo Post</h1>
     <form action="/create-post" method="POST" enctype="multipart/form-data">
         <label for="title">Title:</label><br>
