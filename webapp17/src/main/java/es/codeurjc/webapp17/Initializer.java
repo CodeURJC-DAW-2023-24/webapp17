@@ -33,16 +33,17 @@ public class Initializer {
         usr.setRole(Usr.Role.ADMIN);
         usr.setUsername("usr1");
         usr.setPassword("admin");
-        usr.setEmail("admin");
+        usr.setEmail("admin@admin");
         usrRepository.save(usr);
         
         Usr usr2 = new Usr();
         usr2.setRole(Usr.Role.USER);
         usr2.setUsername("user");
         usr2.setPassword("user");
-        usr2.setEmail("user");
+        usr2.setEmail("user@user");
         usrRepository.save(usr2);
 
+        
         Post post = new Post();
         post.setUsr(usr);
         post.setTitle("title");

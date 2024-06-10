@@ -1,27 +1,71 @@
 {{>header}}
 <div id="content">
-    <div id="left">
-      <div class="entry">
-        <h2><a href="#">Permisos de administración<nav></nav></a></h2>
-  
-        <h2>Elige qué desea hacer</h2>
-        <a class="link" href="#">Banear usuarios</a><br class="hide" />
-        <a class="link" href="#">Crear temática</a><br class="hide" />
-        <a class="link" href="#">Editar temática</a><br class="hide" />
-        <a class="link" href="#">Revisar y eliminar posts</a><br class="hide" />
-      </div>
-      {{#issues}}
-  <div class="entry">
-    <h2>Mensaje</a></h2>
-    <p>{{content}}</p>
-    <p class="meta"><span class="date">date</span> Issued by {{name}} </p>
-    <form action="issue/{{id}}/delete" method="POST">
-      <button class="button" type="submit">Borrar </button>
-  </form>
-  </div>
+      <div id="left">
+        <div class="entry">
+          <h2><a href="#">Permisos de administración<nav></nav></a></h2>
+    
+          <h2>Elige qué desea hacer</h2>
+          <a class="link" href="#">Banear usuarios</a><br class="hide" />
+          <a class="link" href="#">Crear temática</a><br class="hide" />
+          <a class="link" href="#">Editar temática</a><br class="hide" />
+          <a class="link" href="#">Revisar y eliminar posts</a><br class="hide" />
+        </div>
 
-  {{/issues}}
+        <h1> Mensajes <h1>
+        {{#issues}}
+        
+    <div class="entry">
+      <h2>Mensaje</a></h2>
+      <p>{{content}}</p>
+      <p class="meta"><span class="date">date</span> Issued by {{name}} </p>
+      <form action="issue/{{id}}/delete" method="POST">
+        <button class="button" type="submit">Borrar </button>
+    </form>
+    </div>
+
+    {{/issues}}
+     
+    
+      <h1>Usuarios</h1>
+      {{#users}}
+      <div class="entry">
+          <h2>Usuario: {{username}}</h2>
+          <p>ID: {{id}}</p>
+          <p>Correo Electrónico: {{email}}</p>
+          <p>Número de Publicaciones: {{postsCount}}</p>
+          <p>Número de Comentarios: {{commentsCount}}</p>
+          <form action="user/{{id}}/delete" method="POST">
+              <button class="button" type="submit">Borrar</button>
+          </form>
+      </div>
+      {{/users}}
+
+      <h1>Crear usuario</h1>
+      <!-- Formulario para crear usuarios de prueba -->
+<form action="/admin/create-user" method="post">
+    <label for="username">Nombre de usuario:</label>
+    <input type="text" id="username" name="username" required><br>
+
+    <label for="email">Correo electrónico:</label>
+    <input type="email" id="email" name="email" required><br>
+
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" required><br>
+
+    <label for="role">Rol:</label>
+    <select id="role" name="role">
+        <option value="USER">Usuario</option>
+        <option value="ADMIN">Administrador</option>
+    </select><br>
+
+    <button type="submit">Crear usuario</button>
+</form>
+
+
     </div>
   </div>
+  
+  
+
   </div>
   {{>footer}}
