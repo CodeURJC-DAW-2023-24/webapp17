@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.codeurjc.webapp17.entity.Issue;
+import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.repository.IssueRepository;
 import es.codeurjc.webapp17.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,7 @@ public class IssueService {
     public List<Issue> getForums() {
         return (List<Issue>) IssueRepository.findAll();
     }
-    public void createIssue(String content, String name, String email) {
-        Issue issue =  new Issue(content, name, email, LocalDateTime.now());
+    public void addIssue(Issue issue) {
         IssueRepository.save(issue);
     }
     public ArrayList<Issue> getAllIssues() {

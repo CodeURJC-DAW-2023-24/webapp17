@@ -28,11 +28,22 @@
           <!-- Lista de comentarios (inicialmente oculta) -->
           <div id="comments_{{id}}">
             {{#comments}}
-            <div class="comment">
-              <p>{{text}}</p>
-              <p class="meta">Posted by {{#usr}}{{username}}{{/usr}} </p>
-            </div>
-            {{/comments}}
+<div class="comment">
+  <p>{{text}}</p>
+  <form action="/{{id}}/delete_comment" method="POST">
+    <button class="button secondary" type="submit" style="
+
+      font-size: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      right: 0;
+      line-height: 1;
+    ">Borrar comentario</button>
+  </form>
+  <p class="meta">Posted by {{#usr}}{{username}}{{/usr}}</p>
+  
+</div>
+{{/comments}}
           </div>
           
           <form action="/{{id}}/delete" method="POST">

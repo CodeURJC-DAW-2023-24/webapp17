@@ -92,5 +92,11 @@ public class PostController {
         return "redirect:/";
     }
 
+    @PostMapping("/{id}/delete_comment")
+    public String deleteComment(@PathVariable Long id) {
+        commentService.deleteComment(id);
+        return "redirect:/";
+    }
+
    
 }

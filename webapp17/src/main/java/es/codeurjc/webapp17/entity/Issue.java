@@ -32,13 +32,9 @@ public class Issue {
     @Column(columnDefinition = "TEXT", length = 3000)
     private String content;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // Formato de fecha
-    private LocalDateTime date;
+    
+    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm:ss") // 10 de septiembre de 2024 14:30:00
+private LocalDateTime date;
 
-    public Issue(String content, String name, String email, LocalDateTime date) {
-        this.content = content;
-        this.name = name;
-        this.email = email;
-        this.date = date;
-    }
+    
 }
