@@ -30,6 +30,6 @@ public class CommentService {
 
     // Método para agregar un nuevo Comment
     public void addComment(Comment comment) {
-        comments.add(comment);
+        commentRepository.save(comment);
     }
 }

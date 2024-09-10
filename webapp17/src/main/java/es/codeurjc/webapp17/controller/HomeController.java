@@ -20,10 +20,6 @@ public class HomeController {
     @Autowired
     private PostService postService;
 
-    public HomeController(PostService postService) {
-        this.postService = postService;
-        
-    }
     
     @GetMapping("/")
     public String index(Model model) {

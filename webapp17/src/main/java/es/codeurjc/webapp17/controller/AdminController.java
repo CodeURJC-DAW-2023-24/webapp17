@@ -16,6 +16,7 @@ import es.codeurjc.webapp17.entity.Issue;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.IssueService;
 import es.codeurjc.webapp17.service.UsrService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AdminController {
@@ -30,9 +31,11 @@ public class AdminController {
     private UsrService userService;
 
     @GetMapping("/admin")
-    public String adminPage(Model model) {
+    public String adminPage(HttpSession session, Model model) {
         // Aquí verificas si el usuario es administrador
-        boolean isAdmin = true;
+        //Usr usuario = (Usr) session.getAttribute("currentUsr");
+        //Boolean isAdmin = usuario.getRole().equals(Usr.Role.ADMIN);
+        Boolean isAdmin = true;
 
         List<Issue> issues = issuesService.getAllIssues();
         model.addAttribute("issues", issues);
@@ -141,7 +144,7 @@ public class AdminController {
     private void sendCredentialsByEmail(String to, String username, String password) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
-        message.setSubject("Credenciales de acceso a la aplicación");
+        message.setSubject("Credenciales de acceso a la web de El Rincón Del Software");
         message.setText("Hola " + username + ",\n\n"
                 + "Se ha creado una cuenta para ti en nuestra aplicación.\n\n"
                 + "Nombre de usuario: " + username + "\n"

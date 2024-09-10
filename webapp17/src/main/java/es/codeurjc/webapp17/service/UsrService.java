@@ -33,6 +33,15 @@ public class UsrService {
         System.out.println("Usuario no encontrado");
         return false;
     }
+
+    public Usr getUsr(String email) {
+        Usr user = userRepository.findByEmail(email);
+        if (user != null) {
+            return user;
+        }
+        System.out.println("Usuario no encontrado");
+        return null;
+    }
     
 
 

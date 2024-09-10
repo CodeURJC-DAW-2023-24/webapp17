@@ -2,6 +2,7 @@ package es.codeurjc.webapp17.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -24,6 +25,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Usr {
 
+
+
+
+
+
+
     public Usr(String username, String email, String password, Boolean admin) {
         this.username = username;
         this.email = email;
@@ -45,11 +52,11 @@ public class Usr {
     private String password;
     private String email;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy="usr")
     private List<Post> posts;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy="usr")
     private List<Comment> comments;
 

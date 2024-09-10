@@ -17,13 +17,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.webapp17.entity.Comment;
 import es.codeurjc.webapp17.entity.Post;
+import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.CommentService;
 import es.codeurjc.webapp17.service.PostService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PostController {
 
     private static final String DEFAULT_IMAGE_PATH = "/images/entryphoto.png";
+  
 
     @Autowired
     private PostService postService;
@@ -34,8 +37,10 @@ public class PostController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    
+
     @PostMapping("/create-post")
-    public String createPost(@RequestParam String title, @RequestParam String content, @RequestParam String tag, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+    public String createPost(HttpSession session, @RequestParam String title, @RequestParam String content, @RequestParam String tag, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         LocalDateTime now = LocalDateTime.now();
 
         Post post = new Post();
@@ -43,6 +48,8 @@ public class PostController {
         post.setContent(content);
         post.setDate(now);
         post.setTag(tag);
+        Usr user = (Usr) session.getAttribute("currentUsr");
+        post.setUsr(user);
 
         if (image != null && !image.isEmpty()) {
             String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
@@ -66,14 +73,15 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/comment")
-    public String addComment(@PathVariable Long postId, @RequestParam String comment) {
+    public String addComment(HttpSession session, @PathVariable Long postId, @RequestParam String comment) {
         Post post = postService.getPostById(postId);
         if (post != null) {
             Comment newComment = new Comment();
             newComment.setText(comment);
             newComment.setPost(post);
             
-            // newComment.setUsr(user); 
+            Usr user = (Usr) session.getAttribute("currentUsr"); // Obtener el usuario de la sesión
+            newComment.setUsr(user); // Asociar el comentario con el usuario
             commentService.addComment(newComment);
         }
         return "redirect:/";
@@ -83,4 +91,6 @@ public class PostController {
         postService.deletePost(id);
         return "redirect:/";
     }
+
+   
 }

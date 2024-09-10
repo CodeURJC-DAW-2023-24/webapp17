@@ -6,71 +6,42 @@
 <body>
     <div id="content">
       <div id="left">
-        <div class="entry">
-          <h2><a href="ejemplo.html">Java vs C</a></h2>
-          <img class="entryphoto" src="../images/entryphoto.png" width="160" height="213" alt="Entry photo example" />
-          <p>El debate entre Java y C es emblemático en el mundo del desarrollo de software. Java destaca por su
-            portabilidad y seguridad, ideal para aplicaciones empresariales. Por otro lado, C ofrece eficiencia y
-            velocidad,
-            siendo óptimo para sistemas operativos y aplicaciones de alto rendimiento. Java utiliza una máquina virtual
-            para
-            su ejecución, mientras que C es un lenguaje compilado de bajo nivel.</p>
-          <h3>Rendimiento</h3>
-          <p> En términos de rendimiento, C supera a Java debido a su compilación directa. Sin embargo, la elección
-            entre
-            ambos depende de los requisitos del proyecto: Java es preferible para portabilidad y seguridad, mientras que
-            C
-            es ideal para aplicaciones que requieren máximo rendimiento y control del hardware. En última instancia,
-            ambos
-            lenguajes son poderosos y útiles en diferentes contextos dentro del desarrollo de software.</p>
-          <h3>Tipado</h3>
-          <p>Además del rendimiento y la portabilidad, otra diferencia significativa entre Java y C radica en su sistema
-            de
-            tipado. Java es un lenguaje de programación de tipado estático, lo que significa que los tipos de datos se
-            verifican en tiempo de compilación, lo que ayuda a detectar errores antes de la ejecución del programa. En
-            cambio, C es un lenguaje de tipado débil y dinámico, lo que brinda mayor flexibilidad pero también aumenta
-            el
-            riesgo de errores. Esta diferencia en el sistema de tipado afecta la seguridad y la estabilidad del código,
-            siendo un factor importante a considerar al elegir entre ambos lenguajes.</p>
-          <p class="meta"><span class="date">July 15, 2006</span> Posted by Andreas | Tags: Design, XHTML, CSS | 19
-            comments
-          </p>
-        </div>
+        
         {{#posts}}
-<div class="entry">
-  <h2>{{title}}</h2>
-  {{#usr}}
-  <p>Posted by {{usr.username}}</p>
-  {{/usr}}
-  {{#image}}
-  <img class="entryphoto" src="{{image}}" />
-  {{/image}}
-  <p>{{content}}</p>
-  <p class="meta"><span class="date">{{date}}</span> Posted by {{#usr}}{{username}}{{/usr}} | Tags: {{tag}} | {{comments.size}} comments</p>
-  
-  <!-- Botón para desplegar los comentarios asociados -->
-  <button class="button" onclick="toggleComments('{{id}}')">Ver Comentarios</button>
-  
-  <!-- Formulario para agregar un comentario -->
-  <form action="/{{id}}/comment" method="POST">
-    <textarea name="comment" rows="4" cols="50" placeholder="Escribe tu comentario aquí..."></textarea><br>
-    <button class="button" type="submit">Comentar</button>
-  </form>
-  
-  <!-- Lista de comentarios (inicialmente oculta) -->
-  <div id="comments_{{id}}" style="display: none;">
-    {{#comments}}
-    <div class="comment">
-      <p>{{text}}</p>
-      <p class="meta">Posted by {{#usr}}{{username}}{{/usr}} | {{date}}</p>
-    </div>
-    {{/comments}}
-  </div>
-  
-  <form action="/{{id}}/delete" method="POST">
-    <button class="button danger" type="submit">Borrar Post</button>
-  </form>
-</div>
+          <div class="entry">
+          <h2>{{title}}</h2>
+          {{#usr}}
+          <p>Posted by {{usr.username}}</p>
+          {{/usr}}
+          {{#image}}
+          <img class="entryphoto" src="{{image}}" />
+          {{/image}}
+          <p>{{content}}</p>
+          <p class="meta"><span class="date">{{date}}</span> Posted by {{#usr}}{{username}}{{/usr}} | Tags: {{tag}} | {{comments.size}} comments</p>
+          
+          <!-- Botón para desplegar los comentarios asociados -->
+          <button class="button" onclick="toggleComments('{{id}}')">Ver Comentarios</button>
+          
+          <!-- Formulario para agregar un comentario -->
+          <form action="/{{id}}/comment" method="POST">
+            <textarea name="comment" rows="4" cols="50" placeholder="Escribe tu comentario aquí..."></textarea><br>
+            <button class="button" type="submit">Comentar</button>
+          </form>
+          
+          <!-- Lista de comentarios (inicialmente oculta) -->
+          <div id="comments_{{id}}">
+            {{#comments}}
+            <div class="comment">
+              <p>{{text}}</p>
+              <p class="meta">Posted by {{#usr}}{{username}}{{/usr}} </p>
+            </div>
+            {{/comments}}
+          </div>
+          
+          <form action="/{{id}}/delete" method="POST">
+            <button class="button danger" type="submit">Borrar Post</button>
+          </form>
+        </div>
 {{/posts}}
   <h1>Publica un nuevo Post</h1>
     <form action="/create-post" method="POST" enctype="multipart/form-data">
@@ -82,11 +53,17 @@
         <label for="content">Content:</label><br>
         <textarea  name="content" rows="4" cols="50"></textarea><br>
         
-        <label for="image">Image:</label><br>
-        <input type="file"  name="image"><br>
+          <p>Image name:</p>
+          <input type="text" name="imageName">
+          <p>Image file:</p>
+          <input type="file" name="image" accept=".jpg, .jpeg">
         <br>
-        <button class="button" type="submit">Create Post</button>
+        <button class="button" type="submit" value="Save">Create Post</button>
     </form>
+  
+    
+
+
 
     <h1>Genera un nuevo post</h1>
     <form action="/generate-post" method="POST" enctype="multipart/form-data">
