@@ -48,7 +48,7 @@ public class PostController {
         post.setContent(content);
         post.setDate(now);
         post.setTag(tag);
-        Usr user = (Usr) session.getAttribute("currentUsr");
+        Usr user = (Usr) session.getAttribute("user");
         post.setUsr(user);
 
         if (image != null && !image.isEmpty()) {
@@ -80,7 +80,7 @@ public class PostController {
             newComment.setText(comment);
             newComment.setPost(post);
             
-            Usr user = (Usr) session.getAttribute("currentUsr"); // Obtener el usuario de la sesión
+            Usr user = (Usr) session.getAttribute("user"); // Obtener el usuario de la sesión
             newComment.setUsr(user); // Asociar el comentario con el usuario
             commentService.addComment(newComment);
         }

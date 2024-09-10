@@ -32,10 +32,16 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String adminPage(HttpSession session, Model model) {
-        // Aquí verificas si el usuario es administrador
-        //Usr usuario = (Usr) session.getAttribute("currentUsr");
-        //Boolean isAdmin = usuario.getRole().equals(Usr.Role.ADMIN);
-        Boolean isAdmin = true;
+        Boolean isAdmin = false; // Valor predeterminado
+
+        try {
+            Usr usuario = (Usr) session.getAttribute("user");
+            if (usuario != null) {
+                isAdmin = usuario.getRole().equals(Usr.Role.ADMIN);
+            }
+        } catch (ClassCastException e) {
+            // Ignorar la excepción si ocurre un error de tipo de objeto
+        }
 
         List<Issue> issues = issuesService.getAllIssues();
         model.addAttribute("issues", issues);
