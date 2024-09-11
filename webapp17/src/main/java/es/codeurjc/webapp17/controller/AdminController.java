@@ -34,28 +34,34 @@ public class AdminController {
     public String adminPage(HttpSession session, Model model) {
         Boolean isAdmin = false; // Valor predeterminado
 
-        try {
-            Usr usuario = (Usr) session.getAttribute("user");
-            if (usuario != null) {
-                isAdmin = usuario.getRole().equals(Usr.Role.ADMIN);
+        Usr user = (Usr) session.getAttribute("user");
+        if (user != null) {
+            if (user.getRole() == Usr.Role.ADMIN) {
+                model.addAttribute("ADMIN", true);
             }
-        } catch (ClassCastException e) {
-            // Ignorar la excepción si ocurre un error de tipo de objeto
+            }else {
+                model.addAttribute("ADMIN", false);
+                return "redirect:/error-no-admin";
+            
+        
+            
+
         }
 
         List<Issue> issues = issuesService.getAllIssues();
         model.addAttribute("issues", issues);
 
         List<Usr> users = userService.getAllUsrs();
-        List<UserInfo> usersInfo = users.stream().map(user -> new UserInfo(
-            user.getId(),
-            user.getUsername(),
-            user.getEmail(),
-            user.getPosts().size(),
-            user.getComments().size()
+        List<UserInfo> usersInfo = users.stream().map(usr -> new UserInfo(
+            usr.getId(),
+            usr.getUsername(),
+            usr.getEmail(),
+            usr.getPosts().size(),
+            usr.getComments().size()
         )).collect(Collectors.toList());
 
         model.addAttribute("users", usersInfo);
+        
 
         if (isAdmin) {
             // Si el usuario es administrador, se muestra la página de administración

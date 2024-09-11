@@ -14,9 +14,13 @@
     </div>
     <div id="menu">
         <a href="/">Home</a>
-        <a href="/estadisticas">Estadísticas</a>
         <a href="/log_in">Usuario</a>
+
+        {{#ADMIN}}
+        <a href="/estadisticas">Estadísticas</a>
         <a href="/admin">Admin</a>
+        {{/ADMIN}}
+
         <a href="/contacto">Contacto</a>
      
     </div>

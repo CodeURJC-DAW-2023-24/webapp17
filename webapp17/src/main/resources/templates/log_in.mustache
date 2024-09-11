@@ -3,7 +3,9 @@
 
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../css/login.css">
-<form action="/log_in" method="post">
+
+{{^logged}}
+<form action="/logg_in" method="post">
     <p class="text-danger">{{loginError}}</p>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email</label>
@@ -15,5 +17,13 @@
     </div>
     <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
 </form>
+
+{{/logged}}
+
+{{#logged}}
+<form action="/log_out" method="post">
+    <button type="submit" class="button danger">Cerrar Sesión</button>
+</form>
+{{/logged}}
 
 {{>footer}}

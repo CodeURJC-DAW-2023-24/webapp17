@@ -7,11 +7,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import es.codeurjc.webapp17.entity.Usr;
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class EstadisticasController {
 
     @GetMapping("/estadisticas")
-    public String mostrarEstadisticas(Model model) {
+    public String mostrarEstadisticas(Model model, HttpSession session) {
+        Usr user = (Usr) session.getAttribute("user");
+        if (user != null) {
+            if (user.getRole() == Usr.Role.ADMIN) {
+                model.addAttribute("ADMIN", true);
+            }
+            }else {
+                model.addAttribute("ADMIN", false);
+            
+        }
+
+
         // Aquí iría la lógica para cargar las estadísticas desde la base de datos o cualquier otra fuente
 
         
