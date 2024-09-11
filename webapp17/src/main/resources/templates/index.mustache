@@ -1,141 +1,164 @@
-
-
 {{>header}}
 <link rel="stylesheet" href="../css/style.css">
 
 <body>
     <div id="content">
-      <div id="left">
+        <div id="left">
         
         {{#posts}}
-          <div class="entry">
-          <h2>{{title}}</h2>
-          {{#image}}
-          <img class="entryphoto" src="{{image}}" />
-          {{/image}}
-          <p>{{content}}</p>
-          <p class="meta"><span class="date">{{date}}</span> Posted by {{#usr}}{{username}}{{/usr}} | Tags: {{tag}} | {{comments.size}} comments</p>
-          
-          <!-- Botón para desplegar los comentarios asociados -->
-          <button class="button" onclick="toggleComments('{{id}}')">Ver Comentarios</button>
-          
-          <!-- Formulario para agregar un comentario -->
-          <form action="/{{id}}/comment" method="POST">
-            <textarea name="comment" rows="4" cols="50" placeholder="Escribe tu comentario aquí..."></textarea><br>
-            <button class="button" type="submit">Comentar</button>
-          </form>
-          
-          <!-- Lista de comentarios (inicialmente oculta) -->
-          <div id="comments_{{id}}">
-            {{#comments}}
-<div class="comment">
-  <p>{{text}}</p>
-  <form action="/{{id}}/delete_comment" method="POST">
-    <button class="button secondary" type="submit" style="
+            <div class="entry">
+            <h2>{{title}}</h2>
+            {{#image}}
+            <img class="entryphoto" src="{{image}}" />
+            {{/image}}
+            <p>{{content}}</p>
+            <p class="meta"><span class="date">{{date}}</span> Posted by {{#usr}}{{username}}{{/usr}} | Tags: {{tag}} | {{comments.size}} comments</p>
+            
+            <!-- Botón para desplegar los comentarios asociados -->
+            <button class="button" onclick="toggleComments('{{id}}')">Ver Comentarios</button>
+            
+            <!-- Formulario para agregar un comentario -->
+            <form action="/{{id}}/comment" method="POST">
+                <textarea name="comment" rows="4" cols="50" placeholder="Escribe tu comentario aquí..."></textarea><br>
+                <button class="button" type="submit">Comentar</button>
+            </form>
+            
+            <!-- Lista de comentarios (inicialmente oculta) -->
+            <div id="comments_{{id}}">
+                {{#comments}}
+                <div class="comment">
+                    <p>{{text}}</p>
+                    <p class="meta">Posted by {{#usr}}{{username}}{{/usr}}</p>
 
-      font-size: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      right: 0;
-      line-height: 1;
-    ">Borrar comentario</button>
-  </form>
-  <p class="meta">Posted by {{#usr}}{{username}}{{/usr}}</p>
-  
-</div>
-{{/comments}}
-          </div>
-          
-          <form action="/{{id}}/delete" method="POST">
-            <button class="button danger" type="submit">Borrar Post</button>
-          </form>
-        </div>
-{{/posts}}
-  <h1>Publica un nuevo Post</h1>
-    <form action="/create-post" method="POST" enctype="multipart/form-data">
-        <label for="title">Title:</label><br>
-        <input type="text"  name="title"><br>
-        <label for="tag">Temática:</label><br>
-        <input type="text"  name="tag"><br>
-        
-        <label for="content">Content:</label><br>
-        <textarea  name="content" rows="4" cols="50"></textarea><br>
-        
-          <p>Image name:</p>
-          <input type="text" name="imageName">
-          <p>Image file:</p>
-          <input type="file" name="image" accept=".jpg, .jpeg">
-        <br>
-        <button class="button" type="submit" value="Save">Create Post</button>
-    </form>
-  
-    
+                    {{#ADMIN}}
+<form action="/{{id}}/delete_comment" method="POST">
+    <button class="button secondary" type="submit" style="font-size: 8px; font-weight: bold; cursor: pointer; right: 0; line-height: 1;">Borrar comentario</button>
+</form>
+{{/ADMIN}}
 
+{{#currentUser.username == usr.username}}
+<form action="/{{id}}/delete_comment" method="POST">
+    <button class="button secondary" type="submit" style="font-size: 8px; font-weight: bold; cursor: pointer; right: 0; line-height: 1;">Borrar comentario</button>
+</form>
+{{/currentUser.username == usr.username}}
+                </div>
+                {{/comments}}
+            </div>
 
+            {{#ADMIN}}
+<form action="/{{id}}/delete" method="POST">
+    <button class="button danger" type="submit">Borrar Post</button>
+</form>
+{{/ADMIN}}
 
-    <h1>Genera un nuevo post</h1>
-    <form action="/generate-post" method="POST" enctype="multipart/form-data">
-      
-      <label for="tag">Temática:</label><br>
-     
-      <input type="text"  name="tag"><br>
-      
-      
-      <button class="button" type="submit">Autogeneración de Post</button>
-  </form>
+{{#currentUser.username == usr.username}}
+<form action="/{{id}}/delete" method="POST">
+    <button class="button danger" type="submit">Borrar Post</button>
+</form>
+{{/currentUser.username == usr.username}}
+
+            </div>
+        {{/posts}}
+        {{#ADMIN}}
+        <h1>Publica un nuevo Post</h1>
+        <form action="/create-post" method="POST" enctype="multipart/form-data">
+            <label for="title">Title:</label><br>
+            <input type="text"  name="title"><br>
+            <label for="tag">Temática:</label><br>
+            <input type="text"  name="tag"><br>
+            
+            <label for="content">Content:</label><br>
+            <textarea  name="content" rows="4" cols="50"></textarea><br>
+            
+            <p>Image name:</p>
+            <input type="text" name="imageName">
+            <p>Image file:</p>
+            <input type="file" name="image" accept=".jpg, .jpeg">
+            <br>
+            <button class="button" type="submit" value="Save">Create Post</button>
+        </form>
+
+        <h1>Genera un nuevo post</h1>
+        <form action="/generate-post" method="POST" enctype="multipart/form-data">
+            <label for="tag">Temática:</label><br>
+            <input type="text"  name="tag"><br>
+            <button class="button" type="submit">Autogeneración de Post</button>
+        </form>
+        {{/ADMIN}}
+
+        {{#ADMIN}}
+        <h1>Publica un nuevo Post</h1>
+        <form action="/create-post" method="POST" enctype="multipart/form-data">
+            <label for="title">Title:</label><br>
+            <input type="text"  name="title"><br>
+            <label for="tag">Temática:</label><br>
+            <input type="text"  name="tag"><br>
+            
+            <label for="content">Content:</label><br>
+            <textarea  name="content" rows="4" cols="50"></textarea><br>
+            
+            <p>Image name:</p>
+            <input type="text" name="imageName">
+            <p>Image file:</p>
+            <input type="file" name="image" accept=".jpg, .jpeg">
+            <br>
+            <button class="button" type="submit" value="Save">Create Post</button>
+        </form>
+        {{/ADMIN}}
+
 
         <p class="pagenav"><a href="#">Older entries</a> | Newer entries</p>
-      </div>
-      <div id="right">
-        <h2>¿Quiénes somos?</h2>
-        <p class="intro">El rincón del software es una plataforma en línea donde los usuarios pueden discutir,
-          intercambiar
-          ideas y resolver problemas relacionados con el desarrollo, la programación y el uso de software. Estos foros
-          proporcionan un espacio para que los desarrolladores, ingenieros de software y entusiastas de la tecnología
-          compartan sus experiencias, consejos y soluciones técnicas. Los temas de discusión pueden variar desde
-          preguntas
-          específicas sobre lenguajes de programación hasta debates sobre las últimas tendencias en tecnología. Los
-          foros de
-          software suelen ser comunidades activas y colaborativas donde los usuarios pueden obtener ayuda, aprender
-          nuevas
-          habilidades y participar en debates sobre diversos aspectos del mundo del software.</p>
-        <h2>Latest photos</h2>
-        <p class="thumbs"> <a href="#"><img src="../images/thumb1.png" width="80" height="80"
-              alt="Thumbnail example" /></a> <a href="#"><img src="../images/thumb1.png" width="80" height="80"
-              alt="Thumbnail example" /></a> <a href="#"><img src="../images/thumb1.png" width="80" height="80"
-              alt="Thumbnail example" /></a> <a href="#"><img src="../images/thumb1.png" width="80" height="80"
-              alt="Thumbnail example" /></a> </p>
-        <div class="subcontainer">
-          <div class="rightsub">
-            <h2>Popular tags</h2>
-            <a class="link" href="#">XHTML</a><br class="hide" />
-            <a class="link" href="#">Music</a><br class="hide" />
-            <a class="link" href="#">Podcast</a><br class="hide" />
-            <a class="link" href="#">Photos</a><br class="hide" />
-            <a class="link" href="#">CSS</a><br class="hide" />
-            <a class="link" href="#">Webdesign</a><br class="hide" />
-            <h2>RSS Feeds</h2>
-            <a class="link" href="#">Blog entries</a><br class="hide" />
-            <a class="link" href="#">Comments</a><br class="hide" />
-            <a class="link" href="#">Podcasts</a><br class="hide" />
-          </div>
-          <div class="rightsub2">
-            <h2>Latest entries</h2>
-            <a class="link" href="#">With a touch fr...</a><br class="hide" />
-            <a class="link" href="#">Open source</a><br class="hide" />
-            <a class="link" href="#">Hello world!</a><br class="hide" />
-            <h2>Favorite links</h2>
-            <a class="link" href="#">Free templates</a><br class="hide" />
-            <a class="link" href="#">Open Web Design</a><br class="hide" />
-            <a class="link" href="#">Made in Jokkmokk</a><br class="hide" />
-            <a class="link" href="#">Solucija.com</a><br class="hide" />
-            <a class="link" href="#">OSWD.org</a><br class="hide" />
-          </div>
         </div>
-      </div>
-     
+        
+        <div id="right">
+            <h2>¿Quiénes somos?</h2>
+            <p class="intro">El rincón del software es una plataforma en línea donde los usuarios pueden discutir,
+            intercambiar ideas y resolver problemas relacionados con el desarrollo, la programación y el uso de software. 
+            Estos foros proporcionan un espacio para que los desarrolladores, ingenieros de software y entusiastas de la 
+            tecnología compartan sus experiencias, consejos y soluciones técnicas. Los temas de discusión pueden variar 
+            desde preguntas específicas sobre lenguajes de programación hasta debates sobre las últimas tendencias en 
+            tecnología. Los foros de software suelen ser comunidades activas y colaborativas donde los usuarios pueden 
+            obtener ayuda, aprender nuevas habilidades y participar en debates sobre diversos aspectos del mundo del software.</p>
+
+            <h2>Latest photos</h2>
+            <p class="thumbs"> 
+                <a href="#"><img src="../images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> 
+                <a href="#"><img src="../images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> 
+                <a href="#"><img src="../images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> 
+                <a href="#"><img src="../images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> 
+            </p>
+            
+            <div class="subcontainer">
+                <div class="rightsub">
+                    <h2>Popular tags</h2>
+                    <a class="link" href="#">XHTML</a><br class="hide" />
+                    <a class="link" href="#">Music</a><br class="hide" />
+                    <a class="link" href="#">Podcast</a><br class="hide" />
+                    <a class="link" href="#">Photos</a><br class="hide" />
+                    <a class="link" href="#">CSS</a><br class="hide" />
+                    <a class="link" href="#">Webdesign</a><br class="hide" />
+
+                    <h2>RSS Feeds</h2>
+                    <a class="link" href="#">Blog entries</a><br class="hide" />
+                    <a class="link" href="#">Comments</a><br class="hide" />
+                    <a class="link" href="#">Podcasts</a><br class="hide" />
+                </div>
+                
+                <div class="rightsub2">
+                    <h2>Latest entries</h2>
+                    <a class="link" href="#">With a touch fr...</a><br class="hide" />
+                    <a class="link" href="#">Open source</a><br class="hide" />
+                    <a class="link" href="#">Hello world!</a><br class="hide" />
+
+                    <h2>Favorite links</h2>
+                    <a class="link" href="#">Free templates</a><br class="hide" />
+                    <a class="link" href="#">Open Web Design</a><br class="hide" />
+                    <a class="link" href="#">Made in Jokkmokk</a><br class="hide" />
+                    <a class="link" href="#">Solucija.com</a><br class="hide" />
+                    <a class="link" href="#">OSWD.org</a><br class="hide" />
+                </div>
+            </div>
+        </div>
     </div>
-  
-  </div>
 </body>
 {{>footer}}
