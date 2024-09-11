@@ -4,8 +4,16 @@
 <body>
     <div id="content">
         <div id="left">
-        
-        {{#posts}}
+            <div class="pagenav">
+                {{#hasPrevious}}
+                    <a href="?page={{previousPage}}&size={{size}}">Página Anterior</a>
+                {{/hasPrevious}}
+            
+                {{#hasNext}}
+                    <a href="?page={{nextPage}}&size={{size}}">Mostrar más posts</a>
+                {{/hasNext}}
+            </div>
+        {{#posts.content}}
             <div class="entry">
             <h2>{{title}}</h2>
             {{#image}}
@@ -58,7 +66,8 @@
 {{/currentUser.username == usr.username}}
 
             </div>
-        {{/posts}}
+        {{/posts.content}}
+
         {{#ADMIN}}
         <h1>Publica un nuevo Post</h1>
         <form action="/create-post" method="POST" enctype="multipart/form-data">
@@ -86,28 +95,8 @@
         </form>
         {{/ADMIN}}
 
-        {{#ADMIN}}
-        <h1>Publica un nuevo Post</h1>
-        <form action="/create-post" method="POST" enctype="multipart/form-data">
-            <label for="title">Title:</label><br>
-            <input type="text"  name="title"><br>
-            <label for="tag">Temática:</label><br>
-            <input type="text"  name="tag"><br>
-            
-            <label for="content">Content:</label><br>
-            <textarea  name="content" rows="4" cols="50"></textarea><br>
-            
-            <p>Image name:</p>
-            <input type="text" name="imageName">
-            <p>Image file:</p>
-            <input type="file" name="image" accept=".jpg, .jpeg">
-            <br>
-            <button class="button" type="submit" value="Save">Create Post</button>
-        </form>
-        {{/ADMIN}}
+        
 
-
-        <p class="pagenav"><a href="#">Older entries</a> | Newer entries</p>
         </div>
         
         <div id="right">
