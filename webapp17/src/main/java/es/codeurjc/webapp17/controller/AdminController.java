@@ -39,10 +39,11 @@ public class AdminController {
             if (user.getRole() == Usr.Role.ADMIN) {
                 model.addAttribute("ADMIN", true);
             }
-            }else {
+            else {
                 model.addAttribute("ADMIN", false);
                 return "redirect:/error-no-admin";
-            
+            }
+            isAdmin = true;
         
             
 
@@ -72,11 +73,6 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/error-no-admin")
-    public String errorNoAdminPage() {
-        // Página de error para usuarios que no son administradores
-        return "error-no-admin";
-    }
 
     public static class UserInfo {
         private Long id;

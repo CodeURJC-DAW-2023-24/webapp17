@@ -68,6 +68,10 @@ public class UsrService {
         userRepository.save(newUser);
     }
 
+    public Usr findUsrById(Long id) {
+        return userRepository.findById(id).get();
+    }
+
 
     
 }

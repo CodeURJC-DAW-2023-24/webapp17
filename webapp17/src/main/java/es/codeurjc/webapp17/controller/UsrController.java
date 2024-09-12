@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.UsrService;
 
 @Controller
@@ -22,11 +23,21 @@ public class UsrController {
         return "/contacto"; // Redirige a la página principal después de crear el Usr
     }
 
-     @PostMapping("user/{id}/delete")
-    public String deletePost(@PathVariable Long id) {
-        UsrService.deleteUsr(id);
-        return "redirect:/admin";
+    @PostMapping("user/{id}/delete")
+public String deletePost(@PathVariable Long id) {
+    // Obtener el usuario a eliminar
+    Usr user = UsrService.findUsrById(id);
+
+    // Verificar si el email del usuario es 'superadmin@superadmin'
+    if ("superadmin@superadmin".equals(user.getEmail())) {
+        // Redirigir con un mensaje de error o manejar el caso de alguna otra forma
+         return "redirect:/admin";
     }
+
+    // Proceder con la eliminación si no es el superadmin
+    UsrService.deleteUsr(id);
+    return "redirect:/admin";
+}
 
 
 }

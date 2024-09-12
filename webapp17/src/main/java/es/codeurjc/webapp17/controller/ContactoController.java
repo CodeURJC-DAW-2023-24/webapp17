@@ -36,7 +36,7 @@ public class ContactoController {
             
         }
         
-        return "contacto"; // Devuelve la plantilla index.html
+        return "contacto"; 
     }
 
     
