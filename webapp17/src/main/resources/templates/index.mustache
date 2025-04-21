@@ -25,11 +25,7 @@
             <!-- Botón para desplegar los comentarios asociados -->
             <button class="button" onclick="toggleComments('{{id}}')">Ver Comentarios</button>
             
-            <!-- Formulario para agregar un comentario -->
-            <form action="/{{id}}/comment" method="POST">
-                <textarea name="comment" rows="4" cols="50" placeholder="Escribe tu comentario aquí..."></textarea><br>
-                <button class="button" type="submit">Comentar</button>
-            </form>
+            
             
             <!-- Lista de comentarios (inicialmente oculta) -->
             <div id="comments_{{id}}">
@@ -37,7 +33,13 @@
                 <div class="comment">
                     <p>{{text}}</p>
                     <p class="meta">Posted by {{#usr}}{{username}}{{/usr}}</p>
-
+                    <!-- Formulario para agregar un comentario -->
+                    {{#currentUser.username == usr.username}}
+                    <form action="/{{id}}/comment" method="POST">
+                        <textarea name="comment" rows="4" cols="50" placeholder="Escribe tu comentario aquí..."></textarea><br>
+                        <button class="button" type="submit">Comentar</button>
+                    </form>
+                    {{/currentUser.username == usr.username}}
                     {{#ADMIN}}
 <form action="/{{id}}/delete_comment" method="POST">
     <button class="button secondary" type="submit" style="font-size: 8px; font-weight: bold; cursor: pointer; right: 0; line-height: 1;">Borrar comentario</button>

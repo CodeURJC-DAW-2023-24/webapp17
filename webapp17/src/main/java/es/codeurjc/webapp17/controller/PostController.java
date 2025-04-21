@@ -79,8 +79,12 @@ public class PostController {
             Comment newComment = new Comment();
             newComment.setText(comment);
             newComment.setPost(post);
-            
+            newComment.setDate(LocalDateTime.now());
             Usr user = (Usr) session.getAttribute("user"); // Obtener el usuario de la sesión
+            if (user == null) {
+                // Manejar el caso en que el usuario no está autenticado
+                return "redirect:/log_in"; // Redirigir a la página de inicio de sesión
+            }
             newComment.setUsr(user); // Asociar el comentario con el usuario
             commentService.addComment(newComment);
         }
