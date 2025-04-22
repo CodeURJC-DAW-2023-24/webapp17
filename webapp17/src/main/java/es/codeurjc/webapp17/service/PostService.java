@@ -27,6 +27,10 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
+    public ArrayList<Post> getAllPosts() {
+        return new ArrayList<>(postRepository.findAll());
+    }
+
     // Método para agregar un nuevo post
     public void addPost(Post post) {
         postRepository.save(post);

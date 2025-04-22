@@ -54,7 +54,7 @@ public class Post {
     private String content;
 
     @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm:ss") // 10 de septiembre de 2024 14:30:00
-private LocalDateTime date;
+    private LocalDateTime date;
 
 
     private String tag;

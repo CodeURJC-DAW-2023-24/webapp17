@@ -1,90 +1,113 @@
-{{>header}}
+{{> header}}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estadísticas</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f8; color: #333; }
+    h1, h2 { text-align: center; margin-top: 1em; }
+    .chart-container { width: 80%; max-width: 800px; margin: 2em auto; background: #fff; padding: 1em; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+  </style>
+</head>
 <body>
-    <div id="content">
-        <div id="left">
-            <div class="entry">
-                <h2>Temáticas más comentadas</h2>
-                <canvas id="myChart" width="400" height="300"></canvas>
-            </div>
-            <div class="entry">
-                <h2>Posts con más comentarios (polémicos)</h2>
-                <canvas id="myChart2" width="400" height="300"></canvas>
-            </div>
-        </div>
-    <h1>  {{topics}}  </h1> 
-        <p class="pagenav"><a href="#">Older entries</a> | Newer entries</p>
-    </div>
-    <div id="right">
-        <h2>¿Quiénes somos?</h2>
-        <p class="intro">El rincón del software es una plataforma en línea donde los usuarios pueden discutir, intercambiar ideas y resolver problemas relacionados con el desarrollo, la programación y el uso de software. Estos foros proporcionan un espacio para que los desarrolladores, ingenieros de software y entusiastas de la tecnología compartan sus experiencias, consejos y soluciones técnicas. Los temas de discusión pueden variar desde preguntas específicas sobre lenguajes de programación hasta debates sobre las últimas tendencias en tecnología. Los foros de software suelen ser comunidades activas y colaborativas donde los usuarios pueden obtener ayuda, aprender nuevas habilidades y participar en debates sobre diversos aspectos del mundo del software.</p>
-        <h2>Latest photos</h2>
-        <p class="thumbs"> <a href="#"><img src="../css/images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> <a href="#"><img src="images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> <a href="#"><img src="images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> <a href="#"><img src="images/thumb1.png" width="80" height="80" alt="Thumbnail example" /></a> </p>
-        <div class="subcontainer">
-            <div class="rightsub">
-                <h2>Popular tags</h2>
-                <a class="link" href="#">XHTML</a><br class="hide" />
-                <a class="link" href="#">Music</a><br class="hide" />
-                <a class="link" href="#">Podcast</a><br class="hide" />
-                <a class="link" href="#">Photos</a><br class="hide" />
-                <a class="link" href="#">CSS</a><br class="hide" />
-                <a class="link" href="#">Webdesign</a><br class="hide" />
-                <h2>RSS Feeds</h2>
-                <a class="link" href="#">Blog entries</a><br class="hide" />
-                <a class="link" href="#">Comments</a><br class="hide" />
-                <a class="link" href="#">Podcasts</a><br class="hide" />
-            </div>
-            <div class="rightsub2">
-                <h2>Latest entries</h2>
-                <a class="link" href="#">With a touch fr...</a><br class="hide" />
-                <a class="link" href="#">Open source</a><br class="hide" />
-                <a class="link" href="#">Hello world!</a><br class="hide" />
-                <h2>Favorite links</h2>
-                <a class="link" href="#">Free templates</a><br class="hide" />
-                <a class="link" href="#">Open Web Design</a><br class="hide" />
-                <a class="link" href="#">Made in Jokkmokk</a><br class="hide" />
-                <a class="link" href="#">Solucija.com</a><br class="hide" />
-                <a class="link" href="#">OSWD.org</a><br class="hide" />
-            </div>
-        </div>
-    </div>
+  {{#ADMIN}}
+    <h1>🔒 Panel de Estadísticas (Admin)</h1>
+  {{/ADMIN}}
+
+
+  <div class="chart-container">
+    <h2>👥 Usuarios con más posts</h2>
+    <canvas id="usersChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h2>💬 Posts con más comentarios</h2>
+    <canvas id="postsChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h2>🏷️ Tags con más posts</h2>
+    <canvas id="tagsChart"></canvas>
+  </div>
+
+  <script>
+    async function fetchData(url) {
+      const res = await fetch(url);
+      return res.ok ? res.json() : [];
+    }
+
+    function getRandomColor(alpha) {
+      const r = Math.floor(Math.random() * 200 + 20);
+      const g = Math.floor(Math.random() * 200 + 20);
+      const b = Math.floor(Math.random() * 200 + 20);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    async function renderChart(ctxId, labels, data, labelText) {
+      const colors = labels.map(() => getRandomColor(0.6));
+      const borders = colors.map(c => c.replace(/0\.6/, '1'));
+      new Chart(document.getElementById(ctxId), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: labelText,
+            data: data,
+            backgroundColor: colors,
+            borderColor: borders,
+            borderWidth: 1,
+            hoverOffset: 10
+          }]
+        },
+        options: {
+          responsive: true,
+          animation: {
+            duration: 1200,
+            easing: 'easeOutQuart'
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    async function renderCharts() {
+      const users = await fetchData('/users-with-most-posts');
+      await renderChart(
+        'usersChart',
+        users.map(u => u.user),
+        users.map(u => u.postCount),
+        'Posts por usuario'
+      );
+
+      const posts = await fetchData('/posts-with-most-comments');
+      await renderChart(
+        'postsChart',
+        posts.map(p => p.title),
+        posts.map(p => p.commentCount),
+        'Comentarios por post'
+      );
+
+      const tags = await fetchData('/tags-with-most-posts');
+      await renderChart(
+        'tagsChart',
+        tags.map(t => t.tag),
+        tags.map(t => t.count),
+        'Posts por etiqueta'
+      );
+    }
+
+    renderCharts();
+  </script>
 </body>
-{{>footer}}
+  {{> footer}}
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let topics = [{{topics}}];
-        var discussions = {{discussions}};
-        var titles = {{titles}};
-        var comments = {{comments}};
-
-        // Dibujar el gráfico de barras
-        var canvas1 = document.getElementById('myChart');
-        var ctx1 = canvas1.getContext('2d');
-        var barWidth = 30;
-        var startX = 50;
-        var startY = 250;
-
-        for (var i = 0; i < topics.length; i++) {
-            var barHeight = discussions[i] * 5;
-            ctx1.fillStyle = 'blue';
-            ctx1.fillRect(startX, startY - barHeight, barWidth, barHeight);
-            ctx1.fillStyle = 'black';
-            ctx1.fillText(topics[i], startX, startY + 20);
-            startX += 70; // Ajuste el espaciado entre barras
-        }
-
-        // Dibujar el segundo gráfico de barras
-        var canvas2 = document.getElementById('myChart2');
-        var ctx2 = canvas2.getContext('2d');
-        startX = 50; // Reiniciar startX
-        for (var i = 0; i < titles.length; i++) {
-            var barHeight = comments[i] * 3;
-            ctx2.fillStyle = 'red';
-            ctx2.fillRect(startX, startY - barHeight, barWidth, barHeight);
-            ctx2.fillStyle = 'black';
-            ctx2.fillText(titles[i], startX, startY + 20);
-            startX += 150; // Ajuste el espaciado entre barras
-        }
-    });
-</script>
 

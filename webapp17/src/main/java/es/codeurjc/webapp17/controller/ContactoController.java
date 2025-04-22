@@ -29,7 +29,7 @@ public class ContactoController {
         if (user != null) {
             if (user.getRole() == Usr.Role.ADMIN) {
                 model.addAttribute("ADMIN", true);
-                return "index";
+                return "contacto";
             }
             }else {
                 model.addAttribute("ADMIN", false);
