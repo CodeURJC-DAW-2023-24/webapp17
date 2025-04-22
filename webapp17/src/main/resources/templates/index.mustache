@@ -55,12 +55,12 @@
 </form>
 {{/ADMIN}}
 <!-- Formulario para agregar un comentario -->
-                
+                {{#currentUser}}
                     <form action="/{{id}}/comment" method="POST">
                         <textarea name="comment" rows="4" cols="50" placeholder="Escribe tu comentario aquí..."></textarea><br>
                         <button class="button" type="submit">Comentar</button>
                     </form>
-                  
+                    {{/currentUser}}  
 {{#currentUser.username == usr.username}}
 <form action="/{{id}}/delete" method="POST">
     <button class="button danger" type="submit">Borrar Post</button>
