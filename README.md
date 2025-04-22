@@ -12,21 +12,21 @@
 
 ### Descripción general
 
-El rincón del software es una aplicación web que trata de servir como un espacio colaborativo donde los usuarios puedan compartir sus experencias, preguntar dudas o debatir sobre temas relacionados con el software. La aplicación trata de ofrecer la mejor experiencia al usuario mostrando recomendaciones, tendencias o manteniéndole informado de las novedades.
+El rincón del software es una aplicación web que trata de servir como un espacio colaborativo donde los usuarios puedan compartir sus experencias, preguntar dudas o debatir sobre temas relacionados con el software. Es un blog con al propio uso.
 
 ### 👤 Tipos de Usuario
 
 La aplicación tendrá diferentes tipos de usuarios: no registrados, registrados y administradores.
 
-Los usuarios no registrados podrán acceder al foro , ver los posts y enviar mensajes directamente a los administradores.
+Los usuarios no registrados podrán acceder al foro , ver los posts y enviar mensajes directamente a los administradores (desde la pestaña de contacto).
 
-Los usuarios registrados, además de acceder al foro, podrán publicar contenido.
+Los usuarios registrados, además de acceder al foro, podrán publicar contenido, comentar y gestionar sus propios post.
 
-Los administradores podrán  editar temáticas, banear usuarios, eliminar posts y emplear LLM para la autogeneración de post.
+Los administradores podrán  banear usuarios, eliminar posts y emplear LLM para la autogeneración de post.
 
 ### 🔑 Entidades 
 
-La aplicación tendrá diferentes tipos de entidades: usuarios, temáticas, posts, comentarios.
+La aplicación tendrá diferentes tipos de entidades: usuarios, posts, comentarios y mesnajes directos a administradores
 
 ![Diagrama de entidades](images/entidades.svg "Diagrama de entidades")
 
@@ -40,7 +40,7 @@ La aplicación tendrá gráficos de tendencias sobre las temáticas con más pub
 
 ### 🔮 Tecnologías complementarias
 
-La aplicación  dispondrá de un LLM local para la autogeneración de post.
+La aplicación  dispondrá de un LLM local para que los administradores puedan emplearlo en la  autogeneración de posts. Además de un chatbot disponible spara todos los usuarios, el chatbot dispone de memoria conversacional.
 
 ### 🔧 Algoritmos avanzados
 
@@ -49,8 +49,5 @@ La aplicación  dispondrá de un LLM local para la autogeneración de post.
 ### 👥 Colaboradores
 
 | Nombre | Email | Github |
-| --------------------------- | --------------------------------- | --------------------------------------------------- |
-| Sergio Villagarcía Sánchez | s.villagarcia.2019@alumnos.urjc.es | [Sergio-1502](https://github.com/Sergio-1502)                 |
-| Adrián Morales Dato | a.morales.2019@alumnos.urjc.es | [Adri-md-1208](https://github.com/Adri-md-1208)                 |
-| Nicolás Rubira Cabello | n.rubira.2019@alumnos.urjc.es | [nicorubira](https://github.com/nicorubira)                  |
+| --------------------------- | --------------------------------- | --------------------------------------------------- |               |
 | Jesús González Gironda | j.gironda.2019@alumnos.urjc.es | [ggronda](https://github.com/ggronda) |
