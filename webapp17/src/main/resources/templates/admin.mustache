@@ -1,61 +1,53 @@
 {{>header}}
 <div id="content">
-      <div id="left">
-        
-        {{#issues}}
-        
-    <div class="entry">
-      <h2>Mensaje</a></h2>
-      <p>{{content}}</p>
-      <p class="meta"><span class="date">Date:{{date}}</span> Issued by {{name}} </p>
-      <form action="issue/{{id}}/delete" method="POST">
-        <button class="button" type="submit">Borrar </button>
-    </form>
-    </div>
-
-    {{/issues}}
-     
-    
-      <h1>Usuarios</h1>
+    <div id="left">
+      
+      {{#issues}}
+      <div class="entry" style="border: 2px solid #f39c12; padding: 1em; margin-bottom: 1em; border-radius: 10px; background-color: #fffbea; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #e67e22;">📢 Mensaje importante</h2>
+        <p style="font-size: 1.1em;">📝 {{content}}</p>
+        <p class="meta" style="color: #7f8c8d;"><span class="date">📅 Fecha: {{date}}</span> | 🧑 Emitido por <strong>{{name}}</strong></p>
+        <form action="issue/{{id}}/delete" method="POST">
+          <button class="button" style="background-color: #e74c3c; color: white; border: none; padding: 0.5em 1em; border-radius: 5px; cursor: pointer;">🗑️ Borrar</button>
+        </form>
+      </div>
+      {{/issues}}
+  
+      <h1 style="color: #3498db;">👥 Lista de Usuarios</h1>
       {{#users}}
-      <div class="entry">
-          <h2>Usuario: {{username}}</h2>
-          <p>ID: {{id}}</p>
-          <p>Correo Electrónico: {{email}}</p>
-          <p>Número de Publicaciones: {{postsCount}}</p>
-          <p>Número de Comentarios: {{commentsCount}}</p>
+      <div class="entry" style="border: 2px solid #2980b9; padding: 1em; margin-bottom: 1em; border-radius: 10px; background-color: #ecf9ff; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+          <h2 style="color: #2c3e50;">🙋 Usuario: {{username}}</h2>
+          <p>🆔 ID: {{id}}</p>
+          <p>📧 Correo: {{email}}</p>
+          <p>📝 Publicaciones: {{postsCount}}</p>
+          <p>💬 Comentarios: {{commentsCount}}</p>
           <form action="user/{{id}}/delete" method="POST">
-              <button class="button" type="submit">Borrar</button>
+              <button class="button" style="background-color: #c0392b; color: white; border: none; padding: 0.5em 1em; border-radius: 5px; cursor: pointer;">🗑️ Borrar</button>
           </form>
       </div>
       {{/users}}
-
-      <h1>Crear usuario</h1>
-      <!-- Formulario para crear usuarios de prueba -->
-<form action="/admin/create-user" method="post">
-    <label for="username">Nombre de usuario:</label>
-    <input type="text" id="username" name="username" required><br>
-
-    <label for="email">Correo electrónico:</label>
-    <input type="email" id="email" name="email" required><br>
-
-    <label for="password">Contraseña:</label>
-    <input type="password" id="password" name="password" required><br>
-
-    <label for="role">Rol:</label>
-    <select id="role" name="role">
-        <option value="USER">Usuario</option>
-        <option value="ADMIN">Administrador</option>
-    </select><br>
-
-    <button type="submit">Crear usuario</button>
-</form>
-
-
+  
+      <h1 style="color: #2ecc71;">🆕 Crear nuevo usuario</h1>
+      <form action="/admin/create-user" method="post" style="background-color: #eaffea; padding: 1em; border: 2px solid #27ae60; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+          <label for="username">👤 Nombre de usuario:</label><br>
+          <input type="text" id="username" name="username" required><br><br>
+  
+          <label for="email">📧 Correo electrónico:</label><br>
+          <input type="email" id="email" name="email" required><br><br>
+  
+          <label for="password">🔒 Contraseña:</label><br>
+          <input type="password" id="password" name="password" required><br><br>
+  
+          <label for="role">🧩 Rol:</label><br>
+          <select id="role" name="role">
+              <option value="USER">👤 Usuario</option>
+              <option value="ADMIN">🛡️ Administrador</option>
+          </select><br><br>
+  
+          <button type="submit" style="background-color: #2ecc71; color: white; border: none; padding: 0.6em 1.2em; border-radius: 5px; cursor: pointer;">🚀 Crear usuario</button>
+      </form>
+  
     </div>
   </div>
   
-  
-
-  </div>
   {{>footer}}

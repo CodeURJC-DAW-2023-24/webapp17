@@ -81,6 +81,12 @@ public class ChatController {
 
         return "redirect:/";
     } 
+    @PostMapping("/chatbot/send")
+public Map<String, String> handleChat(@RequestParam("message") String message) {
+    String response = chatClient.call(message);
+    return Map.of("response", response);
+}
+
 
 
 }

@@ -145,7 +145,71 @@
                 <br><br>
                 🌐 Los foros de software suelen ser comunidades activas y colaborativas donde puedes obtener ayuda, aprender nuevas habilidades y participar en debates sobre diversos aspectos del mundo del software.
             </p>
-        
+            <h1 style="color: #9b59b6;">🤖 Chatbot</h1>
+            <div style="max-width: 600px; margin: 2em auto; padding: 1.5em; background: linear-gradient(135deg, #f9f0ff, #fdf0ff); border-radius: 16px; box-shadow: 0 8px 20px rgba(155, 89, 182, 0.2); border: 2px solid #e1bee7; font-family: 'Segoe UI', sans-serif;">
+          
+              <h2 style="color: #8e44ad; margin-bottom: 1em; text-align: center;">🤖 ¡Chatea con el Bot!</h2>
+          
+              <div id="chat-box" style="height: 250px; overflow-y: auto; background-color: #ffffff; border: 1px solid #ddd; padding: 1em; border-radius: 10px; margin-bottom: 1em; box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);">
+                <p style="color: #aaa; text-align: center;">¡Comienza la conversación! 🗨️</p>
+              </div>
+          
+              <div style="display: flex; gap: 0.5em;">
+                <input type="text" id="user-input" placeholder="Escribe tu mensaje..." style="flex: 1; padding: 0.75em; border-radius: 10px; border: 1px solid #ccc; font-size: 1em;">
+                <button onclick="sendMessage()" style="padding: 0.75em 1.2em; background-color: #9b59b6; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.3s;">
+                  Enviar 🚀
+                </button>
+              </div>
+            </div>
+          
+            <script>
+              // Array global para guardar toda la conversación
+              let chatHistory = [];
+          
+              function sendMessage() {
+                const input = document.getElementById('user-input');
+                const chatBox = document.getElementById('chat-box');
+                const message = input.value.trim();
+                if (!message) return;
+          
+                // 1) Añadimos el mensaje del usuario al historial
+                chatHistory.push({ role: 'user', content: message });
+          
+                // 2) Mostramos el mensaje en pantalla
+                appendBubble(message, 'user');
+                chatBox.scrollTop = chatBox.scrollHeight;
+          
+                // 3) Limpiamos el input
+                input.value = '';
+          
+                // 4) Enviamos TODO el historial al backend
+                fetch('/chatbot/send', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ history: chatHistory })
+                })
+                .then(res => res.json())
+                .then(data => {
+                  const botReply = data.response;
+                  // Guardamos respuesta del bot
+                  chatHistory.push({ role: 'assistant', content: botReply });
+                  // Mostramos la respuesta
+                  appendBubble(botReply, 'assistant');
+                  chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(err => console.error('Error en el chatbot:', err));
+              }
+          
+              function appendBubble(text, role) {
+                const chatBox = document.getElementById('chat-box');
+                const div = document.createElement('div');
+                div.style.textAlign = role === 'user' ? 'right' : 'left';
+                const color = role === 'user' ? '#dcd0ff' : '#f5e1ff';
+                const prefix = role === 'assistant' ? '🤖 ' : '';
+                div.innerHTML = `<span style="background:${color}; padding:0.5em 1em; border-radius:12px; display:inline-block; margin-bottom:5px;">${prefix}${text}</span>`;
+                chatBox.appendChild(div);
+              }
+            </script>
         </div>
         
         <!-- 🎬 Animación opcional (puedes ponerla en tu CSS global) -->
