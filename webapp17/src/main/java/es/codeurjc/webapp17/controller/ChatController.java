@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import es.codeurjc.webapp17.entity.Post;
+import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.PostService;
+import jakarta.servlet.http.HttpSession;
 import reactor.core.publisher.Flux;
 
 @Controller
@@ -51,7 +53,7 @@ public class ChatController {
     }
 
     @PostMapping("/generate-post")
-    public String response(@RequestParam("tag") String inputString) {
+    public String response(HttpSession session,@RequestParam("tag") String inputString) {
         String prompt  = this.postGeneratorPrompt.concat(inputString);
         LocalDateTime now = LocalDateTime.now();
         String title =  "LLM Post about "+ inputString; 
@@ -66,7 +68,12 @@ public class ChatController {
         post.setDate(now);
         post.setTag(tag);
         post.setImage(LLM_IMAGE_PATH);
-        //post.setUsr(LLM);
+        Usr user = (Usr) session.getAttribute("user"); // Obtener el usuario de la sesión
+            if (user == null) {
+                // Manejar el caso en que el usuario no está autenticado
+                return "redirect:/log_in"; // Redirigir a la página de inicio de sesión
+            }
+            post.setUsr(user);
 
 
         postService.addPost(post);

@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +45,7 @@ public class PostController {
     public String createPost(HttpSession session, @RequestParam String title, @RequestParam String content, @RequestParam String tag, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         LocalDateTime now = LocalDateTime.now();
 
+      
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);

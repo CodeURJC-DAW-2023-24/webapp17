@@ -53,7 +53,7 @@ public class Post {
     @Column(columnDefinition = "TEXT", length = 300)
     private String content;
 
-    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm:ss") // 10 de septiembre de 2024 14:30:00
+    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm") // 10 de septiembre de 2024 14:30:00
     private LocalDateTime date;
 
 
