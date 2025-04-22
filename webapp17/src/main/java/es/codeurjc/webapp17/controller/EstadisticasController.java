@@ -1,13 +1,9 @@
 package es.codeurjc.webapp17.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.hibernate.annotations.Comments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
-import es.codeurjc.webapp17.repository.PostRepository;
 import es.codeurjc.webapp17.service.CommentService;
 import es.codeurjc.webapp17.service.PostService;
 import es.codeurjc.webapp17.service.UsrService;

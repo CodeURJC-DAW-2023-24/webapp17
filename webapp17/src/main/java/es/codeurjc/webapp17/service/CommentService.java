@@ -21,8 +21,11 @@ public class CommentService {
 
 
 
-    private List<Comment> comments = new ArrayList<>();
-
+    /**
+     * Retrieves a list of all comments from the database.
+     *
+     * @return a list of Comment objects
+     */
     public List<Comment> getAllComment() {
         return commentRepository.findAll();
     }

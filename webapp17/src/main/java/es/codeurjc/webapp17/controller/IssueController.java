@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.codeurjc.webapp17.entity.Issue;
-import es.codeurjc.webapp17.entity.Post;
-import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.IssueService;
 
 @Controller

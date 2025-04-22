@@ -1,15 +1,11 @@
 package es.codeurjc.webapp17.service;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import es.codeurjc.webapp17.entity.Issue;
 import es.codeurjc.webapp17.entity.Usr;
-import es.codeurjc.webapp17.repository.IssueRepository;
-import es.codeurjc.webapp17.repository.PostRepository;
 import es.codeurjc.webapp17.repository.UsrRepository;
 
 @Service

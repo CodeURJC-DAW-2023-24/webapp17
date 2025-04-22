@@ -62,6 +62,7 @@ public class HomeController {
             model.addAttribute("ADMIN", false); // No user in session   
             model.addAttribute("currentUser", null); // No user info
         }
+
         return "index"; // Return index view
     }
 

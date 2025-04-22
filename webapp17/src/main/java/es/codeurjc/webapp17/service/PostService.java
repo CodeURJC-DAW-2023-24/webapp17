@@ -1,8 +1,6 @@
 package es.codeurjc.webapp17.service;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +18,6 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
-    private List<Post> posts = new ArrayList<>();
 
     public Page<Post> getPosts(int page, int size) {
         PageRequest pageable = PageRequest.of(page, size);
