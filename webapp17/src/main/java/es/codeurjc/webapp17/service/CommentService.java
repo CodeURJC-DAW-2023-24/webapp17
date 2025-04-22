@@ -23,12 +23,10 @@ public class CommentService {
 
     private List<Comment> comments = new ArrayList<>();
 
-    // Método para obtener todos los Comments
     public List<Comment> getAllComment() {
         return commentRepository.findAll();
     }
 
-    // Método para agregar un nuevo Comment
     public void addComment(Comment comment) {
         commentRepository.save(comment);
     }

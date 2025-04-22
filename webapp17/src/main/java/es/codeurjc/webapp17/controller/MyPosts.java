@@ -14,7 +14,7 @@ import es.codeurjc.webapp17.service.PostService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class HomeController {
+public class MyPosts {
 
     @Autowired
     private PostService postService;
@@ -28,13 +28,27 @@ public class HomeController {
      * @param session the current HTTP session, used to check for a logged-in user
      * @return the name of the view template ("index")
      */
-    @GetMapping("/")
+    @GetMapping("/myposts")
     public String index(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
             Model model,
             HttpSession session) {
-        Page<Post> posts = postService.getPosts(page, size);
+
+        Usr user = (Usr) session.getAttribute("user");
+        if (user != null) {
+            if (user.getRole() == Usr.Role.ADMIN) {
+                model.addAttribute("ADMIN", true); // Set admin flag
+                model.addAttribute("currentUser", user); // Pass current user info
+            } else {
+                model.addAttribute("ADMIN", false);
+                model.addAttribute("currentUser", user);
+
+            }
+        } else {
+            return "redirect:/log_in"; // Redirect to login if no user in session
+        }
+        Page<Post> posts = postService.getPostsbyUsr(page, size, user);
 
         // Add pagination data to the model
         model.addAttribute("posts", posts);
@@ -49,20 +63,9 @@ public class HomeController {
         model.addAttribute("nextPage", posts.hasNext() ? page + 1 : null);
 
         // Check for user in session
-        Usr user = (Usr) session.getAttribute("user");
-        if (user != null) {
-            if (user.getRole() == Usr.Role.ADMIN) {
-                model.addAttribute("ADMIN", true); // Set admin flag
-                model.addAttribute("currentUser", user); // Pass current user info
-            } else {
-                model.addAttribute("ADMIN", false);
-                model.addAttribute("currentUser", user);
-            }
-        } else {
-            model.addAttribute("ADMIN", false); // No user in session   
-            model.addAttribute("currentUser", null); // No user info
-        }
-        return "index"; // Return index view
+
+        model.addAttribute("isOwner", true); // Default value for isOwner
+        return "myposts"; // Return index view
     }
 
 }

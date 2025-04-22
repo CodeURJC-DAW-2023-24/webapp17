@@ -22,7 +22,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     void delete(Post post);
 
-    List<Post> findByUsr(Usr usr);
+    Page<Post> findByUsr(Usr usr, Pageable pageable);
 
     List<Post> findByDateOrderByDate(Date date);
 }

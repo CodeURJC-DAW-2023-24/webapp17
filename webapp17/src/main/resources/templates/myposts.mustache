@@ -90,61 +90,22 @@
             {{/posts.content}}
             
 
-            {{#currentUser}}
-        <h1>📝 Publica un nuevo Post</h1>
-<form action="/create-post" method="POST" enctype="multipart/form-data" style="max-width: 500px; text-align: left; padding: 10px;">
-    
-    <label for="title">📌 Título:</label><br>
-    <input type="text" name="title" style="width: 100%; padding: 5px; margin-bottom: 10px;"><br>
-
-    <label for="tag">🏷️ Temática:</label><br>
-    <input type="text" name="tag" style="width: 100%; padding: 5px; margin-bottom: 10px;"><br>
-
-    <label for="content">🗒️ Contenido:</label><br>
-    <textarea name="content" rows="4" style="width: 100%; padding: 5px; margin-bottom: 10px;"></textarea><br>
-
-    <label for="imageName">🖼️ Nombre de la imagen:</label><br>
-    <input type="text" name="imageName" style="width: 100%; padding: 5px; margin-bottom: 10px;"><br>
-
-    <label for="image">📷 Archivo de imagen (.jpg/.jpeg):</label><br>
-    <input type="file" name="image" accept=".jpg, .jpeg" style="margin-bottom: 15px;"><br>
-
-    <button class="button" type="submit" value="Save" style="padding: 10px 20px; background-color: #4CAF50; color: white; border-radius: 8px; border: none; cursor: pointer;">
-        🚀 Crear Post
-    </button>
-</form>
-{{/currentUser}}
-{{#ADMIN}}
-        <br><hr style="width: 100%; border-top: 1px dashed #ccc;"><br>
-        <h1>🤖 Genera un nuevo Post</h1>
-        <form action="/generate-post" method="POST" enctype="multipart/form-data" style="max-width: 500px; text-align: left; padding: 10px;">
-            
-            <label for="tag">🏷️ Temática:</label><br>
-            <input type="text" name="tag" style="width: 100%; padding: 5px; margin-bottom: 10px;"><br>
-        
-            <button class="button" type="submit" style="padding: 10px 20px; background-color:rgb(17, 61, 218); color: white; border-radius: 8px; border: none; cursor: pointer;">
-                ✨ Autogenerar Post
-            </button>
-        </form>
-        {{/ADMIN}}
 
         
 
         </div>
         <div id="right" style="background: linear-gradient(135deg, #f0f8ff, #e6f7ff); padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); max-width: 600px; font-family: 'Segoe UI', sans-serif; animation: fadeIn 1s ease-out;">
     
-            <h2 style="color: #005a9c; font-size: 28px; margin-bottom: 10px;">👥 ¿Quiénes somos?</h2>
+            <h2 style="color: #005a9c; font-size: 28px; margin-bottom: 10px;">👥 {{#currentUser}}{{username}}{{/currentUser}} </h2>
             
             <p class="intro" style="font-size: 16px; line-height: 1.6; color: #333;">
-                💻 <strong>El rincón del software</strong> es una plataforma en línea donde los usuarios pueden discutir,
-                intercambiar ideas y resolver problemas relacionados con el desarrollo, la programación y el uso de software.
-                <br><br>
-                🤝 Estos foros proporcionan un espacio para que <em>desarrolladores, ingenieros de software y entusiastas de la tecnología</em> compartan sus experiencias, consejos y soluciones técnicas.
-                <br><br>
-                📚 Los temas de discusión pueden variar desde preguntas específicas sobre <code>lenguajes de programación</code> hasta debates sobre las últimas tendencias en tecnología.
-                <br><br>
-                🌐 Los foros de software suelen ser comunidades activas y colaborativas donde puedes obtener ayuda, aprender nuevas habilidades y participar en debates sobre diversos aspectos del mundo del software.
-            </p>
+              💻 <strong>Esta es tu página principal</strong> donde puedes ver todos tus posts y editarlos a placer. Aquí es donde podrás gestionar todo tu contenido de forma fácil y cómoda.
+              <br><br>
+              🚀 Gracias por usar la aplicación, ¡esperamos que disfrutes de la experiencia! Si tienes cualquier duda, no dudes en consultarnos.
+              <br><br>
+              😘 Un beso y ¡feliz programación!
+          </p>
+          
             <h1 style="color: #9b59b6;">🤖 Chatbot</h1>
             <div style="max-width: 600px; margin: 2em auto; padding: 1.5em; background: linear-gradient(135deg, #f9f0ff, #fdf0ff); border-radius: 16px; box-shadow: 0 8px 20px rgba(155, 89, 182, 0.2); border: 2px solid #e1bee7; font-family: 'Segoe UI', sans-serif;">
           

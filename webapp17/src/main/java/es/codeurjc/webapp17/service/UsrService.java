@@ -64,7 +64,7 @@ public class UsrService {
 
 
     public void createUsr(Usr newUser) {
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword())); // Codifica la contraseña
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword())); 
         userRepository.save(newUser);
     }
 
