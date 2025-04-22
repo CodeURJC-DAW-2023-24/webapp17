@@ -25,7 +25,6 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class EstadisticasController {
 
-
     @Autowired
     private PostService postService;
     @Autowired
@@ -33,24 +32,34 @@ public class EstadisticasController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * Controller for statistics-related endpoints.
+     */
     @GetMapping("/estadisticas")
     public String mostrarEstadisticas(Model model, HttpSession session) {
         Usr user = (Usr) session.getAttribute("user");
+
         if (user != null) {
             if (user.getRole() == Usr.Role.ADMIN) {
-                model.addAttribute("ADMIN", true);
+                model.addAttribute("ADMIN", true); // User is admin
             } else {
-                model.addAttribute("ADMIN", false);
-                return "redirect:/index";
+                model.addAttribute("ADMIN", false); // User is not admin
+                return "redirect:/index"; // Redirect non-admin users to index
             }
         } else {
-            model.addAttribute("ADMIN", false);
-            return "redirect:/log_in";
-        }
-        return "estadisticas";
+            model.addAttribute("ADMIN", false); // No user in session
+            return "redirect:/log_in"; // Redirect to login if user is not logged in
         }
 
-    // Usuarios con más posts
+        return "estadisticas"; // Return the statistics view
+    }
+
+    /**
+     * Returns a list of users with their corresponding number of posts, sorted
+     * descending.
+     *
+     * @return a list of maps with "user" and "postCount"
+     */
     @GetMapping("/users-with-most-posts")
     @ResponseBody
     public List<Map<String, Object>> usersWithMostPosts() {
@@ -62,12 +71,17 @@ public class EstadisticasController {
             result.add(Map.of("user", user.getUsername(), "postCount", count));
         }
 
-        // Ordenar descendente por cantidad de posts
-        result.sort((a, b) -> ((Integer)b.get("postCount")).compareTo((Integer)a.get("postCount")));
+        // Sort descending by post count
+        result.sort((a, b) -> ((Integer) b.get("postCount")).compareTo((Integer) a.get("postCount")));
         return result;
     }
 
-    // Posts con más comentarios
+    /**
+     * Returns a list of posts with their corresponding number of comments, sorted
+     * descending.
+     *
+     * @return a list of maps with "title" and "commentCount"
+     */
     @GetMapping("/posts-with-most-comments")
     @ResponseBody
     public List<Map<String, Object>> postsWithMostComments() {
@@ -79,38 +93,44 @@ public class EstadisticasController {
             result.add(Map.of("title", post.getTitle(), "commentCount", count));
         }
 
-        result.sort((a, b) -> ((Integer)b.get("commentCount")).compareTo((Integer)a.get("commentCount")));
+        // Sort descending by comment count
+        result.sort((a, b) -> ((Integer) b.get("commentCount")).compareTo((Integer) a.get("commentCount")));
         return result;
     }
 
-    // Tags con más posts
+    /**
+     * Returns a list of tags with the number of posts associated with each, sorted
+     * descending.
+     *
+     * @return a list of maps with "tag" and "count"
+     */
     @GetMapping("/tags-with-most-posts")
     @ResponseBody
     public List<Map<String, Object>> tagsWithMostPosts() {
-    // Paso 1: Obtener todos los posts
-    List<Post> posts = postService.getAllPosts();
+        // Step 1: Get all posts
+        List<Post> posts = postService.getAllPosts();
 
-    // Paso 2: Contar la cantidad de posts por tag
-    Map<String, Long> tagCounts = new HashMap<>();
-    for (Post post : posts) {
-        String tag = post.getTag();
-        tagCounts.put(tag, tagCounts.getOrDefault(tag, 0L) + 1);
+        // Step 2: Count posts per tag
+        Map<String, Long> tagCounts = new HashMap<>();
+        for (Post post : posts) {
+            String tag = post.getTag();
+            tagCounts.put(tag, tagCounts.getOrDefault(tag, 0L) + 1);
+        }
+
+        // Step 3: Convert to list of maps
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Map.Entry<String, Long> entry : tagCounts.entrySet()) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("tag", entry.getKey());
+            data.put("count", entry.getValue());
+            result.add(data);
+        }
+
+        // Step 4: Sort descending by count
+        result.sort((a, b) -> ((Long) b.get("count")).compareTo((Long) a.get("count")));
+
+        // Step 5: Return result
+        return result;
     }
-
-    // Paso 3: Convertir el mapa en una lista de mapas con clave/valor
-    List<Map<String, Object>> result = new ArrayList<>();
-    for (Map.Entry<String, Long> entry : tagCounts.entrySet()) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("tag", entry.getKey());
-        data.put("count", entry.getValue());
-        result.add(data);
-    }
-
-    // Paso 4: Ordenar la lista por cantidad (de mayor a menor)
-    result.sort((a, b) -> ((Long) b.get("count")).compareTo((Long) a.get("count")));
-
-    // Paso 5: Devolver el resultado
-    return result;
-}
 
 }

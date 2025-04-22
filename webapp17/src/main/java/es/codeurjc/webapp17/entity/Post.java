@@ -47,13 +47,13 @@ public class Post {
     @Column(nullable = false, length = 100)
     private String title;
     
-    @Column(length = 200) // La longitud puede variar según tus necesidades
+    @Column(length = 200) 
     private String image;
 
     @Column(columnDefinition = "TEXT", length = 300)
     private String content;
 
-    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm") // 10 de septiembre de 2024 14:30:00
+    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm") 
     private LocalDateTime date;
 
 

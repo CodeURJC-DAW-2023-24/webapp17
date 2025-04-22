@@ -13,46 +13,58 @@ public class Initializer {
 
     @Autowired
     private UsrRepository usrRepository;
-    
+
     @Autowired
     private UsrService userService;
 
-    // Contraseña cifrada usando el cifrado César con un desplazamiento de 3
-    private static final String ENCRYPTED_PASSWORD = "vxshudgplq"; 
-    private static final int SHIFT = 3; // Número de posiciones para el cifrado César
+    // Encrypted password using Caesar cipher with a shift of 3
+    private static final String ENCRYPTED_PASSWORD = "vxshudgplq";
+    private static final int SHIFT = 3; // Number of positions for Caesar cipher shift
 
+    /**
+     * This method is called after the bean's properties have been set.
+     * It checks if the user "SUPERADMIN" exists. If not, it decrypts the password
+     * and creates the user.
+     */
     @PostConstruct
     public void init() {
         Usr existingUser = usrRepository.findByUsername("SUPERADMIN");
 
         if (existingUser == null) {
-            // Descifrar la contraseña
+            // Decrypt the password
             String password = decryptPassword(ENCRYPTED_PASSWORD, SHIFT);
-            //System.out.println("___________________________________________________________________________________________Contraseña descifrada: " + password);
 
             Usr newUser = new Usr("SUPERADMIN", "superadmin@superadmin", password, true);
 
-            // Guardar el nuevo usuario en la base de datos
+            // Save the new user to the database
             userService.createUsr(newUser);
         }
     }
 
-    // Método para descifrar la contraseña utilizando el cifrado César inverso
+    /**
+     * Method to decrypt the password using reverse Caesar cipher.
+     * It shifts the characters backward in the alphabet by the given shift amount.
+     *
+     * @param encryptedPassword the encrypted password string
+     * @param shift             the number of positions to shift each character
+     * @return the decrypted password
+     */
     private String decryptPassword(String encryptedPassword, int shift) {
         StringBuilder decryptedPassword = new StringBuilder();
 
         for (char c : encryptedPassword.toCharArray()) {
             if (Character.isLetter(c)) {
                 char base = Character.isUpperCase(c) ? 'A' : 'a';
-                // Desplazar cada carácter hacia atrás en el alfabeto
+                // Shift each character backward in the alphabet
                 char decryptedChar = (char) ((c - base - shift + 26) % 26 + base);
                 decryptedPassword.append(decryptedChar);
             } else {
-                // Si no es letra, no lo descifres
+                // If it's not a letter, don't decrypt it
                 decryptedPassword.append(c);
             }
         }
 
         return decryptedPassword.toString();
     }
+
 }

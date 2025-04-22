@@ -20,8 +20,19 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
 
+    /**
+     * Creates a new issue with the provided details and saves it to the database.
+     *
+     * @param name    the name of the person reporting the issue
+     * @param email   the email of the person reporting the issue
+     * @param content the content describing the issue
+     * @param model   the model to pass data to the view (though not used in this
+     *                case)
+     * @return a redirect to the "contacto" page after the issue is created
+     */
     @PostMapping("/issue")
-    public String createIssue(@RequestParam String name, @RequestParam String email, @RequestParam String content, Model model) {
+    public String createIssue(@RequestParam String name, @RequestParam String email, @RequestParam String content,
+            Model model) {
         LocalDateTime now = LocalDateTime.now();
 
         Issue issue = new Issue();
@@ -32,15 +43,21 @@ public class IssueController {
 
         issueService.addIssue(issue);
 
-       
-        return "/contacto"; // Redirige a la página principal después de crear el issue
+        // Redirect to the contact page after creating the issue
+        return "/contacto"; // Redirect to the contact page after the issue is created
     }
 
-     @PostMapping("issue/{id}/delete")
+    /**
+     * Deletes an issue by its ID.
+     *
+     * @param id the ID of the issue to be deleted
+     * @return a redirect to the admin page after the issue is deleted
+     */
+    @PostMapping("issue/{id}/delete")
     public String deleteIssue(@PathVariable Long id) {
         issueService.deleteIssue(id);
+        // Redirect to the admin page after deleting the issue
         return "redirect:/admin";
     }
-
 
 }

@@ -21,72 +21,96 @@ import reactor.core.publisher.Flux;
 
 @Controller
 public class ChatController {
-    
-    
+
     private final OllamaChatClient chatClient;
     private final String postGeneratorPrompt = "Write an article about: ";
 
-     @Autowired
+    @Autowired
     private PostService postService;
-
-
     private static final String LLM_IMAGE_PATH = "/images/LLM.png";
-
-
-
-
-    
     public ChatController(OllamaChatClient chatClient) {
         this.chatClient = chatClient;
     }
-
+    /**
+     * Handles GET requests to generate a text response using the AI model.
+     *
+     * @param message the prompt to send to the AI (default is "Tell me a joke")
+     * @return a map containing the generated response
+     */
     @GetMapping("/ai/generate")
-    public Map generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+    public Map<String, String> generate(
+            @RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
         return Map.of("generation", chatClient.call(message));
     }
 
+    /**
+     * Handles GET requests to stream AI-generated responses in real time.
+     *
+     * @param message the prompt to send to the AI (default is "Tell me a joke")
+     * @return a Flux stream of ChatResponse objects
+     */
     @GetMapping("/ai/generateStream")
-	public Flux<ChatResponse> generateStream(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+    public Flux<ChatResponse> generateStream(
+            @RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
         Prompt prompt = new Prompt(message);
         return chatClient.stream(prompt);
-
     }
 
+    /**
+     * Handles POST requests to generate a blog post using the AI model and saves
+     * it.
+     *
+     * This method uses a base prompt with a user-provided tag, generates the post
+     * content,
+     * and stores the post in the database associated with the logged-in user.
+     *
+     * @param session     the current HTTP session, used to retrieve the logged-in
+     *                    user
+     * @param inputString the user-provided tag or topic for the post
+     * @return a redirect to the home page if successful, or to login if the user is
+     *         not authenticated
+     */
     @PostMapping("/generate-post")
-    public String response(HttpSession session,@RequestParam("tag") String inputString) {
-        String prompt  = this.postGeneratorPrompt.concat(inputString);
+    public String response(HttpSession session, @RequestParam("tag") String inputString) {
+        String prompt = this.postGeneratorPrompt.concat(inputString);
         LocalDateTime now = LocalDateTime.now();
-        String title =  "LLM Post about "+ inputString; 
-        String content =  chatClient.call(prompt);
+        String title = "LLM Post about " + inputString;
+        String content = chatClient.call(prompt);
         String tag = inputString;
 
-          
-
+        // Create and populate the new post
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
         post.setDate(now);
         post.setTag(tag);
         post.setImage(LLM_IMAGE_PATH);
-        Usr user = (Usr) session.getAttribute("user"); // Obtener el usuario de la sesión
-            if (user == null) {
-                // Manejar el caso en que el usuario no está autenticado
-                return "redirect:/log_in"; // Redirigir a la página de inicio de sesión
-            }
-            post.setUsr(user);
 
+        // Retrieve the user from the session
+        Usr user = (Usr) session.getAttribute("user");
+        if (user == null) {
+            // Redirect to login if the user is not authenticated
+            return "redirect:/log_in";
+        }
+        post.setUsr(user);
 
+        // Save the post
         postService.addPost(post);
 
-
+        // Redirect to home page
         return "redirect:/";
-    } 
+    }
+
+    /**
+     * Handles POST requests to send a message to the chatbot and get a response.
+     *
+     * @param message the message sent by the user
+     * @return a map containing the chatbot's response
+     */
     @PostMapping("/chatbot/send")
-public Map<String, String> handleChat(@RequestParam("message") String message) {
-    String response = chatClient.call(message);
-    return Map.of("response", response);
-}
-
-
+    public Map<String, String> handleChat(@RequestParam("message") String message) {
+        String response = chatClient.call(message);
+        return Map.of("response", response);
+    }
 
 }

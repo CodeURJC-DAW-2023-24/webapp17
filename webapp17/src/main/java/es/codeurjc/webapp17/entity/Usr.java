@@ -25,12 +25,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Usr {
 
-
-
-
-
-
-
     public Usr(String username, String email, String password, Boolean admin) {
         this.username = username;
         this.email = email;
@@ -46,7 +40,6 @@ public class Usr {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('ADMIN', 'USER')")
     private Role role;
-
     
     private String username;
     private String password;
@@ -67,7 +60,7 @@ public class Usr {
 
     public Role getRole() {
         if (role == null) {
-            return Role.USER; // Valor por defecto
+            return Role.USER; 
         }
         return role;
     }
