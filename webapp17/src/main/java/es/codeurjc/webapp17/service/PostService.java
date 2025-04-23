@@ -21,18 +21,16 @@ public class PostService {
 
     public Page<Post> getPosts(int page, int size) {
         PageRequest pageable = PageRequest.of(page, size);
-        return postRepository.findAll(pageable);
+        return postRepository.findAllByOrderByIdDesc(pageable);
     }
 
     public Page<Post> getPostsbyUsr(int page, int size, Usr user) {
         PageRequest pageable = PageRequest.of(page, size);
         return postRepository.findByUsr(user, pageable);
     }
-
     public ArrayList<Post> getAllPosts() {
         return new ArrayList<>(postRepository.findAll());
     }
-
     public void addPost(Post post) {
         postRepository.save(post);
     }

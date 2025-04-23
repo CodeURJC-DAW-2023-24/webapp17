@@ -28,4 +28,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByDateOrderByDate(Date date);
 
     Page<Post> findByTag(String tag, PageRequest pageable);
+
+    Page<Post> findAllByOrderByIdDesc(Pageable pageable);
 }
