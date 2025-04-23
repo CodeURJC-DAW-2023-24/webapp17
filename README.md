@@ -26,9 +26,9 @@ Los administradores podrán  banear usuarios, eliminar posts y emplear LLM para 
 
 ### 🔑 Entidades 
 
-La aplicación tendrá diferentes tipos de entidades: usuarios, posts, comentarios y mesnajes directos a administradores
+La aplicación tendrá diferentes tipos de entidades: usuarios, posts, comentarios y mensajes directos a administradores
 
-![Diagrama de entidades](images/entidades.svg "Diagrama de entidades")
+[![Diagrama de entidades](images/entidades.svg "Diagrama de entidades")](https://github.com/CodeURJC-DAW-2023-24/webapp17/blob/main/webapp17/src/main/resources/static/diagrams/ER-BBDD-DIAGRAM.png)
 
 ### 🌄 Imágenes
 
@@ -49,5 +49,4 @@ La aplicación  dispondrá de un LLM local para que los administradores puedan e
 ### 👥 Colaboradores
 
 | Nombre | Email | Github |
-| --------------------------- | --------------------------------- | --------------------------------------------------- |               |
 | Jesús González Gironda | j.gironda.2019@alumnos.urjc.es | [ggronda](https://github.com/ggronda) |
