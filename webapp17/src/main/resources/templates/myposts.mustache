@@ -79,11 +79,17 @@
                     <textarea name="comment" rows="3" cols="50" placeholder="🖊️ Escribe tu comentario aquí..." style="width: 100%; border-radius: 6px; padding: 8px;"></textarea><br>
                     <button class="button" type="submit" style="background-color: #2ecc71; color: white; border: none; padding: 8px 14px; border-radius: 8px;">💬 Comentar</button>
                 </form>
+                
                 {{/currentUser}}
             
                 {{#isOwner}}
                 <form action="/{{id}}/delete" method="POST" style="margin-top: 10px;">
                     <button class="button danger" type="submit" style="background-color: #d35400; color: white; padding: 6px 12px; border-radius: 6px;">🗑️ Borrar mi Post</button>
+                </form>
+                <form action="/{{id}}/edit" method="get" style="display:inline; margin-right: 10px;">
+                  <button class="button" type="submit" style="background-color: #3498db; color:white; padding:6px 12px; border:none; border-radius:6px;">
+                    ✏️ Editar Post
+                  </button>
                 </form>
                 {{/isOwner}}
             </div>

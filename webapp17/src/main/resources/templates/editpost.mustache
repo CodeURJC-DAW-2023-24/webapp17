@@ -1,0 +1,60 @@
+{{>header}}
+<link rel="stylesheet" href="../css/style.css">
+
+<body>
+  <!-- src/main/resources/templates/edit-post.mustache -->
+  <h2 style="color: #34495e; text-align:center; margin-top: 2rem;">✏️✨ Editar Post 📝</h2>
+
+  <form action="/{{post.id}}/edit" method="post" enctype="multipart/form-data" style="max-width: 600px; margin: auto; background: #ffffffdd; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+
+    <!-- Título -->
+    <label for="title" style="font-weight: bold;">📌 Título:</label><br>
+    <input
+      id="title"
+      name="title"
+      type="text"
+      value="{{post.title}}"
+      style="width:100%; padding:10px; border: 2px solid #dfe6e9; border-radius:10px; margin-bottom:15px;"
+    />
+
+    <!-- Contenido -->
+    <label for="content" style="font-weight: bold;">📝 Contenido:</label><br>
+    <textarea
+      id="content"
+      name="content"
+      rows="6"
+      style="width:100%; border: 2px solid #dfe6e9; border-radius:10px; padding:10px; margin-bottom:15px;"
+    >{{post.content}}</textarea>
+
+    <!-- Etiqueta -->
+    <label for="tag" style="font-weight: bold;">🏷️ Etiqueta:</label><br>
+    <input
+      id="tag"
+      name="tag"
+      type="text"
+      value="{{post.tag}}"
+      style="width:100%; padding:10px; border: 2px solid #dfe6e9; border-radius:10px; margin-bottom:15px;"
+    />
+
+    <!-- Nueva imagen (opcional) -->
+    <label for="image" style="font-weight: bold;">🖼️ Imagen (opcional):</label><br>
+    <input
+      id="image"
+      name="image"
+      type="file"
+      style="margin-bottom:20px;"
+    /><br>
+
+    <!-- Botón de envío -->
+    <button
+      class="button"
+      type="submit"
+      style="background-color: #2ecc71; color:white; padding:12px 20px; font-size:16px; font-weight: bold; border:none; border-radius:12px; cursor:pointer; transition: 0.3s ease;"
+      onmouseover="this.style.backgroundColor='#27ae60'"
+      onmouseout="this.style.backgroundColor='#2ecc71'"
+    >
+      🚀 Actualizar Post
+    </button>
+  </form>
+</body>
+{{>footer}}

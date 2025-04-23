@@ -44,4 +44,12 @@ public class PostService {
     public Post getPostById(Long id) {
         return postRepository.findById(id).orElse(null);
     }
+
+    public void updatePost(Post post) {
+        postRepository.save(post);
+    }
+    public Page<Post> getPostsByTag(int page, int size, String tag) {
+        PageRequest pageable = PageRequest.of(page, size);
+        return postRepository.findByTag(tag, pageable);
+    }
 }

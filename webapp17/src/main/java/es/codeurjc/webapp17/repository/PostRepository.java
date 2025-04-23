@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -25,4 +26,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByUsr(Usr usr, Pageable pageable);
 
     List<Post> findByDateOrderByDate(Date date);
+
+    Page<Post> findByTag(String tag, PageRequest pageable);
 }

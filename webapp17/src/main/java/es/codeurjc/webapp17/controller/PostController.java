@@ -5,12 +5,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -141,6 +142,51 @@ public class PostController {
     public String deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return "redirect:/"; // Redirect to the homepage after deleting the comment
+    }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, Model model, HttpSession session) {
+        Post post = postService.getPostById(id);
+        Usr user = (Usr) session.getAttribute("user");
+        if (post == null) {
+            return "redirect:/";
+        } else if (user == null || !(post.getUsr().getId() == user.getId())) {
+            return "redirect:/";
+        }
+        model.addAttribute("post", post);
+        return "editpost";
+    }
+    @PostMapping("/{id}/edit")
+    public String updatePost(
+            @PathVariable Long id,
+            @RequestParam String title,
+            @RequestParam String content,
+            @RequestParam String tag,
+            @RequestParam(value = "image", required = false) MultipartFile image
+    ) throws IOException {
+        Post post = postService.getPostById(id);
+        if (post == null) {
+            System.out.println("Post not found");
+            return "redirect:/";
+        }
+
+        post.setTitle(title);
+        post.setContent(content);
+        post.setTag(tag);
+
+        // (Opcional) subir nueva imagen
+        if (image != null && !image.isEmpty()) {
+            String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
+            Path filepath = Paths.get(uploadPath, filename);
+            if (!Files.exists(filepath.getParent())) {
+                Files.createDirectories(filepath.getParent());
+            }
+            Files.write(filepath, image.getBytes());
+            post.setImage("/images/" + filename);
+        }
+
+        postService.updatePost(post);
+        return "redirect:/myposts";
     }
 
 }
