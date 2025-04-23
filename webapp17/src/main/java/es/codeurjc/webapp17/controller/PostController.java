@@ -174,7 +174,7 @@ public class PostController {
         post.setContent(content);
         post.setTag(tag);
 
-        // (Opcional) subir nueva imagen
+        // (Optional) Handle image upload if present
         if (image != null && !image.isEmpty()) {
             String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
             Path filepath = Paths.get(uploadPath, filename);

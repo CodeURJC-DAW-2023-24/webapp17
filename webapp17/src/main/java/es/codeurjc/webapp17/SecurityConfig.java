@@ -25,9 +25,6 @@ public class SecurityConfig {
         http
         .authorizeHttpRequests(authRequest -> authRequest
         .anyRequest().permitAll()
-        //.requestMatchers("/aloha").authenticated()
-            //.requestMatchers("/admin").hasRole("ADMIN")
-            
         );
      http.httpBasic(login -> login.disable());
      http.csrf().disable();

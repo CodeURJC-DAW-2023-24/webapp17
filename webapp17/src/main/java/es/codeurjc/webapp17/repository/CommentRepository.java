@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import es.codeurjc.webapp17.entity.Comment;
-import es.codeurjc.webapp17.entity.Issue;
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
 

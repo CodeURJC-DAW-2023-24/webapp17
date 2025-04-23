@@ -55,7 +55,7 @@ public class AdminController {
                 model.addAttribute("ADMIN", true);
             } else {
                 model.addAttribute("ADMIN", false);
-                return "redirect:/error-no-admin"; // Redirect if not admin
+                return "redirect:/no_admin"; // Redirect if not admin
             }
             isAdmin = true;
         }
@@ -80,7 +80,7 @@ public class AdminController {
         if (isAdmin) {
             return "admin";
         } else {
-            return "redirect:/error-no-admin";
+            return "no_admin";
         }
     }
 
