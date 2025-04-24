@@ -48,6 +48,8 @@ La aplicación  dispondrá de un LLM local para que los administradores puedan e
 -Por definir-
 
 
+### 🔧 Diagrama de clases
+![Diagrama de clases](https://raw.githubusercontent.com/CodeURJC-DAW-2023-24/webapp17/main/webapp17/src/main/resources/static/diagrams/class_diagram.png)
 
 ### 👥 Colaboradores
 
