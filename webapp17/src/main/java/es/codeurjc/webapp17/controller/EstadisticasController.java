@@ -39,7 +39,7 @@ public class EstadisticasController {
                 model.addAttribute("ADMIN", true); // User is admin
             } else {
                 model.addAttribute("ADMIN", false); // User is not admin
-                return "redirect:/index"; // Redirect non-admin users to index
+                return "/no_admin"; // Redirect non-admin users to index
             }
         } else {
             model.addAttribute("ADMIN", false); // No user in session
