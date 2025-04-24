@@ -13,7 +13,7 @@
 ### Descripción general
 
 El rincón del software es una aplicación web que trata de servir como un espacio colaborativo donde los usuarios puedan compartir sus experencias, preguntar dudas o debatir sobre temas relacionados con el software. Es un blog con al propio uso.
-
+-[Diagrama de navegación](https://github.com/CodeURJC-DAW-2023-24/webapp17/commit/e8f67abe755991d757a28e8c102cc8c04578cd02#diff-584a1d3cfab9a3e75c099a2c303685fe40fec53891f284bf148f3c183ae077d9)
 ### 👤 Tipos de Usuario
 
 La aplicación tendrá diferentes tipos de usuarios: no registrados, registrados y administradores.
