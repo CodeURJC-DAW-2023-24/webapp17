@@ -39,9 +39,11 @@ public class MyPosts {
             if (user.getRole() == Usr.Role.ADMIN) {
                 model.addAttribute("ADMIN", true); // Set admin flag
                 model.addAttribute("currentUser", true); // Pass current user info
+                model.addAttribute("name", user.getUsername()); // Set isOwner to false for admin
             } else {
                 model.addAttribute("ADMIN", false);
                 model.addAttribute("currentUser", true);
+                model.addAttribute("name", user.getUsername());
 
             }
         } else {
