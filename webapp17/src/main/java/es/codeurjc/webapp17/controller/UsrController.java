@@ -57,6 +57,10 @@ public class UsrController {
             // Redirect with an error message or handle the case differently
             return "redirect:/admin"; // Prevent deletion of the superadmin
         }
+        if (user.getId() == userC.getId()) {
+            // Redirect with an error message or handle the case differently
+            return "redirect:/admin"; // Prevent deletion of the superadmin
+        }
         // Proceed with deletion if not the superadmin
         UsrService.deleteUsr(id);
         return "redirect:/admin"; // Redirect to the admin page after deleting the user
