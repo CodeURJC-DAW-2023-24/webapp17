@@ -53,10 +53,10 @@ public class HomeController {
         if (user != null) {
             if (user.getRole() == Usr.Role.ADMIN) {
                 model.addAttribute("ADMIN", true); // Set admin flag
-                model.addAttribute("currentUser", user); // Pass current user info
+                model.addAttribute("currentUser", true); // Pass current user info
             } else {
                 model.addAttribute("ADMIN", false);
-                model.addAttribute("currentUser", user);
+                model.addAttribute("currentUser", true);
             }
         } else {
             model.addAttribute("ADMIN", false); // No user in session   
