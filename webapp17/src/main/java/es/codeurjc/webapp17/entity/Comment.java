@@ -35,7 +35,7 @@ public class Comment {
     private Post post;
     
     @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm") 
-private LocalDateTime date;
+    private LocalDateTime date;
 
 
     @Column(columnDefinition = "TEXT", length = 3000)
