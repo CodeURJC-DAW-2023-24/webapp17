@@ -24,8 +24,7 @@ public class EstadisticasController {
     private PostService postService;
     @Autowired
     private UsrService userService;
-    @Autowired
-    private CommentService commentService;
+    
 
     /**
      * Controller for statistics-related endpoints.

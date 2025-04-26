@@ -1,4 +1,4 @@
-package es.codeurjc.webapp17;
+package es.codeurjc.webapp17.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

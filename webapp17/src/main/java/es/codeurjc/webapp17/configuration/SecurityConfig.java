@@ -1,4 +1,4 @@
-package es.codeurjc.webapp17;
+package es.codeurjc.webapp17.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
