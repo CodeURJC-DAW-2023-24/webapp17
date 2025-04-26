@@ -12,7 +12,7 @@
 
 ### Descripción general
 
-El rincón del software es una aplicación web que trata de servir como un espacio colaborativo donde los usuarios puedan compartir sus experencias, preguntar dudas o debatir sobre temas relacionados con el software. Es un blog con al propio uso.
+El rincón del software es una aplicación web que trata de servir como un espacio colaborativo donde los usuarios puedan compartir sus experencias, preguntar dudas o debatir sobre temas relacionados con el software. Es un blog con al propio uso. (Demo privada en youtube)
 ### 👤 Tipos de Usuario
 
 La aplicación tendrá diferentes tipos de usuarios: no registrados, registrados y administradores.
