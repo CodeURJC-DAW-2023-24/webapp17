@@ -18,7 +18,7 @@ import es.codeurjc.webapp17.service.UsrService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class EstadisticasController {
+public class StatsController {
 
     @Autowired
     private PostService postService;
@@ -30,7 +30,7 @@ public class EstadisticasController {
      * Controller for statistics-related endpoints.
      */
     @GetMapping("/estadisticas")
-    public String mostrarEstadisticas(Model model, HttpSession session) {
+    public String showStats(Model model, HttpSession session) {
         Usr user = (Usr) session.getAttribute("user");
 
         if (user != null) {

@@ -31,7 +31,7 @@ public class UsrController {
     public String createUsr(@RequestParam String name, @RequestParam String email, @RequestParam String password,
             @RequestParam Boolean admin, Model model) {
         UsrService.createUsr(name, email, password, admin);
-        return "/contacto"; // Redirect to the contact page after creating the user
+        return "/contact"; // Redirect to the contact page after creating the user
     }
 
     /**

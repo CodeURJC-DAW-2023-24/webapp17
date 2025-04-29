@@ -42,7 +42,7 @@ public class IssueController {
         issueService.addIssue(issue);
 
         // Redirect to the contact page after creating the issue
-        return "/contacto"; // Redirect to the contact page after the issue is created
+        return "/contact"; // Redirect to the contact page after the issue is created
     }
 
     /**

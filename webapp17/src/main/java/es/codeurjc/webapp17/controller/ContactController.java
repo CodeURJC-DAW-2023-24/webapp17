@@ -7,7 +7,7 @@ import es.codeurjc.webapp17.entity.Usr;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class ContactoController {
+public class ContactController {
 
     /**
      * Handles GET requests to the contact page.
@@ -21,8 +21,8 @@ public class ContactoController {
      * @param session the current HTTP session, used to retrieve the logged-in user
      * @return the name of the "contacto" view
      */
-    @GetMapping("/contacto")
-    public String contacto(Model model, HttpSession session) {
+    @GetMapping("/contact")
+    public String contact(Model model, HttpSession session) {
         Usr user = (Usr) session.getAttribute("user");
 
         if (user != null) {
