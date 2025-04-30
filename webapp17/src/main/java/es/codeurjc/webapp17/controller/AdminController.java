@@ -154,7 +154,7 @@ public class AdminController {
      * @param role     the role assigned to the new user ("ADMIN" or "USER")
      * @return a redirect to the admin page after successful creation
      */
-    @PostMapping("/admin/create-user")
+    @PostMapping("/admin/newUser")
     public String createUser(@RequestParam("username") String username,
             @RequestParam("email") String email,
             @RequestParam("password") String password,

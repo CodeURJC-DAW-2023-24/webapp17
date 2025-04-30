@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
-import es.codeurjc.webapp17.service.CommentService;
 import es.codeurjc.webapp17.service.PostService;
 import es.codeurjc.webapp17.service.UsrService;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -54,6 +54,7 @@ public class StatsController {
      *
      * @return a list of maps with "user" and "postCount"
      */
+    @Hidden
     @GetMapping("/users-with-most-posts")
     @ResponseBody
     public List<Map<String, Object>> usersWithMostPosts() {
@@ -76,6 +77,7 @@ public class StatsController {
      *
      * @return a list of maps with "title" and "commentCount"
      */
+    @Hidden
     @GetMapping("/posts-with-most-comments")
     @ResponseBody
     public List<Map<String, Object>> postsWithMostComments() {
@@ -98,6 +100,7 @@ public class StatsController {
      *
      * @return a list of maps with "tag" and "count"
      */
+    @Hidden
     @GetMapping("/tags-with-most-posts")
     @ResponseBody
     public List<Map<String, Object>> tagsWithMostPosts() {

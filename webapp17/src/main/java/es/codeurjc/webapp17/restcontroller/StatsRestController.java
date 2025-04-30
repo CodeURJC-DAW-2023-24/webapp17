@@ -2,7 +2,10 @@ package es.codeurjc.webapp17.restcontroller;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import es.codeurjc.webapp17.entity.Post;
@@ -10,18 +13,16 @@ import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.PostService;
 import es.codeurjc.webapp17.service.UsrService;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 
-/**
- * REST controller that provides various statistics about users, posts, and tags.
- */
+
 @RestController
-@RequestMapping("/api/statistics")
+@RequestMapping("/api/v1/statistics")
 @Tag(name = "Statistics", description = "Operations related to users, posts, and tags statistics.")
 public class StatsRestController {
 
@@ -31,115 +32,95 @@ public class StatsRestController {
     @Autowired
     private UsrService userService;
 
-    /**
-     * Checks if the current user is logged in and has admin role.
-     *
-     * @param session the current HTTP session
-     * @return a map containing admin status or redirection/error info
-     */
-    @Operation(summary = "Check if user is admin",
-               responses = {
-                   @ApiResponse(responseCode = "200", description = "Authentication and role status",
-                                content = @Content(schema = @Schema(implementation = Map.class)))
-               })
-    @GetMapping("")
-    public Map<String, Object> checkAdmin(HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
-        Map<String, Object> response = new HashMap<>();
-
-        if (user == null) {
-            response.put("error", "Not logged in");
-            response.put("redirect", "/log_in");
-        } else if (user.getRole() != Usr.Role.ADMIN) {
-            response.put("error", "Not authorized");
-            response.put("redirect", "/no_admin");
-        } else {
-            response.put("ADMIN", true);
-        }
-
-        return response;
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class UserPostCountDTO {
+        private String user;
+        private int postCount;
     }
 
-    /**
-     * Returns a list of users with the number of posts each has created, sorted descending.
-     *
-     * @return list of maps with "user" and "postCount"
-     */
-    @Operation(summary = "Users with most posts",
-               description = "Returns a list of users and how many posts each has written, sorted descending.",
-               responses = {
-                   @ApiResponse(responseCode = "200", description = "List of users and their post counts",
-                                content = @Content(array = @ArraySchema(schema = @Schema(implementation = Map.class))))
-               })
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class PostCommentCountDTO {
+        private String title;
+        private int commentCount;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class TagCountDTO {
+        private String tag;
+        private long count;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class ErrorResponseDTO {
+        private String error;
+        private String redirect;
+    }
+
+    
+
+    @Operation(summary = "Users with most posts")
     @GetMapping("/users-with-most-posts")
-    public List<Map<String, Object>> usersWithMostPosts() {
-        List<Usr> users = userService.getAllUsrs();
-        List<Map<String, Object>> result = new ArrayList<>();
-
-        for (Usr user : users) {
-            int count = user.getPosts() != null ? user.getPosts().size() : 0;
-            result.add(Map.of("user", user.getUsername(), "postCount", count));
+    @ApiResponse(responseCode = "200", description = "Users with most posts")
+    @ApiResponse(responseCode = "403", description = "No right permissions")
+    public ResponseEntity<?> usersWithMostPosts(HttpSession session) {
+        Usr user = (Usr) session.getAttribute("user");
+        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(403).body(new ErrorResponseDTO("No right permissions", "/no_admin"));
         }
 
-        result.sort((a, b) -> ((Integer) b.get("postCount")).compareTo((Integer) a.get("postCount")));
-        return result;
+        List<UserPostCountDTO> result = userService.getAllUsrs().stream()
+            .map(u -> new UserPostCountDTO(u.getUsername(), u.getPosts() != null ? u.getPosts().size() : 0))
+            .sorted(Comparator.comparingInt(UserPostCountDTO::getPostCount).reversed())
+            .toList();
+
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Returns a list of posts with the number of comments each has, sorted descending.
-     *
-     * @return list of maps with "title" and "commentCount"
-     */
-    @Operation(summary = "Posts with most comments",
-               description = "Returns a list of posts and how many comments each has, sorted descending.",
-               responses = {
-                   @ApiResponse(responseCode = "200", description = "List of posts and their comment counts",
-                                content = @Content(array = @ArraySchema(schema = @Schema(implementation = Map.class))))
-               })
+    @Operation(summary = "Posts with most comments")
     @GetMapping("/posts-with-most-comments")
-    public List<Map<String, Object>> postsWithMostComments() {
-        List<Post> posts = postService.getAllPosts();
-        List<Map<String, Object>> result = new ArrayList<>();
-
-        for (Post post : posts) {
-            int count = post.getComments() != null ? post.getComments().size() : 0;
-            result.add(Map.of("title", post.getTitle(), "commentCount", count));
+    @ApiResponse(responseCode = "200", description = "Posts with most comments")
+    @ApiResponse(responseCode = "403", description = "No right permissions")
+    public ResponseEntity<?> postsWithMostComments(HttpSession session) {
+        Usr user = (Usr) session.getAttribute("user");
+        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(403).body(new ErrorResponseDTO("No right permissions", "/no_admin"));
         }
 
-        result.sort((a, b) -> ((Integer) b.get("commentCount")).compareTo((Integer) a.get("commentCount")));
-        return result;
+        List<PostCommentCountDTO> result = postService.getAllPosts().stream()
+            .map(p -> new PostCommentCountDTO(p.getTitle(), p.getComments() != null ? p.getComments().size() : 0))
+            .sorted(Comparator.comparingInt(PostCommentCountDTO::getCommentCount).reversed())
+            .toList();
+
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Returns a list of tags with the number of associated posts, sorted descending.
-     *
-     * @return list of maps with "tag" and "count"
-     */
-    @Operation(summary = "Tags with most posts",
-               description = "Returns a list of tags with how many posts are associated with each, sorted descending.",
-               responses = {
-                   @ApiResponse(responseCode = "200", description = "List of tags and their post counts",
-                                content = @Content(array = @ArraySchema(schema = @Schema(implementation = Map.class))))
-               })
+    @Operation(summary = "Tags with most posts")
     @GetMapping("/tags-with-most-posts")
-    public List<Map<String, Object>> tagsWithMostPosts() {
-        List<Post> posts = postService.getAllPosts();
-        Map<String, Long> tagCounts = new HashMap<>();
-
-        for (Post post : posts) {
-            String tag = post.getTag();
-            if (tag != null) {
-                tagCounts.put(tag, tagCounts.getOrDefault(tag, 0L) + 1);
-            }
+    @ApiResponse(responseCode = "200", description = "Tags with most posts")
+    @ApiResponse(responseCode = "403", description = "No right permissions")
+    public ResponseEntity<?> tagsWithMostPosts(HttpSession session) {
+        Usr user = (Usr) session.getAttribute("user");
+        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(403).body(new ErrorResponseDTO("No right permissions", "/no_admin"));
         }
 
-        List<Map<String, Object>> result = new ArrayList<>();
-        for (Map.Entry<String, Long> entry : tagCounts.entrySet()) {
-            result.add(Map.of("tag", entry.getKey(), "count", entry.getValue()));
-        }
+        Map<String, Long> tagCounts = postService.getAllPosts().stream()
+            .filter(p -> p.getTag() != null)
+            .collect(Collectors.groupingBy(Post::getTag, Collectors.counting()));
 
-        result.sort((a, b) -> ((Long) b.get("count")).compareTo((Long) a.get("count")));
-        return result;
+        List<TagCountDTO> result = tagCounts.entrySet().stream()
+            .map(e -> new TagCountDTO(e.getKey(), e.getValue()))
+            .sorted(Comparator.comparingLong(TagCountDTO::getCount).reversed())
+            .toList();
+
+        return ResponseEntity.ok(result);
     }
 }
- 

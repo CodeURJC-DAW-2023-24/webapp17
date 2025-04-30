@@ -16,7 +16,9 @@ import org.springframework.ai.ollama.OllamaChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
  * REST controller for chatbot interaction and AI-generated post creation.
  */
 @RestController
-@RequestMapping("/api/chatbot")
+@RequestMapping("/api/v1/chatbot")
 public class ChatRestController {
 
     @Autowired
@@ -47,6 +49,7 @@ public class ChatRestController {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ChatRequest {
+
         private List<Message> history;
     }
 
@@ -57,7 +60,9 @@ public class ChatRestController {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Message {
+
         private String role;
+
         private String content;
     }
 
@@ -68,6 +73,7 @@ public class ChatRestController {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class SimpleMessageDTO {
+
         private String message;
     }
 
@@ -84,8 +90,8 @@ public class ChatRestController {
         List<Message> history = request.getHistory();
 
         String historyStr = history.stream()
-            .map(msg -> msg.getRole() + ": " + msg.getContent())
-            .collect(Collectors.joining("\n"));
+                .map(msg -> msg.getRole() + ": " + msg.getContent())
+                .collect(Collectors.joining("\n"));
 
         String response = chatClient.call(historyStr);
 
@@ -101,18 +107,19 @@ public class ChatRestController {
      */
     @Operation(summary = "Generate blog post using AI and save to DB")
     @ApiResponse(responseCode = "201", description = "Post created")
+    @ApiResponse(responseCode = "403", description = "No right permissions")
     @PostMapping(value = "/generate-post")
-    public ResponseEntity<String> generatePost(HttpSession session, @RequestBody  SimpleMessageDTO tag) {
+    public ResponseEntity<String> generatePost(HttpSession session, @RequestBody SimpleMessageDTO tag) {
+
         Usr user = (Usr) session.getAttribute("user");
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in.");
+        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(403).body("No right permissions");
         }
+
         String prompt = postGeneratorPrompt + tag;
         String title = "LLM Post about " + tag;
         String content = chatClient.call(prompt);
         LocalDateTime now = LocalDateTime.now();
-
-        
 
         Post post = new Post();
         post.setTitle(title);
@@ -123,8 +130,15 @@ public class ChatRestController {
         post.setUsr(user);
 
         postService.addPost(post);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Post created successfully.");
+
+        // Build URI like /posts/{id}
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/posts/{id}")
+                .buildAndExpand(post.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body("Post created successfully.");
     }
 
-    
 }
