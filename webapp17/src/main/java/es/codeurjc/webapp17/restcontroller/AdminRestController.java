@@ -123,6 +123,53 @@ public class AdminRestController {
 
         return ResponseEntity.created(location).body("User successfully created.");
     }
+    
+    /**
+     * Retrieves all issues if the user has the ADMIN role.
+     *
+     * @param session the current HTTP session
+     * @return a list of issues, or 403 if access is denied
+     */
+    @Operation(summary = "Get all issues")
+    @ApiResponse(responseCode = "200", description = "Issues successfully loaded")
+    @ApiResponse(responseCode = "403", description = "Access denied")
+    @GetMapping("/issues")
+    public ResponseEntity<?> getAllIssues(HttpSession session) {
+        Usr user = (Usr) session.getAttribute("user");
+        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(403).body("Access denied");
+        }
+
+        List<Issue> issues = issueService.getAllIssues();
+        return ResponseEntity.ok(issues);
+    }
+
+    /**
+     * Retrieves all users if the user has the ADMIN role.
+     *
+     * @param session the current HTTP session
+     * @return a list of user information, or 403 if access is denied
+     */
+    @Operation(summary = "Get all users")
+    @ApiResponse(responseCode = "200", description = "Users successfully loaded")
+    @ApiResponse(responseCode = "403", description = "Access denied")
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers(HttpSession session) {
+        Usr user = (Usr) session.getAttribute("user");
+        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(403).body("Access denied");
+        }
+
+        List<Usr> users = userService.getAllUsrs();
+        List<UserInfoDTO> userInfoDTOs = users.stream().map(u -> new UserInfoDTO(
+                u.getId(),
+                u.getUsername(),
+                u.getEmail(),
+                u.getPosts().size(),
+                u.getComments().size())).collect(Collectors.toList());
+
+        return ResponseEntity.ok(userInfoDTOs);
+    }
 
     /**
      * Sends an email containing login credentials to the new user.
