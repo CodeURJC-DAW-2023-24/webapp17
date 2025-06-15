@@ -2,6 +2,7 @@ package es.codeurjc.webapp17.restcontroller;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import es.codeurjc.webapp17.entity.Issue;
+import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.IssueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -71,6 +74,26 @@ public class IssueRestController {
     public ResponseEntity<?> deleteIssue(@PathVariable Long id) {
         issueService.deleteIssue(id);
         return ResponseEntity.status(201).body("Issue correctly deleted.");
+    }
+
+        /**
+     * Retrieves all issues if the user has the ADMIN role.
+     *
+     * @param session the current HTTP session
+     * @return a list of issues, or 403 if access is denied
+     */
+    @Operation(summary = "Get all issues")
+    @ApiResponse(responseCode = "200", description = "Issues successfully loaded")
+    @ApiResponse(responseCode = "403", description = "Access denied")
+    @GetMapping("/issues")
+    public ResponseEntity<?> getAllIssues(HttpSession session) {
+        Usr user = (Usr) session.getAttribute("user");
+        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(403).body("Access denied");
+        }
+
+        List<Issue> issues = issueService.getAllIssues();
+        return ResponseEntity.ok(issues);
     }
 
     /**

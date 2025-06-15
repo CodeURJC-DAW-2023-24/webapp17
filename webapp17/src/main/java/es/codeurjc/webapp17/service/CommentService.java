@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 import es.codeurjc.webapp17.entity.Comment;
-
+import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -36,5 +36,9 @@ public class CommentService {
 
     public void deleteComment(Long id) {
         commentRepository.delete(commentRepository.findById(id).get());
+    }
+
+    public Comment getCommentById(Long id) {
+        return commentRepository.findById(id).orElse(null);
     }
 }

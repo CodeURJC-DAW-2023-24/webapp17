@@ -26,45 +26,17 @@ import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/")
-@Tag(name = "Admin Controller", description = "Admin operations for managing users and issues")
-public class AdminRestController {
+@Tag(name = "Users Controller", description = "Operations for managing users ")
+public class UsersRestController {
 
     @Autowired
     private JavaMailSender emailSender;
 
-    @Autowired
-    private IssueService issueService;
-
+   
     @Autowired
     private UsrService userService;
 
-    /**
-     * Retrieves the admin dashboard data if the user has the ADMIN role.
-     *
-     * @param session the current HTTP session
-     * @return a list of issues and user information, or 403 if access is denied
-     */
-    @Operation(summary = "Get admin panel information")
-    @ApiResponse(responseCode = "200", description = "Information successfully loaded")
-    @ApiResponse(responseCode = "403", description = "Access denied")
-    @GetMapping
-    public ResponseEntity<?> getAdminDashboard(HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
-        if (user == null || user.getRole() != Usr.Role.ADMIN) {
-            return ResponseEntity.status(403).body("Access denied");
-        }
-
-        List<Issue> issues = issueService.getAllIssues();
-        List<Usr> users = userService.getAllUsrs();
-        List<UserInfoDTO> UserInfoDTOs = users.stream().map(u -> new UserInfoDTO(
-                u.getId(),
-                u.getUsername(),
-                u.getEmail(),
-                u.getPosts().size(),
-                u.getComments().size())).collect(Collectors.toList());
-
-        return ResponseEntity.ok(new AdminResponseDTO(issues, UserInfoDTOs));
-    }
+   
 
     @DeleteMapping("/users/{id}")
     @ApiResponse(responseCode = "201", description = "User deleted successfully")
@@ -124,25 +96,7 @@ public class AdminRestController {
         return ResponseEntity.created(location).body("User successfully created.");
     }
     
-    /**
-     * Retrieves all issues if the user has the ADMIN role.
-     *
-     * @param session the current HTTP session
-     * @return a list of issues, or 403 if access is denied
-     */
-    @Operation(summary = "Get all issues")
-    @ApiResponse(responseCode = "200", description = "Issues successfully loaded")
-    @ApiResponse(responseCode = "403", description = "Access denied")
-    @GetMapping("/issues")
-    public ResponseEntity<?> getAllIssues(HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
-        if (user == null || user.getRole() != Usr.Role.ADMIN) {
-            return ResponseEntity.status(403).body("Access denied");
-        }
 
-        List<Issue> issues = issueService.getAllIssues();
-        return ResponseEntity.ok(issues);
-    }
 
     /**
      * Retrieves all users if the user has the ADMIN role.
@@ -226,17 +180,5 @@ public class AdminRestController {
         private String role;
     }
 
-    /**
-     * Wrapper class to return both issues and user info in the admin response.
-     */
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class AdminResponseDTO {
-
-        private List<Issue> issues;
-
-        private List<UserInfoDTO> users;
-    }
-
+    
 }

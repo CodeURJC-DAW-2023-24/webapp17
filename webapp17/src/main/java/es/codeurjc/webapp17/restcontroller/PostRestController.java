@@ -14,7 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import es.codeurjc.webapp17.entity.Comment;
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
-import es.codeurjc.webapp17.restcontroller.PostRestController.PostResponseDTO;
 import es.codeurjc.webapp17.service.CommentService;
 import es.codeurjc.webapp17.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -283,6 +282,48 @@ public class PostRestController {
             post.getComments().size()
     );
 }
+
+    /**
+    * Updates a comment by its ID.
+    * 
+    * @param id Comment ID.
+    * @param DTO DTO with new comment text.
+    * @return 200 OK if updated, 403 if no permission, 404 if not found.
+    */
+    @PutMapping("/comments/{id}")
+    @Operation(summary = "Update a comment by ID")
+    @ApiResponse(responseCode = "403", description = "No permission to modify this comment")
+    public ResponseEntity<?> updateComment(@PathVariable Long id,
+                                         @RequestBody CommentDTO DTO,
+                                         HttpSession session) {
+
+        // Retrieve the currently authenticated user
+        Usr user = (Usr) session.getAttribute("user");
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated.");
+        }
+
+        // Retrieve the comment by its ID
+        Comment comment = commentService.getCommentById(id);
+        if (comment == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Check if the authenticated user is the owner or an admin
+        if (!comment.getUsr().equals(user) && user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No permission to modify this comment.");
+        }
+
+        // Update the comment text
+        comment.setText(DTO.getText());    
+
+        // Save the updated comment
+        commentService.addComment(comment);
+
+        return ResponseEntity.ok().body(comment);
+    }
+
 
     
     

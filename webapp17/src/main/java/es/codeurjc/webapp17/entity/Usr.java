@@ -63,4 +63,7 @@ public class Usr {
         }
         return role;
     }
+    public String getUsername() {
+        return this.username;
+    }
 }
