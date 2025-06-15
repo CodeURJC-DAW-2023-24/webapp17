@@ -1,4 +1,4 @@
-package es.codeurjc.webapp17.controller;
+package es.codeurjc.webapp17.restcontroller;
 
 import java.io.IOException;
 import java.nio.file.*;

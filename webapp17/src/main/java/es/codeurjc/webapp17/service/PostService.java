@@ -18,7 +18,6 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
-
     public Page<Post> getPosts(int page, int size) {
         PageRequest pageable = PageRequest.of(page, size);
         return postRepository.findAllByOrderByIdDesc(pageable);
@@ -28,9 +27,11 @@ public class PostService {
         PageRequest pageable = PageRequest.of(page, size);
         return postRepository.findByUsr(user, pageable);
     }
+
     public ArrayList<Post> getAllPosts() {
         return new ArrayList<>(postRepository.findAll());
     }
+
     public void addPost(Post post) {
         postRepository.save(post);
     }
@@ -46,8 +47,17 @@ public class PostService {
     public void updatePost(Post post) {
         postRepository.save(post);
     }
+
     public Page<Post> getPostsByTag(int page, int size, String tag) {
         PageRequest pageable = PageRequest.of(page, size);
         return postRepository.findByTag(tag, pageable);
+    }
+
+    public Usr getUsrByPostId(Long id) {
+        Post post = postRepository.findById(id).orElse(null);
+        if (post != null) {
+            return post.getUsr();
+        }
+        return null;
     }
 }

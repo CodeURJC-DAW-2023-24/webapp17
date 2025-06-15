@@ -1,6 +1,5 @@
 package es.codeurjc.webapp17.restcontroller;
 
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,6 @@ import lombok.NoArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 
 @RestController
 @RequestMapping("/api/v1/statistics")
@@ -64,8 +62,6 @@ public class StatsRestController {
         private String redirect;
     }
 
-    
-
     @Operation(summary = "Users with most posts")
     @GetMapping("users")
     @ApiResponse(responseCode = "200", description = "Users with most posts")
@@ -77,9 +73,9 @@ public class StatsRestController {
         }
 
         List<UserPostCountDTO> result = userService.getAllUsrs().stream()
-            .map(u -> new UserPostCountDTO(u.getUsername(), u.getPosts() != null ? u.getPosts().size() : 0))
-            .sorted(Comparator.comparingInt(UserPostCountDTO::getPostCount).reversed())
-            .toList();
+                .map(u -> new UserPostCountDTO(u.getUsername(), u.getPosts() != null ? u.getPosts().size() : 0))
+                .sorted(Comparator.comparingInt(UserPostCountDTO::getPostCount).reversed())
+                .toList();
 
         return ResponseEntity.ok(result);
     }
@@ -95,9 +91,9 @@ public class StatsRestController {
         }
 
         List<PostCommentCountDTO> result = postService.getAllPosts().stream()
-            .map(p -> new PostCommentCountDTO(p.getTitle(), p.getComments() != null ? p.getComments().size() : 0))
-            .sorted(Comparator.comparingInt(PostCommentCountDTO::getCommentCount).reversed())
-            .toList();
+                .map(p -> new PostCommentCountDTO(p.getTitle(), p.getComments() != null ? p.getComments().size() : 0))
+                .sorted(Comparator.comparingInt(PostCommentCountDTO::getCommentCount).reversed())
+                .toList();
 
         return ResponseEntity.ok(result);
     }
@@ -113,13 +109,13 @@ public class StatsRestController {
         }
 
         Map<String, Long> tagCounts = postService.getAllPosts().stream()
-            .filter(p -> p.getTag() != null)
-            .collect(Collectors.groupingBy(Post::getTag, Collectors.counting()));
+                .filter(p -> p.getTag() != null)
+                .collect(Collectors.groupingBy(Post::getTag, Collectors.counting()));
 
         List<TagCountDTO> result = tagCounts.entrySet().stream()
-            .map(e -> new TagCountDTO(e.getKey(), e.getValue()))
-            .sorted(Comparator.comparingLong(TagCountDTO::getCount).reversed())
-            .toList();
+                .map(e -> new TagCountDTO(e.getKey(), e.getValue()))
+                .sorted(Comparator.comparingLong(TagCountDTO::getCount).reversed())
+                .toList();
 
         return ResponseEntity.ok(result);
     }

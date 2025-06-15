@@ -1,4 +1,5 @@
 package es.codeurjc.webapp17.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +23,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
         return User.withUsername(user.getUsername())
-                   .password(user.getPassword())
-                   .roles(user.getRole().name())
-                   .build();
+                .password(user.getPassword())
+                .roles(user.getRole().name())
+                .build();
     }
 }

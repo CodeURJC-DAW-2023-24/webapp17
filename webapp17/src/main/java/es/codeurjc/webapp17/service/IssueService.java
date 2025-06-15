@@ -19,15 +19,17 @@ public class IssueService {
     public List<Issue> getForums() {
         return (List<Issue>) IssueRepository.findAll();
     }
+
     public void addIssue(Issue issue) {
         IssueRepository.save(issue);
     }
+
     public ArrayList<Issue> getAllIssues() {
         return new ArrayList<Issue>(IssueRepository.findAll());
-        
+
     }
 
-     public void deleteIssue(Long id) {
+    public void deleteIssue(Long id) {
         IssueRepository.delete(IssueRepository.findById(id).get());
     }
 }

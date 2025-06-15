@@ -12,9 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import es.codeurjc.webapp17.entity.Issue;
 import es.codeurjc.webapp17.entity.Usr;
-import es.codeurjc.webapp17.service.IssueService;
 import es.codeurjc.webapp17.service.UsrService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,11 +30,8 @@ public class UsersRestController {
     @Autowired
     private JavaMailSender emailSender;
 
-   
     @Autowired
     private UsrService userService;
-
-   
 
     @DeleteMapping("/users/{id}")
     @ApiResponse(responseCode = "201", description = "User deleted successfully")
@@ -95,8 +90,6 @@ public class UsersRestController {
 
         return ResponseEntity.created(location).body("User successfully created.");
     }
-    
-
 
     /**
      * Retrieves all users if the user has the ADMIN role.
@@ -180,5 +173,4 @@ public class UsersRestController {
         private String role;
     }
 
-    
 }

@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(exclude = {
-    org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration.class
+		org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration.class
 })
 public class Webapp17Application {
 

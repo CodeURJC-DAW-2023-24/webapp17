@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -20,23 +19,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name="comment")
+@Entity(name = "comment")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   
     @ManyToOne
     private Usr usr;
 
     @ManyToOne
     @JsonIgnore
     private Post post;
-    
-    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm") 
-    private LocalDateTime date;
 
+    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm")
+    private LocalDateTime date;
 
     @Column(columnDefinition = "TEXT", length = 3000)
     private String text;

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.UsrService;
 
@@ -24,8 +26,8 @@ public class AuthRestController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam("email") String email,
-                                   @RequestParam("password") String password,
-                                   HttpSession session) {
+            @RequestParam("password") String password,
+            HttpSession session) {
         if (userService.authenticate(email, password)) {
             currentUsr = userService.getUsr(email);
             session.setAttribute("user", currentUsr);
@@ -45,34 +47,32 @@ public class AuthRestController {
     }
 
     @GetMapping("/me")
-public ResponseEntity<?> me(HttpSession session) {
-    Usr user = (Usr) session.getAttribute("user");
+    public ResponseEntity<?> me(HttpSession session) {
+        Usr user = (Usr) session.getAttribute("user");
 
-    if (user == null) {
-        return ResponseEntity.status(401).body("Not authenticated.");
-    } else {
-        return ResponseEntity.ok().body(new UsrDto(user)); // Utilizamos el DTO
-    }
-}
-
-private static class UsrDto {
-    private Long id;
-    private String email;
-    private String nombre;
-    private Usr.Role role;
-
-    UsrDto(Usr user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.nombre = user.getUsername();
-        this.role = user.getRole();
+        if (user == null) {
+            return ResponseEntity.status(401).body("Not authenticated.");
+        } else {
+            return ResponseEntity.ok().body(new UsrDto(user)); // Utilizamos el DTO
+        }
     }
 
-    // Getters
-    public Long getId() { return id; }
-    public String getEmail() { return email; }
-    public String getNombre() { return nombre; }
-    public Usr.Role getRole() { return role; }
-}
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    private static class UsrDto {
+        private Long id;
+        private String email;
+        private String nombre;
+        private Usr.Role role;
+
+        UsrDto(Usr user) {
+            this.id = user.getId();
+            this.email = user.getEmail();
+            this.nombre = user.getUsername();
+            this.role = user.getRole();
+        }
+
+    }
 
 }

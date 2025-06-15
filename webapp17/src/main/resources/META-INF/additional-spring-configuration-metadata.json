@@ -1,0 +1,6 @@
+{"properties": [{
+  "name": "upload.path",
+  "type": "java.lang.String",
+  "description": "Folder path where uploaded files will be stored.",
+  "defaultValue": "/tmp/uploads"
+}]}

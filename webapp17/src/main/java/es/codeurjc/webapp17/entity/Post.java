@@ -2,7 +2,6 @@ package es.codeurjc.webapp17.entity;
 
 import java.time.LocalDateTime;
 
-
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -41,21 +40,20 @@ public class Post {
     private Usr usr;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     @Column(nullable = false, length = 100)
     private String title;
-    
-    @Column(length = 200) 
+
+    @Column(length = 200)
     private String image;
 
     @Column(columnDefinition = "TEXT", length = 300)
     private String content;
 
-    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm") 
+    @DateTimeFormat(pattern = "dd 'de' MMMM 'de' yyyy HH:mm")
     private LocalDateTime date;
-
 
     private String tag;
 

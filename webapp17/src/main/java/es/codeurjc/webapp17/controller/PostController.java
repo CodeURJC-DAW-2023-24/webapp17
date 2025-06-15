@@ -154,14 +154,14 @@ public class PostController {
         model.addAttribute("post", post);
         return "editpost";
     }
+
     @PostMapping("/{id}/edit")
     public String updatePost(
             @PathVariable Long id,
             @RequestParam String title,
             @RequestParam String content,
             @RequestParam String tag,
-            @RequestParam(value = "image", required = false) MultipartFile image
-    ) throws IOException {
+            @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         Post post = postService.getPostById(id);
         if (post == null) {
             System.out.println("Post not found");

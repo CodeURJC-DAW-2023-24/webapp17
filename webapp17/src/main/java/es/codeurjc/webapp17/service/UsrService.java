@@ -1,4 +1,5 @@
 package es.codeurjc.webapp17.service;
+
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,9 @@ public class UsrService {
     @Autowired
     private UsrRepository userRepository;
 
-   @Autowired
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    
     public boolean authenticate(String email, String password) {
         Usr user = userRepository.findByEmail(email);
         if (user != null) {
@@ -38,8 +38,6 @@ public class UsrService {
         System.out.println("Usuario no encontrado");
         return null;
     }
-    
-
 
     public void deleteUsr(Long id) {
         userRepository.delete(userRepository.findById(id).get());
@@ -47,20 +45,18 @@ public class UsrService {
 
     public ArrayList<Usr> getAllUsrs() {
         return new ArrayList<Usr>(userRepository.findAll());
-        
+
     }
 
-
-    public void createUsr( String name, String email, String password, Boolean admin) {
+    public void createUsr(String name, String email, String password, Boolean admin) {
         String encodedPassword = passwordEncoder.encode(password);
 
-        Usr usuario =  new Usr(name, email, encodedPassword,admin);
+        Usr usuario = new Usr(name, email, encodedPassword, admin);
         userRepository.save(usuario);
     }
 
-
     public void createUsr(Usr newUser) {
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword())); 
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(newUser);
     }
 
@@ -68,6 +64,4 @@ public class UsrService {
         return userRepository.findById(id).get();
     }
 
-
-    
 }

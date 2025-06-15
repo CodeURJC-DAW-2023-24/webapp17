@@ -63,20 +63,21 @@ public class IssueRestController {
         return ResponseEntity.created(location).body("Issue successfully created.");
     }
 
-    /**
-     * Deletes an issue based on its ID.
-     *
-     * @param id the ID of the issue
-     * @return confirmation message
-     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete issue")
-    public ResponseEntity<?> deleteIssue(@PathVariable Long id) {
+    public ResponseEntity<?> deleteIssue(@PathVariable Long id, HttpSession session) {
+        // Check if user is an admin
+        Usr user = (Usr) session.getAttribute("user");
+
+        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+            return ResponseEntity.status(403).body("Access denied.");
+        }
+
         issueService.deleteIssue(id);
-        return ResponseEntity.status(201).body("Issue correctly deleted.");
+        return ResponseEntity.ok("Issue successfully deleted.");
     }
 
-        /**
+    /**
      * Retrieves all issues if the user has the ADMIN role.
      *
      * @param session the current HTTP session

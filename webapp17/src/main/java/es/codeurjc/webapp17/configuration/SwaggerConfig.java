@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-    
+
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                      .title("Mi API")
-                      .description("Documentación de la API")
-                      .version("1.0.0"));
+                        .title("El Ricón del Software APIREST")
+                        .description("API documentation for El Ricón del Software web application")
+                        .version("1.0.13"));
     }
 }

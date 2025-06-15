@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import es.codeurjc.webapp17.entity.Issue;
 
-
-public interface IssueRepository extends JpaRepository<Issue, Long>{
+public interface IssueRepository extends JpaRepository<Issue, Long> {
 
     List<Issue> findAll();
 
@@ -15,16 +14,10 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
 
     void deleteById(long id);
 
-  
     Issue save(Issue Issue);
 
     void delete(Issue Issue);
 
     List<Issue> findByDateOrderByDate(Date date);
-
-
-   
-
-
 
 }
