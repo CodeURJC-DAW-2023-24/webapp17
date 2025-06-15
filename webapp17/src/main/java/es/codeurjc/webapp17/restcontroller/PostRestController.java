@@ -98,7 +98,7 @@ public class PostRestController {
                 .toUri();
 
         // Return 201 Created with Location header and the created post as body
-        return ResponseEntity.created(location).body(post);
+        return ResponseEntity.created(location).body(DTO);
     }
 
     /**
@@ -175,7 +175,7 @@ public class PostRestController {
         // Return 200 OK with Location header
         return ResponseEntity.ok()
                 .location(location)
-                .body(post);
+                .body(DTO);
     }
 
     /**

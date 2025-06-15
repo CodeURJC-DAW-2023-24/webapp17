@@ -201,7 +201,7 @@
                 input.value = '';
           
                 // 4) Enviamos TODO el historial al backend
-                fetch('/api/v1/chatbot/messages', {
+                fetch('/api/v1/chatbot/send', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ history: chatHistory })
