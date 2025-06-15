@@ -67,7 +67,7 @@ public class StatsRestController {
     
 
     @Operation(summary = "Users with most posts")
-    @GetMapping("/users-with-most-posts")
+    @GetMapping("users")
     @ApiResponse(responseCode = "200", description = "Users with most posts")
     @ApiResponse(responseCode = "403", description = "No right permissions")
     public ResponseEntity<?> usersWithMostPosts(HttpSession session) {
@@ -85,7 +85,7 @@ public class StatsRestController {
     }
 
     @Operation(summary = "Posts with most comments")
-    @GetMapping("/posts-with-most-comments")
+    @GetMapping("posts")
     @ApiResponse(responseCode = "200", description = "Posts with most comments")
     @ApiResponse(responseCode = "403", description = "No right permissions")
     public ResponseEntity<?> postsWithMostComments(HttpSession session) {
@@ -103,7 +103,7 @@ public class StatsRestController {
     }
 
     @Operation(summary = "Tags with most posts")
-    @GetMapping("/tags-with-most-posts")
+    @GetMapping("tags")
     @ApiResponse(responseCode = "200", description = "Tags with most posts")
     @ApiResponse(responseCode = "403", description = "No right permissions")
     public ResponseEntity<?> tagsWithMostPosts(HttpSession session) {

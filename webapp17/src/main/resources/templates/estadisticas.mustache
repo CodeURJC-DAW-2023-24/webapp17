@@ -80,7 +80,7 @@
     }
 
     async function renderCharts() {
-      const users = await fetchData('/users-with-most-posts');
+      const users = await fetchData('users');
       await renderChart(
         'usersChart',
         users.map(u => u.user),
@@ -88,7 +88,7 @@
         'Posts por usuario'
       );
 
-      const posts = await fetchData('/posts-with-most-comments');
+      const posts = await fetchData('posts');
       await renderChart(
         'postsChart',
         posts.map(p => p.title),
@@ -96,7 +96,7 @@
         'Comentarios por post'
       );
 
-      const tags = await fetchData('/tags-with-most-posts');
+      const tags = await fetchData('tags');
       await renderChart(
         'tagsChart',
         tags.map(t => t.tag),

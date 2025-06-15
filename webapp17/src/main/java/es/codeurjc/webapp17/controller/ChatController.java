@@ -69,7 +69,7 @@ public class ChatController {
      * @return a redirect to the home page if successful, or to login if the user is
      *         not authenticated
      */
-    @PostMapping("/generate-post")
+    @PostMapping("ai-post")
     public String response(HttpSession session, @RequestParam("tag") String inputString) {
         String prompt = this.postGeneratorPrompt.concat(inputString);
         LocalDateTime now = LocalDateTime.now();
@@ -106,7 +106,7 @@ public class ChatController {
      * @param message the message sent by the user
      * @return a map containing the chatbot's response
      */
-    @PostMapping("/chatbot/send")
+    @PostMapping("/chatbot/messages")
     public Map<String, String> handleChat(@RequestParam("message") String message) {
         String response = chatClient.call(message);
         return Map.of("response", response);

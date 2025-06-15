@@ -108,7 +108,7 @@ public class ChatRestController {
     @Operation(summary = "Generate blog post using AI and save to DB")
     @ApiResponse(responseCode = "201", description = "Post created")
     @ApiResponse(responseCode = "403", description = "No right permissions")
-    @PostMapping(value = "/generate-post")
+    @PostMapping(value = "ai-post")
     public ResponseEntity<String> generatePost(HttpSession session, @RequestBody SimpleMessageDTO tag) {
 
         Usr user = (Usr) session.getAttribute("user");

@@ -3,6 +3,7 @@ package es.codeurjc.webapp17.restcontroller;
 import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
+import org.springframework.data.domain.Page;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import es.codeurjc.webapp17.entity.Comment;
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
+import es.codeurjc.webapp17.restcontroller.PostRestController.PostResponseDTO;
 import es.codeurjc.webapp17.service.CommentService;
 import es.codeurjc.webapp17.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,39 +29,57 @@ import lombok.NoArgsConstructor;
 @RequestMapping("/api/v1/posts")
 @Tag(name = "Post Controller", description = "REST API for managing posts and comments")
 public class PostRestController {
-
+    
     private static final String DEFAULT_IMAGE_PATH = "/images/entryphoto.png";
-
+    
     private final PostService postService;
     private final CommentService commentService;
-
+    
     @Value("${upload.path}")
     private String uploadPath;
-
+    
     public PostRestController(PostService postService, CommentService commentService) {
         this.postService = postService;
         this.commentService = commentService;
     }
+        @GetMapping
+    @Operation(summary = "Get paginated posts")
+    public ResponseEntity<Page<PostResponseDTO>> getPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
+        Page<Post> posts = postService.getPosts(page, size);
+
+        if (posts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        // Transform into DTOs
+        Page<PostResponseDTO> postResponseDTOS = posts.map(this::convertToDto);
+
+        return ResponseEntity.ok(postResponseDTOS);
+    }
+
+    
     /**
-     * Creates a new post.
-     *
-     * @param session HTTP session with logged-in user.
-     * @param DTO     DTO containing post data and optional image.
-     * @return The created post.
-     * @throws IOException If file upload fails.
-     */
+    * Creates a new post.
+    *
+    * @param session HTTP session with logged-in user.
+    * @param DTO     DTO containing post data and optional image.
+    * @return The created post.
+    * @throws IOException If file upload fails.
+    */
     @PostMapping
     @Operation(summary = "Create a new post")
     public ResponseEntity<?> createPost(HttpSession session, @ModelAttribute PostDTO DTO) throws IOException {
         LocalDateTime now = LocalDateTime.now();
-
+        
         Post post = new Post();
         post.setTitle(DTO.getTitle());
         post.setContent(DTO.getContent());
         post.setDate(now);
         post.setTag(DTO.getTag());
-
+        
         // Get the logged-in user from the session
         Usr user = (Usr) session.getAttribute("user");
         if (user == null) {
@@ -67,87 +87,90 @@ public class PostRestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in.");
         }
         post.setUsr(user);
-
+        
         post.setImage(DEFAULT_IMAGE_PATH);
-
+        
         // Save the post (the ID will be populated after saving)
         postService.addPost(post);
-
+        
         // Build the URI for the created post (e.g., /posts/{id})
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(post.getId())
-                .toUri();
-
+        .fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(post.getId())
+        .toUri();
+        
         // Return 201 Created with Location header and the created post as body
         return ResponseEntity.created(location).body(post);
     }
 
+    
+    
+    
     /**
-     * Adds a comment to a post.
-     *
-     * @param session HTTP session with logged-in user.
-     * @param postId  Post ID.
-     * @param DTO     Comment DTO.
-     * @return 204 No Content on success.
-     */
+    * Adds a comment to a post.
+    *
+    * @param session HTTP session with logged-in user.
+    * @param postId  Post ID.
+    * @param DTO     Comment DTO.
+    * @return 204 No Content on success.
+    */
     @PostMapping("/{postId}/comments")
     @Operation(summary = "Add a comment to a post")
     public ResponseEntity<Void> addComment(HttpSession session, @PathVariable Long postId,
-            @RequestBody CommentDTO DTO) {
-
+    @RequestBody CommentDTO DTO) {
+        
         // Find the post by its ID
         Post post = postService.getPostById(postId);
         if (post == null)
-            return ResponseEntity.notFound().build(); // 404 if post doesn't exist
-
+        return ResponseEntity.notFound().build(); // 404 if post doesn't exist
+        
         // Check if user is logged in
         Usr user = (Usr) session.getAttribute("user");
         if (user == null)
-            return ResponseEntity.status(401).build(); // 401 Unauthorized
-
+        return ResponseEntity.status(401).build(); // 401 Unauthorized
+        
         // Create and populate the comment
         Comment comment = new Comment();
         comment.setText(DTO.getText());
         comment.setPost(post);
         comment.setDate(LocalDateTime.now());
         comment.setUsr(user);
-
+        
         // Save the comment (assumes the comment ID is set after saving)
         commentService.addComment(comment);
-
+        
         // Build Location URI: e.g., /posts/{postId}/comments/{commentId}
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{commentId}")
-                .buildAndExpand(comment.getId())
-                .toUri();
-
+        .fromCurrentRequest()
+        .path("/{commentId}")
+        .buildAndExpand(comment.getId())
+        .toUri();
+        
         // Return 201 Created with Location header (no body)
         return ResponseEntity.created(location).build();
     }
-
+    
     /**
-     * Deletes a post by ID.
-     *
-     * @param id Post ID.
-     * @return 204 No Content on success.
-     */
+    * Deletes a post by ID.
+    *
+    * @param id Post ID.
+    * @return 204 No Content on success.
+    */
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a post by ID")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
-
+        
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
     }
-
+    
     /**
-     * Deletes a comment by ID.
-     *
-     * @param id Comment ID.
-     * @return 204 No Content on success.
-     */
+    * Deletes a comment by ID.
+    *
+    * @param id Comment ID.
+    * @return 204 No Content on success.
+    */
     @DeleteMapping("/comments/{id}")
     @Operation(summary = "Delete a comment by ID")
     @ApiResponse(responseCode = "403", description = "No right permissions")
@@ -159,28 +182,28 @@ public class PostRestController {
         commentService.deleteComment(id);
         return ResponseEntity.status(201).body("Deletion completed");
     }
-
+    
     /**
-     * Updates a post with new data.
-     *
-     * @param id  Post ID.
-     * @param DTO DTO containing new post data and optional image.
-     * @return The updated post.
-     * @throws IOException If file upload fails.
-     */
+    * Updates a post with new data.
+    *
+    * @param id  Post ID.
+    * @param DTO DTO containing new post data and optional image.
+    * @return The updated post.
+    * @throws IOException If file upload fails.
+    */
     @PutMapping("/{id}")
     @Operation(summary = "Update a post by ID")
     public ResponseEntity<?> updatePost(@PathVariable Long id, @ModelAttribute PostDTO DTO, HttpSession session)
-            throws IOException {
-
+    throws IOException {
+        
         // Get the logged-in user
         Usr user = (Usr) session.getAttribute("user");
-
+        
         // Only ADMIN users are allowed to update posts
         if (user == null || user.getRole() != Usr.Role.ADMIN) {
             return ResponseEntity.status(403).body("No right permissions");
         }
-
+        
         // Fetch the post by ID
         Post post = postService.getPostById(id);
         if (post == null) {
@@ -190,45 +213,77 @@ public class PostRestController {
             post.setTitle(DTO.getTitle());
             post.setContent(DTO.getContent());
             post.setTag(DTO.getTag());
-
+            
             // Save the updated post
             postService.updatePost(post);
-
+            
             // Build the URI to the updated resource (e.g., /posts/{id})
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .build()
-                    .toUri();
-
+            .fromCurrentRequest()
+            .build()
+            .toUri();
+            
             // Return 200 OK with the Location header
             return ResponseEntity.ok()
-                    .location(location)
-                    .body(post);
+            .location(location)
+            .body(post);
         }
     }
-
+    
     /**
-     * DTO for creating a post.
-     */
+    * DTO for creating a post.
+    */
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PostDTO {
-
+        
         private String title;
-
+        
         private String content;
-
+        
         private String tag;
     }
-
+    
     /**
-     * DTO for submitting a comment.
-     */
+    * DTO for submitting a comment.
+    */
     @Data
     public static class CommentDTO {
-
+        
         private String text;
     }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PostResponseDTO {
+        
+        private Long id;
+        private String title;
+        private String content;
+        private String tag;
+        private LocalDateTime date;
+        private String image;
+        private Long userId;
+        private String username;
+        
+        private int totalComments;
+        
+    }
+    private PostResponseDTO convertToDto(Post post) {
+    return new PostResponseDTO(
+            post.getId(), 
+            post.getTitle(), 
+            post.getContent(), 
+            post.getTag(), 
+            post.getDate(), 
+            post.getImage(), 
+            post.getUsr().getId(), 
+            post.getUsr().getUsername(), 
+            post.getComments().size()
+    );
+}
 
+    
+    
 }

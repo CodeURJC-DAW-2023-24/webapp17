@@ -127,7 +127,7 @@
   <br><hr style="width: 100%; border-top: 1px dashed #ccc;"><br>
   <h1 style="color: #34495e; text-align:center; margin-bottom: 20px;">🤖 Genera un nuevo Post</h1>
 
-  <form action="/generate-post" method="POST" enctype="multipart/form-data" 
+  <form action="ai-post" method="POST" enctype="multipart/form-data" 
         style="max-width: 600px; margin: auto; background: #ffffffdd; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
 
     <label for="tag" style="font-weight: bold;">🏷️ Temática:</label><br>
@@ -201,7 +201,7 @@
                 input.value = '';
           
                 // 4) Enviamos TODO el historial al backend
-                fetch('/api/v1/chatbot/send', {
+                fetch('/api/v1/chatbot/messages', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ history: chatHistory })

@@ -55,7 +55,7 @@ public class StatsController {
      * @return a list of maps with "user" and "postCount"
      */
     @Hidden
-    @GetMapping("/users-with-most-posts")
+    @GetMapping("users")
     @ResponseBody
     public List<Map<String, Object>> usersWithMostPosts() {
         List<Usr> users = userService.getAllUsrs();
@@ -78,7 +78,7 @@ public class StatsController {
      * @return a list of maps with "title" and "commentCount"
      */
     @Hidden
-    @GetMapping("/posts-with-most-comments")
+    @GetMapping("posts")
     @ResponseBody
     public List<Map<String, Object>> postsWithMostComments() {
         List<Post> posts = postService.getAllPosts();
@@ -101,7 +101,7 @@ public class StatsController {
      * @return a list of maps with "tag" and "count"
      */
     @Hidden
-    @GetMapping("/tags-with-most-posts")
+    @GetMapping("tags")
     @ResponseBody
     public List<Map<String, Object>> tagsWithMostPosts() {
         // Step 1: Get all posts

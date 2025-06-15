@@ -25,7 +25,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/api/v1/")
 @Tag(name = "Admin Controller", description = "Admin operations for managing users and issues")
 public class AdminRestController {
 
@@ -101,7 +101,7 @@ public class AdminRestController {
     @Operation(summary = "Create a new user from the admin panel")
     @ApiResponse(responseCode = "201", description = "User successfully created")
     @ApiResponse(responseCode = "403", description = "No right permissions")
-    @PostMapping("/newUser")
+    @PostMapping("user")
     public ResponseEntity<String> createUser(@RequestBody CreateUserRequestDTO request, HttpSession session) {
         Usr user = (Usr) session.getAttribute("user");
         if (user == null || user.getRole() != Usr.Role.ADMIN) {
