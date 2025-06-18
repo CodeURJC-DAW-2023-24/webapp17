@@ -21,4 +21,5 @@ RUN mkdir -p /app/uploads/images \
 EXPOSE 8443
 
 # Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "sleep 10 && java -jar app.jar"]
+
