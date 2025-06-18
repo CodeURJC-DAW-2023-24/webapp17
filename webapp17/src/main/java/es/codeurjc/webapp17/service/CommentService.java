@@ -30,10 +30,16 @@ public class CommentService {
     }
 
     public void deleteComment(Long id) {
-        commentRepository.delete(commentRepository.findById(id).get());
+        try {
+            commentRepository.deleteById(id);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
     }
 
     public Comment getCommentById(Long id) {
+        
         return commentRepository.findById(id).orElse(null);
     }
 }

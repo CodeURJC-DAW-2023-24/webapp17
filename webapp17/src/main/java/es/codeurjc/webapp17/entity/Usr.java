@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,12 +47,12 @@ public class Usr {
     private String password;
     private String email;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "usr-post")
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonBackReference
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "usr-comment")
     private List<Comment> comments;
 
     public enum Role {
@@ -63,6 +65,7 @@ public class Usr {
         }
         return role;
     }
+
     public String getUsername() {
         return this.username;
     }

@@ -40,7 +40,11 @@ public class UsrService {
     }
 
     public void deleteUsr(Long id) {
-        userRepository.delete(userRepository.findById(id).get());
+        try {
+            userRepository.delete(userRepository.findById(id).get());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public ArrayList<Usr> getAllUsrs() {

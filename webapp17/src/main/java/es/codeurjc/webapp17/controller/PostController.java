@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -115,7 +116,7 @@ public class PostController {
             newComment.setUsr(user); // Associate the comment with the user
             commentService.addComment(newComment);
         }
-        return "redirect:"; // Redirect to the homepage after adding the comment
+        return "redirect:/"; // Redirect to the homepage after adding the comment
     }
 
     /**
@@ -127,7 +128,7 @@ public class PostController {
     @PostMapping("/{id}/delete")
     public String deletePost(@PathVariable Long id) {
         postService.deletePost(id);
-        return "redirect:"; // Redirect to the homepage after deleting the post
+        return "redirect:/"; // Redirect to the homepage after deleting the post
     }
 
     /**
@@ -139,7 +140,7 @@ public class PostController {
     @PostMapping("/{id}/delete_comment")
     public String deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
-        return "redirect:"; // Redirect to the homepage after deleting the comment
+        return "redirect:/"; // Redirect to the homepage after deleting the comment
     }
 
     @GetMapping("/{id}/edit")
@@ -147,9 +148,9 @@ public class PostController {
         Post post = postService.getPostById(id);
         Usr user = (Usr) session.getAttribute("user");
         if (post == null) {
-            return "redirect:";
+            return "redirect:/";
         } else if (user == null || !(post.getUsr().getId() == user.getId())) {
-            return "redirect:";
+            return "redirect:/";
         }
         model.addAttribute("post", post);
         return "editpost";

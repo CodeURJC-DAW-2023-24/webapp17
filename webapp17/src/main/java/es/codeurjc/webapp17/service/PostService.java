@@ -37,7 +37,12 @@ public class PostService {
     }
 
     public void deletePost(Long id) {
-        postRepository.delete(postRepository.findById(id).orElse(null));
+        try {
+            postRepository.deleteById(id);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     public Post getPostById(Long id) {
