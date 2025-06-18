@@ -58,6 +58,22 @@ public class PostRestController {
         return ResponseEntity.ok(postResponseDTOS);
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get a post by ID")
+    public ResponseEntity<PostResponseDTO> getPostById(@PathVariable Long id) {
+        // Buscar el post por ID
+        Post post = postService.getPostById(id);
+
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Convertir a DTO
+        PostResponseDTO dto = convertToDto(post);
+
+        return ResponseEntity.ok(dto);
+    }
+
     /**
      * Creates a new post.
      *

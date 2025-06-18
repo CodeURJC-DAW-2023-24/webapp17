@@ -4,12 +4,12 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: mysql-db
+    container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: password  # Cambié la contraseña a 'password'
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: myappdb
     ports:
-      - "3307:3306"  # Cambié el puerto externo a 3307
+      - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -23,12 +23,17 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/myappdb  # Aquí no cambian los puertos
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/myappdb
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: password  # Aseguré que la contraseña sea 'password'
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      # Reminder!!!!  OLLAMA_HOST=0.0.0.0 ollama serve in the vm
+      # before using the docker compose up bc if not the host.docker.internal will not work
+      OLLAMA_URL: http://host.docker.internal:11434
     networks:
       - app-network
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
 
 volumes:
   mysql-data:

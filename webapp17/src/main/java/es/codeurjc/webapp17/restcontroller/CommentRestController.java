@@ -114,7 +114,7 @@ public class CommentRestController {
         // Retrieve the comment by its ID
         Comment comment = commentService.getCommentById(id);
         if (comment == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body("Comment not found.");
         }
 
         // Check if the user is neither the owner nor an Administrator

@@ -48,7 +48,7 @@ public class PostController {
      * @return a redirect to the homepage after the post is created
      * @throws IOException if there is an issue saving the uploaded image
      */
-    @PostMapping("/create-post")
+    @PostMapping("/post")
     public String createPost(HttpSession session, @RequestParam String title, @RequestParam String content,
             @RequestParam String tag, @RequestParam(value = "image", required = false) MultipartFile image)
             throws IOException {
@@ -76,7 +76,7 @@ public class PostController {
             }
 
             Files.write(filepath, image.getBytes());
-            post.setImage("/images/" + filename); // Image path in the asset repository
+            post.setImage("uploads/" + filename); // Image path in the asset repository
         } else {
             // Use default image if no image is uploaded
             post.setImage(DEFAULT_IMAGE_PATH);
@@ -115,7 +115,7 @@ public class PostController {
             newComment.setUsr(user); // Associate the comment with the user
             commentService.addComment(newComment);
         }
-        return "redirect:/"; // Redirect to the homepage after adding the comment
+        return "redirect:"; // Redirect to the homepage after adding the comment
     }
 
     /**
@@ -127,7 +127,7 @@ public class PostController {
     @PostMapping("/{id}/delete")
     public String deletePost(@PathVariable Long id) {
         postService.deletePost(id);
-        return "redirect:/"; // Redirect to the homepage after deleting the post
+        return "redirect:"; // Redirect to the homepage after deleting the post
     }
 
     /**
@@ -139,7 +139,7 @@ public class PostController {
     @PostMapping("/{id}/delete_comment")
     public String deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
-        return "redirect:/"; // Redirect to the homepage after deleting the comment
+        return "redirect:"; // Redirect to the homepage after deleting the comment
     }
 
     @GetMapping("/{id}/edit")
@@ -147,9 +147,9 @@ public class PostController {
         Post post = postService.getPostById(id);
         Usr user = (Usr) session.getAttribute("user");
         if (post == null) {
-            return "redirect:/";
+            return "redirect:";
         } else if (user == null || !(post.getUsr().getId() == user.getId())) {
-            return "redirect:/";
+            return "redirect:";
         }
         model.addAttribute("post", post);
         return "editpost";
@@ -180,7 +180,7 @@ public class PostController {
                 Files.createDirectories(filepath.getParent());
             }
             Files.write(filepath, image.getBytes());
-            post.setImage("/images/" + filename);
+            post.setImage("uploads/" + filename); // Update the image path
         }
 
         postService.updatePost(post);
