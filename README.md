@@ -6,8 +6,8 @@
 - [Entidades](#-entidades)
 - [Imágenes](#-imágenes)
 - [Gráficos](#-gráficos)
-- [Tecnologías complementarias](#-tecnologías-complementarias)
-- [Algoritmos avanzados](#-algoritmos-avanzados)
+- [Tecnologías complementarias](#-tecnologías-complementarias-y-algoritmos-avanzados)
+- [Guía de despliegue](#-requisitos-previos)
 - [Colaboradores](#-colaboradores)
 
 ### Descripción general
@@ -39,18 +39,81 @@ La aplicación tendrá la opción de subir imágenes en los posts como parte del
 
 La aplicación tendrá gráficos de tendencias sobre las temáticas con más publicaciones en un periódo de tiempo.
 
-### 🔮 Tecnologías complementarias
+### 🔮 Tecnologías complementarias y algoritmos avanzados
 
 La aplicación  dispondrá de un LLM local para que los administradores puedan emplearlo en la  autogeneración de posts. Además de un chatbot disponible spara todos los usuarios, el chatbot dispone de memoria conversacional.
-
-### 🔧 Algoritmos avanzados
-
--Por definir-
-
 
 ### 🔧 Diagrama de clases
 ![Diagrama de clases](https://raw.githubusercontent.com/CodeURJC-DAW-2023-24/webapp17/main/webapp17/src/main/resources/static/diagrams/class_diagram.png)
 
+## 🚀 Guía de Despliegue
+
+### ✅ Requisitos Previos
+
+- Docker & Docker Compose
+- Git
+- [Ollama](https://ollama.com)
+
+---
+
+### 🧠 Instalación y Configuración de Ollama
+
+#### 1. Descargar e instalar Ollama
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+> Si usas macOS con Homebrew:
+> ```bash
+> brew install ollama
+> ```
+
+#### 2. Verificar que Ollama funciona correctamente
+
+```bash
+ollama run llama3
+```
+
+---
+
+#### 3. Descargar el modelo Qwen 0.6B
+
+```bash
+ollama pull qwen:0.6b
+```
+
+---
+
+#### 4. Servir Ollama en red local (escuchar en todas las interfaces)
+
+```bash
+OLLAMA_HOST=0.0.0.0 ollama serve
+```
+
+---
+
+### 🐳 Levantar la Aplicación con Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Esto lanzará:
+
+- 🌐 El backend de Spring Boot
+- 💾 Una base de datos MySQL con volúmenes persistentes
+- 🔍 El cliente que se conecta a Ollama vía HTTP (por ejemplo, para generación de texto o clasificación de publicaciones)
+- 🖼 Almacenamiento local de imágenes y datos de usuario
+
+---
+
+### 📦 Persistencia de Datos
+
+La configuración de `docker-compose.yml` asegura que los siguientes datos se conserven:
+
+- Base de datos MySQL → volumen en `/var/lib/mysql`
+  
 ### 👥 Colaboradores
 
 | Nombre | Email | Github |
