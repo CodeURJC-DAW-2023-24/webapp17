@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,7 +76,7 @@ public class PostController {
             }
 
             Files.write(filepath, image.getBytes());
-            post.setImage("uploads/" + filename); // Image path in the asset repository
+            post.setImage("/files/" + filename); // Image path in the asset repository
         } else {
             // Use default image if no image is uploaded
             post.setImage(DEFAULT_IMAGE_PATH);
@@ -181,7 +180,7 @@ public class PostController {
                 Files.createDirectories(filepath.getParent());
             }
             Files.write(filepath, image.getBytes());
-            post.setImage("uploads/" + filename); // Update the image path
+            post.setImage("/files/"  + filename); // Update the image path
         }
 
         postService.updatePost(post);

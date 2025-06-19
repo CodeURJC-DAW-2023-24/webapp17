@@ -13,9 +13,6 @@ WORKDIR /app
 # Copy the JAR from the builder stage
 COPY --from=builder /app/target/*.jar app.jar
 
-# Create the upload directory and set permissions
-RUN mkdir -p /app/uploads/images \
-    && chmod -R 777 /app/uploads
 
 # Expose application port
 EXPOSE 8443
