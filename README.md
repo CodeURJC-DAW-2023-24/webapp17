@@ -107,6 +107,13 @@ Esto lanzará:
 - 🖼 Almacenamiento local de imágenes y datos de usuario
 
 ---
+## 📥 Descargar la imagen desde Docker Hub
+
+Ejecuta el siguiente comando para descargar la imagen:
+
+```bash
+docker pull ggronda/webapp17
+---
 
 ### 📦 Persistencia de Datos
 
