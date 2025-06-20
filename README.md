@@ -69,15 +69,8 @@ curl -fsSL https://ollama.com/install.sh | sh
 > brew install ollama
 > ```
 
-#### 2. Verificar que Ollama funciona correctamente
 
-```bash
-ollama run llama3
-```
-
----
-
-#### 3. Descargar el modelo Qwen 0.6B
+#### 2. Descargar el modelo Qwen 0.6B
 
 ```bash
 ollama pull qwen:0.6b
@@ -85,7 +78,7 @@ ollama pull qwen:0.6b
 
 ---
 
-#### 4. Servir Ollama en red local (escuchar en todas las interfaces)
+#### 3. Servir Ollama en red local (escuchar en todas las interfaces)
 
 ```bash
 OLLAMA_HOST=0.0.0.0 ollama serve
