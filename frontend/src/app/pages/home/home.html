@@ -1,0 +1,249 @@
+<!-- Main app component template -->
+<div id="content">
+  <div id="left">
+    <!-- Page navigation -->
+    <div class="pagenav">
+      <a *ngIf="hasPrevious" 
+         [routerLink]="['/']" 
+         [queryParams]="{page: previousPage, size: pageSize}">
+         Página Anterior
+      </a>
+      
+      <a *ngIf="hasNext" 
+         [routerLink]="['/']" 
+         [queryParams]="{page: nextPage, size: pageSize}">
+         Mostrar más posts
+      </a>
+    </div>
+
+    <!-- Posts list -->
+    <div *ngFor="let post of posts" 
+         class="entry" 
+         style="border: 1px solid #ddd; border-radius: 12px; padding: 20px; margin-bottom: 30px; background-color: #f9f9f9; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); transition: transform 0.2s;">
+      
+      <h2 style="color: #2c3e50;">📌 {{post.title}}</h2>
+      
+      <img *ngIf="post.image" 
+           class="entryphoto" 
+           [src]="post.image" 
+           style="max-width: 35%; height: auto; border-radius: 10px; margin-bottom: 10px;" />
+      
+      <p style="font-size: 16px; color: #333;">{{post.content}}</p>
+      
+      <p class="meta" style="font-size: 14px; color: #666;">
+        📅 <span class="date">{{post.date | date:'short'}}</span> | 
+        👤 Posted by {{post.usr?.username}} | 
+        🏷️ Tags: {{post.tag}} | 
+        💬 {{post.comments?.length || 0}} comentarios
+      </p>
+      
+      <!-- Toggle comments button -->
+      <button class="button" 
+              (click)="toggleComments(post.id)" 
+              style="background-color: #3498db; color: white; padding: 8px 14px; border-radius: 8px; border: none; margin-bottom: 10px;">
+        💬 Ver Comentarios
+      </button>
+
+      <!-- Comments container -->
+      <div [id]="'comments_' + post.id" 
+           class="comments-container" 
+           [style.max-height]="isCommentsVisible(post.id) ? 'none' : '0px'"
+           [style.opacity]="isCommentsVisible(post.id) ? '1' : '0'"
+           style="margin-top: 10px; overflow: hidden; transition: max-height 0.5s ease-out, opacity 0.5s ease-out;">
+        
+        <div *ngFor="let comment of post.comments" 
+             class="comment" 
+             style="background-color: #eef6ff; border-left: 4px solid #3498db; padding: 10px; border-radius: 6px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+          
+          <p style="margin: 0;">🗨️ <strong>{{comment.text}}</strong></p>
+          <p class="meta" style="font-size: 12px; color: #555;">👤 {{comment.usr?.username}}</p>
+
+          <!-- Admin delete comment button -->
+          <form *ngIf="isAdmin" 
+                (ngSubmit)="deleteComment(post.id, comment.id)" 
+                style="margin-top: 5px;">
+            <button class="button secondary" 
+                    type="submit" 
+                    style="font-size: 10px; background-color: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 5px;">
+              ❌ Borrar comentario
+            </button>
+          </form>
+
+          <!-- Owner delete comment button -->
+          <form *ngIf="comment.isOwner" 
+                (ngSubmit)="deleteComment(post.id, comment.id)" 
+                style="margin-top: 5px;">
+            <button class="button secondary" 
+                    type="submit" 
+                    style="font-size: 10px; background-color: #e67e22; color: white; border: none; padding: 4px 8px; border-radius: 5px;">
+              🗑️ Eliminar comentario
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Admin delete post button -->
+      <form *ngIf="isAdmin" 
+            (ngSubmit)="deletePost(post.id)" 
+            style="margin-top: 10px;">
+        <button class="button danger" 
+                type="submit" 
+                style="background-color: #c0392b; color: white; padding: 6px 12px; border: none; border-radius: 6px;">
+          🗑️ Borrar Post
+        </button>
+      </form>
+
+      <!-- Add comment form for logged users -->
+      <form *ngIf="currentUser" 
+            (ngSubmit)="addComment(post.id, commentText)" 
+            style="margin-top: 10px;">
+        <textarea [(ngModel)]="commentText" 
+                  name="comment" 
+                  rows="3" 
+                  cols="50" 
+                  placeholder="🖊️ Escribe tu comentario aquí..." 
+                  style="width: 100%; border-radius: 6px; padding: 8px;"></textarea><br>
+        <button class="button" 
+                type="submit" 
+                style="background-color: #2ecc71; color: white; border: none; padding: 8px 14px; border-radius: 8px;">
+          💬 Comentar
+        </button>
+      </form>
+
+      <!-- Owner delete post button -->
+      <form *ngIf="post.isOwner" 
+            (ngSubmit)="deletePost(post.id)" 
+            style="margin-top: 10px;">
+        <button class="button danger" 
+                type="submit" 
+                style="background-color: #d35400; color: white; padding: 6px 12px; border-radius: 6px;">
+          🗑️ Borrar mi Post
+        </button>
+      </form>
+    </div>
+
+    <!-- Create new post form (for logged users) -->
+    <div *ngIf="currentUser">
+      <h1 style="color: #34495e; text-align:center; margin-bottom: 20px;">📝 Publica un nuevo Post</h1>
+
+      <form (ngSubmit)="createPost()" 
+            style="max-width: 600px; margin: auto; background: #ffffffdd; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+
+        <label for="title" style="font-weight: bold;">📌 Título:</label><br>
+        <input type="text" 
+               [(ngModel)]="newPost.title" 
+               name="title"
+               style="width: 100%; padding: 10px; margin-bottom: 15px; border: 2px solid #dfe6e9; border-radius: 10px;"><br>
+
+        <label for="tag" style="font-weight: bold;">🏷️ Temática:</label><br>
+        <input type="text" 
+               [(ngModel)]="newPost.tag" 
+               name="tag"
+               style="width: 100%; padding: 10px; margin-bottom: 15px; border: 2px solid #dfe6e9; border-radius: 10px;"><br>
+
+        <label for="content" style="font-weight: bold;">🗒️ Contenido:</label><br>
+        <textarea [(ngModel)]="newPost.content" 
+                  name="content" 
+                  rows="4" 
+                  style="width: 100%; padding: 10px; margin-bottom: 15px; border: 2px solid #dfe6e9; border-radius: 10px;"></textarea><br>
+
+        <label for="imageName" style="font-weight: bold;">🖼️ Nombre de la imagen:</label><br>
+        <input type="text" 
+               [(ngModel)]="newPost.imageName" 
+               name="imageName"
+               style="width: 100%; padding: 10px; margin-bottom: 15px; border: 2px solid #dfe6e9; border-radius: 10px;"><br>
+
+        <label for="image" style="font-weight: bold;">📷 Archivo de imagen (.jpg/.jpeg):</label><br>
+        <input type="file" 
+               (change)="onImageSelected($event)" 
+               accept=".jpg,.jpeg" 
+               style="margin-bottom: 20px;"><br>
+
+        <button class="button" 
+                type="submit" 
+                style="background-color: #2ecc71; color: white; padding: 12px 20px; font-size: 16px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s ease;">
+          🚀 Crear Post
+        </button>
+      </form>
+    </div>
+
+    <!-- AI post generation form (for admins only) -->
+    <div *ngIf="isAdmin">
+      <br><hr style="width: 100%; border-top: 1px dashed #ccc;"><br>
+      <h1 style="color: #34495e; text-align:center; margin-bottom: 20px;">🤖 Genera un nuevo Post</h1>
+
+      <form (ngSubmit)="generateAIPost()" 
+            style="max-width: 600px; margin: auto; background: #ffffffdd; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+
+        <label for="aiTag" style="font-weight: bold;">🏷️ Temática:</label><br>
+        <input type="text" 
+               [(ngModel)]="aiPostTag" 
+               name="aiTag"
+               style="width: 100%; padding: 10px; margin-bottom: 20px; border: 2px solid #dfe6e9; border-radius: 10px;"><br>
+
+        <button class="button" 
+                type="submit" 
+                style="background-color: #3b82f6; color: white; padding: 12px 20px; font-size: 16px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s ease;">
+          ✨ Autogenerar Post
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Right sidebar -->
+  <div id="right" 
+       style="background: linear-gradient(135deg, #f0f8ff, #e6f7ff); padding: 20px; margin-top: 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); max-width: 600px; font-family: 'Segoe UI', sans-serif;">
+    
+    <h2 style="color: #005a9c; font-size: 28px; margin-bottom: 10px;">👥 ¿Quiénes somos?</h2>
+    
+    <p class="intro" style="font-size: 16px; line-height: 1.6; color: #333;">
+      💻 <strong>El rincón del software</strong> es una plataforma en línea donde los usuarios pueden discutir,
+      intercambiar ideas y resolver problemas relacionados con el desarrollo, la programación y el uso de software.
+      <br><br>
+      🤝 Estos foros proporcionan un espacio para que <em>desarrolladores, ingenieros de software y entusiastas de la tecnología</em> compartan sus experiencias, consejos y soluciones técnicas.
+      <br><br>
+      📚 Los temas de discusión pueden variar desde preguntas específicas sobre <code>lenguajes de programación</code> hasta debates sobre las últimas tendencias en tecnología.
+      <br><br>
+      🌐 Los foros de software suelen ser comunidades activas y colaborativas donde puedes obtener ayuda, aprender nuevas habilidades y participar en debates sobre diversos aspectos del mundo del software.
+    </p>
+
+    <!-- Chatbot section -->
+    <h1 style="color: #9b59b6;">🤖 Chatbot</h1>
+    <div style="max-width: 600px; margin: 2em auto; padding: 1.5em; background: linear-gradient(135deg, #f9f0ff, #fdf0ff); border-radius: 16px; box-shadow: 0 8px 20px rgba(155, 89, 182, 0.2); border: 2px solid #e1bee7; font-family: 'Segoe UI', sans-serif;">
+  
+      <h2 style="color: #8e44ad; margin-bottom: 1em; text-align: center;">🤖 ¡Chatea con el Bot!</h2>
+  
+      <!-- Chat display area -->
+      <div #chatBox 
+           id="chat-box" 
+           style="height: 250px; overflow-y: auto; background-color: #ffffff; border: 1px solid #ddd; padding: 1em; border-radius: 10px; margin-bottom: 1em; box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);">
+        
+        <!-- Initial message -->
+        <p *ngIf="chatMessages.length === 0" 
+           style="color: #aaa; text-align: center;">¡Comienza la conversación! 🗨️</p>
+        
+        <!-- Chat messages -->
+        <div *ngFor="let message of chatMessages" 
+             [style.text-align]="message.role === 'user' ? 'right' : 'left'">
+          <span [style.background-color]="message.role === 'user' ? '#dcd0ff' : '#f5e1ff'"
+                style="padding: 0.5em 1em; border-radius: 12px; display: inline-block; margin-bottom: 5px;">
+            <span *ngIf="message.role === 'assistant'">🤖 </span>{{message.content}}
+          </span>
+        </div>
+      </div>
+  
+      <!-- Chat input -->
+      <div style="display: flex; gap: 0.5em;">
+        <input type="text" 
+               [(ngModel)]="chatMessage"
+               (keyup.enter)="sendChatMessage()"
+               placeholder="Escribe tu mensaje..." 
+               style="flex: 1; padding: 0.75em; border-radius: 10px; border: 1px solid #ccc; font-size: 1em;">
+        <button (click)="sendChatMessage()" 
+                style="padding: 0.75em 1.2em; background-color: #9b59b6; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.3s;">
+          Enviar 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<!-- edit-post.component.html -->
+<div class="container mt-4">
+  <h2 class="text-center mb-4">✏️ Editar Post</h2>
+
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" class="card p-4 shadow-lg">
+
+    <!-- Título -->
+    <div class="mb-3">
+      <label for="title" class="form-label">📌 Título:</label>
+      <input type="text" id="title" class="form-control" formControlName="title" required>
+    </div>
+
+    <!-- Contenido -->
+    <div class="mb-3">
+      <label for="content" class="form-label">📝 Contenido:</label>
+      <textarea id="content" class="form-control" formControlName="content" rows="5" required></textarea>
+    </div>
+
+    <!-- Etiqueta -->
+    <div class="mb-3">
+      <label for="tag" class="form-label">🏷️ Etiqueta:</label>
+      <input type="text" id="tag" class="form-control" formControlName="tag" required>
+    </div>
+
+    <!-- Imagen -->
+    <div class="mb-3">
+      <label for="image" class="form-label">🖼️ Imagen (opcional):</label>
+      <input type="file" id="image" (change)="onImageSelected($event)" class="form-control">
+    </div>
+
+    <!-- Previsualización -->
+    <div *ngIf="previewUrl" class="mb-3 text-center">
+      <p class="text-muted">Previsualización:</p>
+      <img [src]="previewUrl" alt="Preview" class="img-fluid rounded" style="max-height: 200px;">
+    </div>
+
+    <!-- Botón -->
+    <button class="btn btn-success w-100" type="submit" [disabled]="editForm.invalid">
+      🚀 Actualizar Post
+    </button>
+  </form>
+</div>

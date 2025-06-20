@@ -1,15 +1,26 @@
-<div id="container">
-    <div id="sitetitle">
-      <h1><a routerLink="/">El rincón del software</a></h1>
-    </div>
-    <div id="menu">
-        <a routerLink="/">Home</a>
-        <a routerLink="/log_in">Usuario</a>
-        <ng-container *ngIf="isAdmin">
-          <a routerLink="/estadisticas">Estadísticas</a>
-          <a routerLink="/admin">Admin</a>
-        </ng-container>
-        <a routerLink="/myposts">Mis posts</a>
-        <a routerLink="/contact">Contacto</a>
-    </div>
-</div>
+<footer id="footer">
+  <h2 class="hide">Site info</h2>
+  <div class="footer-content">
+    <p>&copy; 2024 El Rincón del Software</p>
+    <p>Design by <a href="https://github.com/CodeURJC-DAW-2023-24/webapp17" target="_blank">webapp17</a></p>
+    <p><a href="#" target="_blank">Homepage</a></p>
+  </div>
+  <div class="footer-icons">
+    <a href="https://www.linkedin.com/in/jes%C3%BAs-gonz%C3%A1lez-gironda-642a85271/" 
+       target="_blank" class="icon">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/jes%C3%BAs-gonz%C3%A1lez-gironda-642a85271/" 
+       target="_blank" class="icon">
+      <i class="fab fa-twitter"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/jes%C3%BAs-gonz%C3%A1lez-gironda-642a85271/" 
+       target="_blank" class="icon">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/jes%C3%BAs-gonz%C3%A1lez-gironda-642a85271/" 
+       class="icon">
+      <i class="fab fa-linkedin-in"></i>
+    </a>
+  </div>
+</footer>

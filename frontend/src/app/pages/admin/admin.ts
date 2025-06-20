@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-admin',
-  imports: [],
+  imports: [], standalone: true,
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })

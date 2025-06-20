@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-contacto',
-  imports: [],
+  imports: [], standalone: true,
   templateUrl: './contacto.html',
   styleUrl: './contacto.css'
 })

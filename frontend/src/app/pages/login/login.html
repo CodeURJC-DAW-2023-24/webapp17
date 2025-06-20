@@ -1,0 +1,48 @@
+<div *ngIf="!(authService.currentUser$ | async); else loggedInTemplate">
+  <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+
+    <p class="text-danger" *ngIf="loginError">{{ loginError }}</p>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input 
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+        [(ngModel)]="email"
+        #emailInput="ngModel"
+      >
+      <div *ngIf="emailInput.invalid && emailInput.touched" class="text-danger">
+        Email requerido
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input 
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        required
+        [(ngModel)]="password"
+        #passwordInput="ngModel"
+      >
+      <div *ngIf="passwordInput.invalid && passwordInput.touched" class="text-danger">
+        Contraseña requerida
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">
+      Iniciar Sesión
+    </button>
+  </form>
+</div>
+
+<ng-template #loggedInTemplate>
+  <form (ngSubmit)="onLogout()">
+    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+  </form>
+</ng-template>

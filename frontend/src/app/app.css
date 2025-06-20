@@ -44,7 +44,7 @@ body {
     margin: 0;
     padding: 0;
     font: 76% tahoma, verdana, sans-serif;
-    background: #e6e6e6 url(../images/bodybg.png) repeat-x;
+    background: #e6e6e6 url(/assets/bodybg.png) repeat-x;
     color: #333;
     text-align: center;
 }
@@ -107,7 +107,7 @@ h4 {
     min-width: 700px;
     padding: 0 20px;
     margin: 0 auto;
-    background: #f0f0f0 url(../images/contentbg.png) repeat-x;
+    background: #f0f0f0 url(/assets/contentbg.png) repeat-x;
     color: #333;
     text-align: left;
     border-left: 1px solid #eef;
@@ -117,7 +117,7 @@ h4 {
 #sitetitle {
     float: left;
     height: auto;
-    background: url(../images/globe.gif) no-repeat;
+    background: url(/assets/globe.gif) no-repeat;
     /* Delete this line to remove the animated globe */
     width: 42%;
     color: #333;
@@ -151,7 +151,7 @@ h4 {
 #menu a:hover {
     color: #269;
     text-decoration: none;
-    background: #fff url(../images/menuhover.png) repeat-x;
+    background: #fff url(/assets/menuhover.png) repeat-x;
     padding: 35px 5px 41px 5px;
     border-left: 1px solid #eee;
     border-right: 1px solid #eee;
@@ -161,7 +161,7 @@ h4 {
     margin-top: 30px;
     width: 100%;
     clear: both;
-    background: url(../images/globebottom.gif) bottom left no-repeat;
+    background: url(/assets/globebottom.gif) bottom left no-repeat;
 }
 
 #content h2 {
@@ -223,7 +223,7 @@ h4 {
     position: relative;
     margin: 0 0 20px 0;
     border: 2px solid #fff;
-    background: #eee url(../images/entrybg.png) repeat-x;
+    background: #eee url(/assets/entrybg.png) repeat-x;
     color: #333;
     padding: 10px 10px 0 10px;
 }
@@ -232,13 +232,13 @@ h4 {
 .intro a:hover {
     text-decoration: none;
     padding-bottom: 2px;
-    background: url(../images/flash2.gif) bottom left repeat-x;
+    background: url(/assets/flash2.gif) bottom left repeat-x;
     /* Delete this line to remove the flashing underline for regular links */
 }
 
 .link {
     color: #269;
-    background: url(../images/linkarrow.gif) left no-repeat;
+    background: url(/assets/linkarrow.gif) left no-repeat;
     display: block;
     margin: 4px 0 0 0;
     padding: 2px 1em;
@@ -246,7 +246,7 @@ h4 {
 
 .link:hover {
     color: #48b;
-    background: url(../images/blinkarrow.gif) left no-repeat;
+    background: url(/assets/blinkarrow.gif) left no-repeat;
     /* Delete this line to remove the blinking arrows by the links */
     text-decoration: none;
 }
@@ -261,7 +261,7 @@ h4 {
 }
 
 .thumbs img:hover {
-    background: url(../images/flash.gif);
+    background: url(/assets/flash.gif);
     /* Delete this line to remove the blinkingblue frame around the thumbnails */
 }
 
