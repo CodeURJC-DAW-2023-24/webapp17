@@ -113,6 +113,7 @@ Ejecuta el siguiente comando para descargar la imagen:
 
 ```bash
 docker pull ggronda/webapp17
+```
 ---
 
 ### 📦 Persistencia de Datos
