@@ -15,6 +15,7 @@ services:
 
   springboot-app:
     build: .
+    image: ggronda/webapp17
     container_name: spring-app
     ports:
       - "8443:8443"
