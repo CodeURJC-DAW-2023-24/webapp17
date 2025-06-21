@@ -8,6 +8,7 @@ import { NoPermission } from './pages/nopermission/nopermission';
 import { MyPosts } from './pages/mypost/myposts';
 import { EditPost } from './pages/editpost/editpost';
 import { Statistics } from './pages/stats/statistics';
+import { Contacto } from './pages/contacto/contacto';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,11 +18,12 @@ export const appConfig: ApplicationConfig = {
       { path: 'myposts', component: MyPosts },               // User's posts
       { path: 'editpost', component: EditPost },             // Create post
       { path: 'editpost/:id', component: EditPost },         // Edit post with ID
-      { path: 'estadisticas', component: Statistics },     // Statistics
+      { path: 'statistics', component: Statistics },     // Statistics
       { path: 'noadmin', component: NoAdmin },               // No admin access
       { path: 'nopermission', component: NoPermission },     // No permission
-      { path: 'error', component: Error },                   // Error page
-      { path: '**', redirectTo: '/error' }                   // 404 redirect
+      { path: 'error', component: Error },
+      {path: 'contact', component: Contacto}       , // Contact page
+      { path: '**', redirectTo: 'error' }                   // 404 redirect
     ])
   ]
 };

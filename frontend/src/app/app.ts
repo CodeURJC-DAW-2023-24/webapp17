@@ -9,7 +9,7 @@ import { Contacto } from './pages/contacto/contacto';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Header, Footer, LogIn,Home,Contacto],
+  imports: [RouterOutlet, Header, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
