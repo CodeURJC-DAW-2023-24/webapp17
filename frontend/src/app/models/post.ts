@@ -11,3 +11,17 @@ export interface Post {
   date?: string;   
   tag?: string;
 }
+
+export interface PostCreationDTO {
+  title: string;
+  content: string;
+  tag: string;
+  image: File | null; 
+}
+
+export interface PostPage {
+  content: Post[];
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}

@@ -1,14 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router ,RouterModule} from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { AuthService } from '../../services/auth.service';
 import { ChatService, Message } from '../../services/chat.service';
 import { CommentService } from '../../services/comment.service';
 import { Post } from '../../models/post';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-home',
-  imports: [], standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, FormsModule,RouterModule], standalone: true,
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -57,12 +60,14 @@ export class Home implements OnInit, AfterViewChecked {
     private route: ActivatedRoute,
     private router: Router,
     private commentService: CommentService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Initialize user data
-    this.loadUserData();
-    
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      this.isAdmin = user?.role === 'ADMIN';
+    });
     // Load posts with pagination from query params
     this.route.queryParams.subscribe(params => {
       this.currentPage = +(params['page'] || 0);
@@ -78,11 +83,7 @@ export class Home implements OnInit, AfterViewChecked {
     }
   }
 
-  // User and authentication methods
-  private loadUserData(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    this.isAdmin = this.authService.isAdmin();
-  }
+
 
   // Posts loading and pagination
   private loadPosts(): void {
@@ -119,10 +120,10 @@ export class Home implements OnInit, AfterViewChecked {
   }
 
   deleteComment(commentId: number): void {
-  this.commentService.deleteComment(commentId).subscribe()
+    this.commentService.deleteComment(commentId).subscribe()
   }
 
-  // Post management
+
   createPost(): void {
     if (!this.newPost.title.trim() || !this.newPost.content.trim()) {
       alert('Por favor, completa los campos obligatorios');
@@ -132,18 +133,15 @@ export class Home implements OnInit, AfterViewChecked {
     const formData = new FormData();
     formData.append('title', this.newPost.title);
     formData.append('content', this.newPost.content);
-    formData.append('tag', this.newPost.tag);
-    formData.append('imageName', this.newPost.imageName);
-    
+    formData.append('tag', this.newPost.tag || '');
+
     if (this.newPost.image) {
-      formData.append('image', this.newPost.image);
+      formData.append('image', this.newPost.image, this.newPost.image.name);
     }
 
     this.postService.createPost(formData).subscribe({
       next: (post: any) => {
-        // Add new post to the beginning of the list
         this.posts.unshift(post);
-        // Reset form
         this.resetNewPostForm();
         alert('Post creado exitosamente');
       },
@@ -153,6 +151,10 @@ export class Home implements OnInit, AfterViewChecked {
       }
     });
   }
+
+
+
+
 
   deletePost(postId: number): void {
     if (confirm('¿Estás seguro de que quieres eliminar este post?')) {
@@ -199,14 +201,14 @@ export class Home implements OnInit, AfterViewChecked {
         event.target.value = '';
         return;
       }
-      
+
       // Validate file size (e.g., max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('El archivo es demasiado grande. Máximo 5MB');
         event.target.value = '';
         return;
       }
-      
+
       this.newPost.image = file;
     }
   }
@@ -223,7 +225,7 @@ export class Home implements OnInit, AfterViewChecked {
       content: this.chatMessage
     };
     this.chatMessages.push(userMessage);
-    
+
     // Prepare message for sending
     const messageToSend = this.chatMessage;
     this.chatMessage = ''; // Clear input immediately
@@ -274,13 +276,5 @@ export class Home implements OnInit, AfterViewChecked {
     };
   }
 }
-export interface User {
-  id: number;
-  role: 'ADMIN' | 'USER';
-  username: string;
-  password?: string; // opcional, no se suele enviar al front
-  email: string;
-  posts?: Post[];
-  comments?: Comment[];
-}
+
 

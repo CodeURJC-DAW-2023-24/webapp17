@@ -14,7 +14,8 @@ import { FormsModule } from '@angular/forms';
 export class MyPosts {
   posts: Post[] = [];
   currentPage = 0;
-  size = 5;
+  totalPages = 0;
+  size = 3;
   hasNext = false;
   hasPrevious = false;
   commentsVisible: { [postId: number]: boolean } = {};
@@ -23,17 +24,19 @@ export class MyPosts {
   constructor(private postService: PostService, private commentService :  CommentService) { }
 
   ngOnInit(): void {
-    this.loadPosts(this.currentPage);
+    this.loadMyPosts(this.currentPage);
   }
 
-loadPosts(page: number): void {
-  this.postService.getPosts(page, this.size).subscribe(posts => {
-    this.posts = posts;
+loadMyPosts(page: number): void {
+  this.postService.getMyPosts(page, this.size).subscribe(response => {
+    this.posts = response.content;
     this.currentPage = page;
-    this.hasPrevious = page > 0;
-    this.hasNext = posts.length === this.size; // si devuelve el tamaño completo, puede haber más
+    this.totalPages = response.totalPages;
+    this.hasPrevious = !response.first;
+    this.hasNext = !response.last;
   });
 }
+
 
   toggleComments(postId: number) {
     this.commentsVisible[postId] = !this.commentsVisible[postId];
@@ -45,16 +48,16 @@ loadPosts(page: number): void {
 
     this.commentService.addComment(postId, commentText).subscribe(() => {
       this.newComments[postId] = '';
-      this.loadPosts(this.currentPage);  // recarga para ver nuevo comentario
+      this.loadMyPosts(this.currentPage);  // recarga para ver nuevo comentario
     });
   }
 
   nextPage() {
-    if (this.hasNext) this.loadPosts(this.currentPage + 1);
+    if (this.hasNext) this.loadMyPosts(this.currentPage + 1);
   }
 
   previousPage() {
-    if (this.hasPrevious) this.loadPosts(this.currentPage - 1);
+    if (this.hasPrevious) this.loadMyPosts(this.currentPage - 1);
   }
 
 }

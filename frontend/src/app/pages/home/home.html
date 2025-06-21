@@ -32,7 +32,7 @@
       
       <p class="meta" style="font-size: 14px; color: #666;">
         📅 <span class="date">{{post.date | date:'short'}}</span> | 
-        👤 Posted by {{post.usr?.username}} | 
+        👤 Posted by {{post.user?.username}} | 
         🏷️ Tags: {{post.tag}} | 
         💬 {{post.comments?.length || 0}} comentarios
       </p>
@@ -56,11 +56,11 @@
              style="background-color: #eef6ff; border-left: 4px solid #3498db; padding: 10px; border-radius: 6px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
           
           <p style="margin: 0;">🗨️ <strong>{{comment.text}}</strong></p>
-          <p class="meta" style="font-size: 12px; color: #555;">👤 {{comment.usr?.username}}</p>
+          <p class="meta" style="font-size: 12px; color: #555;">👤 {{comment.user.username}}</p>
 
           <!-- Admin delete comment button -->
           <form *ngIf="isAdmin" 
-                (ngSubmit)="deleteComment(post.id, comment.id)" 
+                (ngSubmit)="deleteComment(comment.id)" 
                 style="margin-top: 5px;">
             <button class="button secondary" 
                     type="submit" 
@@ -70,8 +70,8 @@
           </form>
 
           <!-- Owner delete comment button -->
-          <form *ngIf="comment.isOwner" 
-                (ngSubmit)="deleteComment(post.id, comment.id)" 
+          <form ngIf="comment.user?.id === currentUser?.id" 
+                (ngSubmit)="deleteComment(comment.id)" 
                 style="margin-top: 5px;">
             <button class="button secondary" 
                     type="submit" 
@@ -111,7 +111,7 @@
       </form>
 
       <!-- Owner delete post button -->
-      <form *ngIf="post.isOwner" 
+      <form *ngIf="post.user?.id === currentUser?.id" 
             (ngSubmit)="deletePost(post.id)" 
             style="margin-top: 10px;">
         <button class="button danger" 

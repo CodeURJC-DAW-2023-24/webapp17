@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { PostService, PostDTO} from '../../services/post.service';
+import { PostService} from '../../services/post.service';
+import { PostCreationDTO } from '../../models/post';
 
 @Component({
   selector: 'app-edit-post',
@@ -18,6 +19,7 @@ export class EditPost implements OnInit {
   loading = false;
   errorMessage = '';
   hovered = false;
+  newPost: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -66,17 +68,20 @@ export class EditPost implements OnInit {
     }
     this.loading = true;
 
-    const postData: PostDTO = {
-      title: this.postForm.value.title,
-      content: this.postForm.value.content,
-      tag: this.postForm.value.tag,
-      image: this.selectedImage ?? undefined
-    };
+    const formData = new FormData();
+    formData.append('title', this.newPost.title);
+    formData.append('content', this.newPost.content);
+    formData.append('tag', this.newPost.tag || '');
 
-    this.postService.updatePost(this.postId, postData).subscribe({
+    if (this.newPost.image) {
+      formData.append('image', this.newPost.image, this.newPost.image.name);
+    }
+
+
+    this.postService.updatePost(this.postId, formData).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/posts', this.postId]); // Redirige a la vista del post actualizado
+        this.router.navigate(['/posts']); 
       },
       error: () => {
         this.loading = false;
