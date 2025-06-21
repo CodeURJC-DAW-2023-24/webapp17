@@ -194,7 +194,7 @@ public class PostRestController {
         post.setContent(DTO.getContent());
         post.setTag(DTO.getTag());
         
-        MultipartFile image = dto.getImage();
+        MultipartFile image = DTO.getImage();
         if (image != null && !image.isEmpty()) {
             String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
             Path filepath = Paths.get(uploadPath, filename);
@@ -257,8 +257,6 @@ public class PostRestController {
         private MultipartFile image;
         private Long userId;
         private String username;
-
-
     }
 
     @Data
