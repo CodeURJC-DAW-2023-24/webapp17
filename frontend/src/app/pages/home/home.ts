@@ -8,10 +8,11 @@ import { Post } from '../../models/post';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { User } from '../../models/user';
+import { CustomDatePipe } from '../../Pipes/custom-date.pipe';
 
 @Component({
   selector: 'app-home',
-  imports: [ReactiveFormsModule, CommonModule, FormsModule,RouterModule], standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, FormsModule,RouterModule,CustomDatePipe], standalone: true,
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -40,6 +41,7 @@ export class Home implements OnInit, AfterViewChecked {
     imageName: '',
     image: null as File | null
   };
+  
 
   // AI post generation
   aiPostTag: string = '';

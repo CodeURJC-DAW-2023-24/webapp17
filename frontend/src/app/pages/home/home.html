@@ -31,7 +31,7 @@
       <p style="font-size: 16px; color: #333;">{{post.content}}</p>
       
       <p class="meta" style="font-size: 14px; color: #666;">
-        📅 <span class="date">{{post.date | date:'short'}}</span> | 
+        📅 <span class="date">{{ post.date ? (post.date | customDate | date:'short') : '' }}</span> | 
         👤 Posted by {{post.user?.username}} | 
         🏷️ Tags: {{post.tag}} | 
         💬 {{post.comments?.length || 0}} comentarios

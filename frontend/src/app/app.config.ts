@@ -9,6 +9,7 @@ import { MyPosts } from './pages/mypost/myposts';
 import { EditPost } from './pages/editpost/editpost';
 import { Statistics } from './pages/stats/statistics';
 import { Contacto } from './pages/contacto/contacto';
+import { Admin } from './pages/admin/admin';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +20,7 @@ export const appConfig: ApplicationConfig = {
       { path: 'editpost', component: EditPost },             // Create post
       { path: 'editpost/:id', component: EditPost },         // Edit post with ID
       { path: 'statistics', component: Statistics },     // Statistics
+      {path: 'admin', component: Admin},                     // Admin page 
       { path: 'noadmin', component: NoAdmin },               // No admin access
       { path: 'nopermission', component: NoPermission },     // No permission
       { path: 'error', component: Error },
