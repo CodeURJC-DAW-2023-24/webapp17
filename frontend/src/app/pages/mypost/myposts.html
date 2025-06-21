@@ -1,1 +1,34 @@
-<p>my-posts works!</p>
+<div class="content">
+
+  <div class="pagenav">
+    <button (click)="previousPage()" [disabled]="!hasPrevious">Página Anterior</button>
+    <button (click)="nextPage()" [disabled]="!hasNext">Mostrar más posts</button>
+  </div>
+
+  <div *ngFor="let post of posts" class="entry">
+    <h2>📌 {{ post.title }}</h2>
+
+    <img *ngIf="post.image" [src]="post.image" class="entryphoto" />
+
+    <p>{{ post.content }}</p>
+
+    <p class="meta">
+      📅 {{ post.date }} | 👤 Posted by {{ post.user?.username }} | 🏷️ Tags: {{ post.tag }} | 💬 {{ post.comments?.length }} comentarios
+    </p>
+
+    <button (click)="toggleComments(post.id)">💬 Ver Comentarios</button>
+
+    <div class="comments-container" *ngIf="commentsVisible[post.id]">
+      <div *ngFor="let comment of post.comments" class="comment">
+        <p>🗨️ <strong>{{ comment.text }}</strong></p>
+        <p class="meta">👤 {{ comment.user.username }}</p>
+      </div>
+    </div>
+
+    <div *ngIf="commentsVisible[post.id]" class="comment-form">
+      <textarea *ngIf="post.id !== undefined" [(ngModel)]="newComments[post.id]" placeholder="🖊️ Escribe tu comentario aquí..."></textarea>
+      <button (click)="submitComment(post.id)">💬 Comentar</button>
+    </div>
+  </div>
+
+</div>

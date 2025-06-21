@@ -1,11 +1,28 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [], standalone: true,
+  imports: [CommonModule], 
+  standalone: true,
   templateUrl: './header.html',
   styleUrl: './header.css'
 })
-export class Header {
+export class Header implements OnInit {
+  
+  isAdmin: boolean=  false;
+  ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
+    
+  }
+
+  constructor(private authService: AuthService) {}
+
+  get currentUser() {
+    return this.authService.currentUser$;
+  }
+
+ 
 
 }

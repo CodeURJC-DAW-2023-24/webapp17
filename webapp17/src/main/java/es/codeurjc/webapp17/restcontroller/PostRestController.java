@@ -9,7 +9,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
@@ -82,39 +87,46 @@ public class PostRestController {
      * @return The created post.
      * @throws IOException If file upload fails.
      */
-    @PostMapping
+    @PostMapping("/posts")
     @Operation(summary = "Create a new post")
-    public ResponseEntity<?> createPost(HttpSession session, @ModelAttribute PostDTO DTO) throws IOException {
-        LocalDateTime now = LocalDateTime.now();
-
-        Post post = new Post();
-        post.setTitle(DTO.getTitle());
-        post.setContent(DTO.getContent());
-        post.setDate(now);
-        post.setTag(DTO.getTag());
-
-        // Get the logged-in user from the session
+    public ResponseEntity<?> createPost(HttpSession session, @ModelAttribute PostCreationDTO dto) throws IOException {
         Usr user = (Usr) session.getAttribute("user");
         if (user == null) {
-            // If not logged in, return 401 Unauthorized
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in.");
         }
+
+        LocalDateTime now = LocalDateTime.now();
+        Post post = new Post();
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+        post.setDate(now);
+        post.setTag(dto.getTag());
         post.setUsr(user);
 
-        post.setImage(DEFAULT_IMAGE_PATH);
+        MultipartFile image = dto.getImage();
+        if (image != null && !image.isEmpty()) {
+            String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
+            Path filepath = Paths.get(uploadPath, filename);
 
-        // Save the post (the ID will be populated after saving)
+            if (!Files.exists(filepath.getParent())) {
+                Files.createDirectories(filepath.getParent());
+            }
+
+            Files.write(filepath, image.getBytes());
+            post.setImage("/files/" + filename);
+        } else {
+            post.setImage(DEFAULT_IMAGE_PATH);
+        }
+
         postService.addPost(post);
 
-        // Build the URI for the created post (e.g., /posts/{id})
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(post.getId())
                 .toUri();
 
-        // Return 201 Created with Location header and the created post as body
-        return ResponseEntity.created(location).body(DTO);
+        return ResponseEntity.created(location).body(post);
     }
 
     /**
@@ -154,7 +166,7 @@ public class PostRestController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a post by ID")
-    public ResponseEntity<?> updatePost(@PathVariable Long id, @ModelAttribute PostDTO DTO, HttpSession session)
+    public ResponseEntity<?> updatePost(@PathVariable Long id, @ModelAttribute PostCreationDTO DTO, HttpSession session)
             throws IOException {
 
         // Retrieve the currently authenticated user
@@ -181,6 +193,21 @@ public class PostRestController {
         post.setTitle(DTO.getTitle());
         post.setContent(DTO.getContent());
         post.setTag(DTO.getTag());
+        
+        MultipartFile image = dto.getImage();
+        if (image != null && !image.isEmpty()) {
+            String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
+            Path filepath = Paths.get(uploadPath, filename);
+
+            if (!Files.exists(filepath.getParent())) {
+                Files.createDirectories(filepath.getParent());
+            }
+
+            Files.write(filepath, image.getBytes());
+            post.setImage("/files/" + filename);
+        } else {
+            post.setImage(DEFAULT_IMAGE_PATH);
+        }
 
         // Save the updated post
         postService.updatePost(post);
@@ -216,6 +243,22 @@ public class PostRestController {
     public static class CommentDTO {
 
         private String text;
+    }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PostCreationDTO {
+
+        private Long id;
+        private String title;
+        private String content;
+        private String tag;
+        private LocalDateTime date;
+        private MultipartFile image;
+        private Long userId;
+        private String username;
+
+
     }
 
     @Data

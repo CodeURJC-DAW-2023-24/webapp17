@@ -1,42 +1,52 @@
-<!-- edit-post.component.html -->
-<div class="container mt-4">
-  <h2 class="text-center mb-4">✏️ Editar Post</h2>
+<h2 style="color: #34495e; text-align:center; margin-top: 2rem;">✏️✨ Editar Post 📝</h2>
 
-  <form [formGroup]="editForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" class="card p-4 shadow-lg">
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" style="max-width: 600px; margin: auto; background: #ffffffdd; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
 
-    <!-- Título -->
-    <div class="mb-3">
-      <label for="title" class="form-label">📌 Título:</label>
-      <input type="text" id="title" class="form-control" formControlName="title" required>
-    </div>
+  <label for="title" style="font-weight: bold;">📌 Título:</label><br>
+  <input
+    id="title"
+    type="text"
+    formControlName="title"
+    style="width:100%; padding:10px; border: 2px solid #dfe6e9; border-radius:10px; margin-bottom:15px;"
+  />
+ 
 
-    <!-- Contenido -->
-    <div class="mb-3">
-      <label for="content" class="form-label">📝 Contenido:</label>
-      <textarea id="content" class="form-control" formControlName="content" rows="5" required></textarea>
-    </div>
+  <label for="content" style="font-weight: bold;">📝 Contenido:</label><br>
+  <textarea
+    id="content"
+    rows="6"
+    formControlName="content"
+    style="width:100%; border: 2px solid #dfe6e9; border-radius:10px; padding:10px; margin-bottom:15px;"
+  ></textarea>
+ 
 
-    <!-- Etiqueta -->
-    <div class="mb-3">
-      <label for="tag" class="form-label">🏷️ Etiqueta:</label>
-      <input type="text" id="tag" class="form-control" formControlName="tag" required>
-    </div>
+  <label for="tag" style="font-weight: bold;">🏷️ Etiqueta:</label><br>
+  <input
+    id="tag"
+    type="text"
+    formControlName="tag"
+    style="width:100%; padding:10px; border: 2px solid #dfe6e9; border-radius:10px; margin-bottom:15px;"
+  />
 
-    <!-- Imagen -->
-    <div class="mb-3">
-      <label for="image" class="form-label">🖼️ Imagen (opcional):</label>
-      <input type="file" id="image" (change)="onImageSelected($event)" class="form-control">
-    </div>
+  <label for="image" style="font-weight: bold;">🖼️ Imagen (opcional):</label><br>
+  <input
+    id="image"
+    type="file"
+    (change)="onFileSelected($event)"
+    style="margin-bottom:20px;"
+  /><br>
+<button
+  class="button"
+  type="submit"
+  [disabled]="loading"
+  [style.backgroundColor]="hovered ? '#27ae60' : '#2ecc71'"
+  (mouseenter)="hovered = true"
+  (mouseleave)="hovered = false"
+>
+  🚀 Actualizar Post
+</button>
 
-    <!-- Previsualización -->
-    <div *ngIf="previewUrl" class="mb-3 text-center">
-      <p class="text-muted">Previsualización:</p>
-      <img [src]="previewUrl" alt="Preview" class="img-fluid rounded" style="max-height: 200px;">
-    </div>
-
-    <!-- Botón -->
-    <button class="btn btn-success w-100" type="submit" [disabled]="editForm.invalid">
-      🚀 Actualizar Post
-    </button>
-  </form>
-</div>
+  <div *ngIf="errorMessage" style="color: red; margin-top: 1rem;">
+    {{ errorMessage }}
+  </div>
+</form>

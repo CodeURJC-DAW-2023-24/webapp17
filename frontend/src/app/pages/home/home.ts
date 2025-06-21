@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { AuthService } from '../../services/auth.service';
-import { ChatService } from '../../services/chat.service';
+import { ChatService, Message } from '../../services/chat.service';
 import { CommentService } from '../../services/comment.service';
+import { Post } from '../../models/post';
 
 @Component({
   selector: 'app-home',
@@ -45,7 +46,7 @@ export class Home implements OnInit, AfterViewChecked {
   visibleComments: Set<number> = new Set();
 
   // Chat functionality
-  chatMessages: ChatMessage[] = [];
+  chatMessages: Message[] = [];
   chatMessage: string = '';
   private shouldScrollToBottom = false;
 
@@ -217,7 +218,7 @@ export class Home implements OnInit, AfterViewChecked {
     }
 
     // Add user message to chat
-    const userMessage: ChatMessage = {
+    const userMessage: Message = {
       role: 'user',
       content: this.chatMessage
     };
@@ -229,10 +230,10 @@ export class Home implements OnInit, AfterViewChecked {
     this.shouldScrollToBottom = true;
 
     // Send message to backend
-    this.chatService.sendMessage(this.chatMessages).subscribe({
+    this.chatService.sendChat(this.chatMessages).subscribe({
       next: (response: { response: any; }) => {
         // Add bot response to chat
-        const botMessage: ChatMessage = {
+        const botMessage: Message = {
           role: 'assistant',
           content: response.response
         };
@@ -242,7 +243,7 @@ export class Home implements OnInit, AfterViewChecked {
       error: (error: any) => {
         console.error('Error sending chat message:', error);
         // Add error message to chat
-        const errorMessage: ChatMessage = {
+        const errorMessage: Message = {
           role: 'assistant',
           content: 'Lo siento, hubo un error al procesar tu mensaje.'
         };

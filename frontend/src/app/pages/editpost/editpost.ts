@@ -2,79 +2,86 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { PostService, PostDTO, PostResponseDTO } from '../../services/post.service';
+import { PostService, PostDTO} from '../../services/post.service';
 
 @Component({
   selector: 'app-edit-post',
   templateUrl: './editpost.html',
   standalone: true,
-  imports: [ReactiveFormsModule], // Añade CommonModule, ReactiveFormsModule si lo necesitas
+  imports: [ReactiveFormsModule, CommonModule], 
 })
 export class EditPost implements OnInit {
-  editForm: FormGroup;
+
   postId!: number;
-  selectedImageFile: File | null = null;
-  previewUrl: string | null = null;
+  postForm!: FormGroup;
+  selectedImage: File | null = null;
+  loading = false;
+  errorMessage = '';
+  hovered = false;
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private postService: PostService
-  ) {
-    this.editForm = this.fb.group({
-      title: ['', Validators.required],
-      content: ['', Validators.required],
-      tag: ['', Validators.required],
-    });
-  }
+    private postService: PostService,
+    private fb: FormBuilder,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    this.postId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadPostData();
+    this.postId = +this.route.snapshot.paramMap.get('id')!;
+    this.postForm = this.fb.group({
+      title: ['', Validators.required],
+      content: ['', Validators.required],
+      tag: [''],
+      image: [null]
+    });
+
+    this.loadPost();
   }
 
-  loadPostData(): void {
-    this.postService.getPost(this.postId).subscribe((post: PostResponseDTO) => {
-      this.editForm.patchValue({
-        title: post.title,
-        content: post.content,
-        tag: post.tag
-      });
-
-      // Si ya hay imagen, se podría mostrar (si la URL está accesible)
-      if (post.image) {
-        this.previewUrl = `http://localhost:8443/api/v1/posts/${this.postId}/image`; // ajusta si usas endpoint diferente
+  loadPost(): void {
+    this.postService.getPostById(this.postId).subscribe({
+      next: (post) => {
+        this.postForm.patchValue({
+          title: post.title,
+          content: post.content,
+          tag: post.tag
+        });
+      },
+      error: () => {
+        this.errorMessage = 'Error al cargar el post.';
       }
     });
   }
 
-  onImageSelected(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
     if (file) {
-      this.selectedImageFile = file;
-
-      const reader = new FileReader();
-      reader.onload = e => this.previewUrl = reader.result as string;
-      reader.readAsDataURL(file);
+      this.selectedImage = file;
     }
   }
 
   onSubmit(): void {
-    if (this.editForm.invalid) return;
-
-    const post: PostDTO = this.editForm.value;
-    const formData = new FormData();
-    formData.append('title', post.title);
-    formData.append('content', post.content);
-    formData.append('tag', post.tag);
-    if (this.selectedImageFile) {
-      formData.append('image', this.selectedImageFile);
+    if (this.postForm.invalid) {
+      return;
     }
+    this.loading = true;
 
-    this.postService.updatePost2(this.postId, formData).subscribe({
-      next: () => this.router.navigate(['/posts', this.postId]),
-      error: err => console.error('Error al actualizar el post:', err)
+    const postData: PostDTO = {
+      title: this.postForm.value.title,
+      content: this.postForm.value.content,
+      tag: this.postForm.value.tag,
+      image: this.selectedImage ?? undefined
+    };
+
+    this.postService.updatePost(this.postId, postData).subscribe({
+      next: () => {
+        this.loading = false;
+        this.router.navigate(['/posts', this.postId]); // Redirige a la vista del post actualizado
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'Error al actualizar el post.';
+      }
     });
   }
 }
