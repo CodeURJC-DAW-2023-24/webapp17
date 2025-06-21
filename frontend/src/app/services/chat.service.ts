@@ -24,7 +24,7 @@ export interface SimpleMessageDTO {
 })
 export class ChatService {
 
-  private chatApiUrl = '/api/v1/chatbot/send';
+  private chatApiUrl = 'https://localhost:8443/api/v1/chatbot/send';
   private generatePostApiUrl = '/api/v1/chatbot/ai-post';
 
   constructor(private http: HttpClient) {}

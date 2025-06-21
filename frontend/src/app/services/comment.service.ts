@@ -27,7 +27,7 @@ export interface Comment extends CommentResponseDTO {
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrl = 'http://localhost:8443/api/v1/comments';
+  private apiUrl = 'https://localhost:8443/api/v1/comments';
 
   constructor(private http: HttpClient) {}
 

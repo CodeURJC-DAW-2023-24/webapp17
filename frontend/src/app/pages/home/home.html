@@ -25,7 +25,7 @@
       
       <img *ngIf="post.image" 
            class="entryphoto" 
-           [src]="post.image" 
+           [src]="'https://localhost:8443' + post.image" 
            style="max-width: 35%; height: auto; border-radius: 10px; margin-bottom: 10px;" />
       
       <p style="font-size: 16px; color: #333;">{{post.content}}</p>

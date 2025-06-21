@@ -4,7 +4,7 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StatisticsService {
-  private baseUrl = '/api/v1/statistics';
+  private baseUrl = 'https://localhost:8443/api/v1/statistics';
 
   constructor(private http: HttpClient) {}
 

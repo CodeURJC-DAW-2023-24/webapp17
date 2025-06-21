@@ -28,7 +28,7 @@ export interface ApiResponse {
   providedIn: 'root'
 })
 export class UsersService {
-  private readonly baseUrl = 'http://localhost:8080/api/v1'; // Adjust the URL according to your configuration
+  private readonly baseUrl = 'https://localhost:8443/api/v1'; // Adjust the URL according to your configuration
   
   private httpOptions = {
     headers: new HttpHeaders({

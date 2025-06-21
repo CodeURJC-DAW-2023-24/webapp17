@@ -10,7 +10,7 @@ import { Post, PostCreationDTO, PostPage } from '../models/post';
   providedIn: 'root'
 })
 export class PostService {
-  private readonly API_URL = '/api/v1/posts';
+  private readonly API_URL = 'https://localhost:8443/api/v1/posts';
 
   constructor(private http: HttpClient) { }
 

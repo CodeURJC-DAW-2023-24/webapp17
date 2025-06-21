@@ -20,7 +20,7 @@ export interface ImageUploadResponse {
   providedIn: 'root'
 })
 export class ImageService {
-  private readonly baseUrl = 'http://localhost:8080/api/images'; // Adjust the URL according to your configuration
+  private readonly baseUrl = 'https://localhost:8443/api/images'; // Adjust the URL according to your configuration
   
   constructor(private http: HttpClient) { }
 
