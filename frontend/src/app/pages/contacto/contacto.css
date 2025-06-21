@@ -56,3 +56,34 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del mapa */
     transition: transform 0.3s; /* Transición de transformación */
 }
+form input, form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
+
+form {
+  background: rgb(113, 197, 225);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.info-contacto {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg,rgb(78, 145, 253), #ffffff);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  max-width: 400px;
+  margin: 20px auto;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+

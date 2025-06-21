@@ -7,7 +7,7 @@ import { NoAdmin } from './pages/noadmin/noadmin';
 import { NoPermission } from './pages/nopermission/nopermission';
 import { MyPosts } from './pages/mypost/myposts';
 import { EditPost } from './pages/editpost/editpost';
-import { Estadisticas } from './pages/estadisticas/estadisticas';
+import { Statistics } from './pages/stats/statistics';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
       { path: 'myposts', component: MyPosts },               // User's posts
       { path: 'editpost', component: EditPost },             // Create post
       { path: 'editpost/:id', component: EditPost },         // Edit post with ID
-      { path: 'estadisticas', component: Estadisticas },     // Statistics
+      { path: 'estadisticas', component: Statistics },     // Statistics
       { path: 'noadmin', component: NoAdmin },               // No admin access
       { path: 'nopermission', component: NoPermission },     // No permission
       { path: 'error', component: Error },                   // Error page

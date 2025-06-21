@@ -1,6 +1,6 @@
+<!-- Solo muestra el formulario si el usuario NO está autenticado -->
 <div *ngIf="!(authService.currentUser$ | async); else loggedInTemplate">
-  <form (ngSubmit)="onLogin()" #loginForm="ngForm">
-
+  <form #loginForm="ngForm" (ngSubmit)="onLogin()">
     <p class="text-danger" *ngIf="loginError">{{ loginError }}</p>
 
     <div class="mb-3">
@@ -10,9 +10,9 @@
         class="form-control"
         id="email"
         name="email"
-        required
         [(ngModel)]="email"
         #emailInput="ngModel"
+        required
       >
       <div *ngIf="emailInput.invalid && emailInput.touched" class="text-danger">
         Email requerido
@@ -20,15 +20,15 @@
     </div>
 
     <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
+      <label for="password" class="form-label">Contraseña</label>
       <input 
         type="password"
         class="form-control"
         id="password"
         name="password"
-        required
         [(ngModel)]="password"
         #passwordInput="ngModel"
+        required
       >
       <div *ngIf="passwordInput.invalid && passwordInput.touched" class="text-danger">
         Contraseña requerida

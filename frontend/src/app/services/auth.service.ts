@@ -3,14 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { User } from '../models/user';
 
 // Updated interfaces to match your API DTOs
-export interface UsrDto {
-  id: number;
-  email: string;
-  nombre: string; // Note: maps to username in your backend
-  role: 'USER' | 'ADMIN';
-}
+
 
 export interface LoginRequest {
   email: string;
@@ -22,12 +18,14 @@ export interface LoginRequest {
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8443/api/auth'; // Updated to match your controller path
-  private currentUserSubject = new BehaviorSubject<UsrDto | null>(null);
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    // Check if user is authenticated on service initialization
-    this.checkAuthStatus();
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      this.currentUserSubject.next(JSON.parse(storedUser));
+    }
   }
 
   /**
@@ -36,54 +34,35 @@ export class AuthService {
    * @param password User password
    * @returns Observable with login response
    */
-  login(email: string, password: string): Observable<string> {
-    // Create form parameters as your controller expects @RequestParam
-    const params = new HttpParams()
-      .set('email', email)
-      .set('password', password);
+  login(email: string, password: string): Observable<User> {
+    const params = new HttpParams().set('email', email).set('password', password);
 
-    return this.http.post(`${this.apiUrl}/login`, null, { 
-      params,
-      responseType: 'text' // Since API returns plain text response
-    }).pipe(
-      tap(() => {
-        // After successful login, get user info
-        this.getCurrentUserFromServer().subscribe();
-      }),
-      catchError(error => {
-        console.error('Login failed:', error);
-        return throwError(() => error);
+    return this.http.post<User>(this.apiUrl + "/login", null, { params }).pipe(
+      tap(user => {
+        // Guardamos usuario en BehaviorSubject y localStorage
+        this.currentUserSubject.next(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
       })
     );
   }
 
-  /**
-   * Logout the current user
-   * @returns Observable with logout response
-   */
-  logout(): Observable<string> {
-    return this.http.post(`${this.apiUrl}/logout`, null, {
-      responseType: 'text'
-    }).pipe(
+  logout(): Observable<any> {
+    return this.http.post(this.apiUrl+ "/logout", {}).pipe(
       tap(() => {
-        // Clear current user from subject
         this.currentUserSubject.next(null);
-      }),
-      catchError(error => {
-        console.error('Logout failed:', error);
-        // Even if logout fails on server, clear local state
-        this.currentUserSubject.next(null);
-        return throwError(() => error);
+        localStorage.removeItem('currentUser');
       })
     );
   }
+
+
 
   /**
    * Get current authenticated user from server
    * @returns Observable with current user data
    */
-  getCurrentUserFromServer(): Observable<UsrDto> {
-    return this.http.get<UsrDto>(`${this.apiUrl}/me`).pipe(
+  getCurrentUserFromServer(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/me`).pipe(
       tap(user => {
         this.currentUserSubject.next(user);
       }),
@@ -97,28 +76,11 @@ export class AuthService {
     );
   }
 
-  /**
-   * Check authentication status on service initialization
-   */
-  private checkAuthStatus(): void {
-    this.getCurrentUserFromServer().subscribe({
-      next: () => {
-        // User is authenticated, currentUserSubject updated in tap operator
-      },
-      error: () => {
-        // User not authenticated or error occurred
-        this.currentUserSubject.next(null);
-      }
-    });
-  }
-
-  /**
-   * Get current user from local state
-   * @returns Current user or null
-   */
-  getCurrentUser(): UsrDto | null {
+  getCurrentUser(): User | null {
     return this.currentUserSubject.value;
-  }
+  };
+
+
 
   /**
    * Check if user is logged in
@@ -167,14 +129,14 @@ export class AuthService {
    * @returns Username or null
    */
   getCurrentUsername(): string | null {
-    return this.getCurrentUser()?.nombre || null;
+    return this.getCurrentUser()?.username || null;
   }
 
   /**
    * Refresh current user data from server
    * @returns Observable with updated user data
    */
-  refreshUser(): Observable<UsrDto> {
+  refreshUser(): Observable<User> {
     return this.getCurrentUserFromServer();
   }
 }

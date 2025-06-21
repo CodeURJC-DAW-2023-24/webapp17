@@ -1,1 +1,36 @@
-<p>contacto works!</p>
+<div class="container">
+  <div *ngIf="enviado" class="alert alert-success" style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 0.75rem; padding: 1rem 1.25rem; font-weight: 500; font-size: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 0.5rem;">
+    ✅ ¡Mensaje enviado con éxito! 🎉
+  </div>
+
+  <div class="header">
+    <h1>📬 Contáctanos</h1>
+    <p>¡Estamos aquí para ayudarte! Si tienes alguna pregunta o comentario, no dudes en ponerte en contacto con nosotros.</p>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" #contactForm="ngForm" style="max-width: 500px; margin: auto; background:rgb(113, 197, 225); padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1); font-family: 'Segoe UI', sans-serif;">
+    <label for="name">👤 Nombre:</label>
+    <input type="text" id="name" name="name" [(ngModel)]="issue.name" required class="form-control">
+
+    <label for="email">📧 Email:</label>
+    <input type="email" id="email" name="email" [(ngModel)]="issue.email" required class="form-control">
+
+    <label for="message">✍️ Mensaje:</label>
+    <textarea id="message" name="content" [(ngModel)]="issue.content" rows="5" required class="form-control"></textarea>
+
+    <button type="submit" class="btn btn-primary">🚀 Enviar</button>
+  </form>
+
+  <!-- Información de contacto -->
+  <div class="info-contacto">
+    <h3>📞 Información de Contacto</h3>
+    <p>📍 <strong>Dirección:</strong> Calle Falsa 123, Ciudad, País</p>
+    <p>📱 <strong>Teléfono:</strong> <a href="tel:+123456789">+123 456 789</a></p>
+    <p>📧 <strong>Email:</strong> <a href="mailto:info@el_rincon_del_software.com">info&#64;el_rincon_del_software.com</a></p>
+  </div>
+
+  <!-- Mapa -->
+  <div class="map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!..." width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>
+  </div>
+</div>

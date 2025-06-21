@@ -1,7 +1,7 @@
 export interface Issue {
-  id: number;
+  id?: number;
   name: string;
   email: string;
   content: string;
-  date: string;  
+  date?: string;  
 }

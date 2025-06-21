@@ -31,7 +31,7 @@ public class AuthRestController {
         if (userService.authenticate(email, password)) {
             currentUsr = userService.getUsr(email);
             session.setAttribute("user", currentUsr);
-            return ResponseEntity.ok().body("Login successful.");
+            return ResponseEntity.ok().body(new UsrDto(currentUsr)); // Utilizamos el DTO
         } else {
             return ResponseEntity.badRequest().body("Invalid credentials.");
         }
