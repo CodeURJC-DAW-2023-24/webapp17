@@ -3,6 +3,9 @@ package es.codeurjc.webapp17.restcontroller;
 import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -193,7 +196,7 @@ public class PostRestController {
         post.setTitle(DTO.getTitle());
         post.setContent(DTO.getContent());
         post.setTag(DTO.getTag());
-        
+
         MultipartFile image = DTO.getImage();
         if (image != null && !image.isEmpty()) {
             String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
@@ -236,14 +239,17 @@ public class PostRestController {
         private String tag;
     }
 
-    /**
-     * DTO for submitting a comment.
-     */
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class CommentDTO {
-
-        private String text;
+        private Long id;
+        private String content;
+        private Long userId;
+        private String username;
+        private LocalDateTime date;
     }
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -259,36 +265,47 @@ public class PostRestController {
         private String username;
     }
 
-    @Data
     @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PostResponseDTO {
+@NoArgsConstructor
+@Data
+public static class PostResponseDTO {
+    private Long id;
+    private String title;
+    private String content;
+    private String tag;
+    private LocalDateTime date;
+    private String image;
+    private Long userId;
+    private String username;
+    private int totalComments;
+    private List<CommentDTO> comments;
+}
+private PostResponseDTO convertToDto(Post post) {
 
-        private Long id;
-        private String title;
-        private String content;
-        private String tag;
-        private LocalDateTime date;
-        private String image;
-        private Long userId;
-        private String username;
+    List<CommentDTO> commentDTOs = post.getComments().stream()
+        .map(comment -> new CommentDTO(
+            comment.getId(),
+            comment.getText(),
+            comment.getUsr().getId(),
+            comment.getUsr().getUsername(),
+            comment.getDate()
+        ))
+        .collect(Collectors.toList());
 
-        private int totalComments;
+    return new PostResponseDTO(
+            post.getId(),
+            post.getTitle(),
+            post.getContent(),
+            post.getTag(),
+            post.getDate(),
+            post.getImage(),
+            post.getUsr().getId(),
+            post.getUsr().getUsername(),
+            post.getComments().size(),
+            commentDTOs // aquí añadimos la lista mapeada
+    );
+}
 
-    }
-
-    private PostResponseDTO convertToDto(Post post) {
-        return new PostResponseDTO(
-                post.getId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getTag(),
-                post.getDate(),
-                post.getImage(),
-                post.getUsr().getId(),
-                post.getUsr().getUsername(),
-                post.getComments().size());
-    }
 
     /**
      * Get paginated posts of the currently authenticated user.

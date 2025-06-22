@@ -2,8 +2,6 @@ package es.codeurjc.webapp17.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -47,11 +45,11 @@ public class Usr {
     private String password;
     private String email;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     @JsonManagedReference(value = "usr-post")
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     @JsonManagedReference(value = "usr-comment")
     private List<Comment> comments;
 
