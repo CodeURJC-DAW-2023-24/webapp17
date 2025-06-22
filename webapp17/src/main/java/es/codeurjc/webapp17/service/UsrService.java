@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.repository.UsrRepository;
@@ -39,9 +40,12 @@ public class UsrService {
         return null;
     }
 
+    @Transactional
     public void deleteUsr(Long id) {
         try {
-            userRepository.delete(userRepository.findById(id).get());
+            userRepository.deleteCommentsByUsrId(id);
+            userRepository.deletePostsByUsrId(id);
+            userRepository.deleteById(id);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

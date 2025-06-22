@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
@@ -36,13 +37,14 @@ public class PostService {
         postRepository.save(post);
     }
 
+    @Transactional
     public void deletePost(Long id) {
         try {
-            postRepository.deleteById(id);
+            postRepository.deleteCommentsByPostId(id); 
+            postRepository.deleteById(id); 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     public Post getPostById(Long id) {
