@@ -10,6 +10,7 @@ export interface Post {
   content?: string;
   date?: string;   
   tag?: string;
+  username: string;
 }
 
 export interface PostCreationDTO {

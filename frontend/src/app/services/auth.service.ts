@@ -51,7 +51,6 @@ export class AuthService {
 
   private logoutLocal() {
     this.saveUser(null);
-    // window.location.reload();
   }
 
   getCurrentUserFromServer(): Observable<User> {

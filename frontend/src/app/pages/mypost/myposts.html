@@ -24,7 +24,7 @@
     <p style="text-align:left; font-size: 16px; color: #333;">{{ post.content }}</p>
 
     <p class="meta">
-      📅 {{ post.date ? (post.date | customDate | date:'short') : '' }} | 👤 Posted by {{ post.user?.username }} | 🏷️
+      📅 {{ post.date ? (post.date | customDate | date:'short') : '' }} | 👤 Posted by {{ post.username }} | 🏷️
       Tags: {{ post.tag }} | 💬 {{ post.comments?.length }} comentarios
     </p>
 

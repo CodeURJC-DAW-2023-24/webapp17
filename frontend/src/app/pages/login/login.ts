@@ -28,6 +28,7 @@ export class LogIn {
   }
 
   onLogout(): void {
-    this.authService.logout().subscribe();
+    this.authService.logout().subscribe(() => {
+  });
   }
 }

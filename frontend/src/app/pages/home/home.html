@@ -28,7 +28,7 @@
 
       <p class="meta" style="font-size: 14px; color: #666;">
         📅 <span class="date">{{ post.date ? (post.date | customDate | date:'short') : '' }}</span> |
-        👤 Posted by {{post.user?.username}} |
+        👤 Posted by {{post.username}} |
         🏷️ Tags: {{post.tag}} |
         💬 {{post.comments?.length || 0}} comentarios
       </p>
