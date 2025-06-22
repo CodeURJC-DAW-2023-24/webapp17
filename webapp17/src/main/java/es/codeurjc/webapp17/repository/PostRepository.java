@@ -38,7 +38,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "DELETE FROM comment WHERE post_id = :id", nativeQuery = true)
     void deleteCommentsByPostId(@Param("id") Long id);
 
-    // Si quieres sobrescribir el deleteById también:
     @Override
     @Modifying
     @Transactional
