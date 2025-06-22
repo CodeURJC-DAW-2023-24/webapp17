@@ -75,6 +75,7 @@ public class ChatRestController {
     public static class SimpleMessageDTO {
 
         private String message;
+
     }
 
     /**
@@ -116,7 +117,7 @@ public class ChatRestController {
             return ResponseEntity.status(403).body("No right permissions");
         }
 
-        String prompt = postGeneratorPrompt + dto.getMesagge();
+        String prompt = postGeneratorPrompt + dto.getMessage();
         String title = "LLM Post about " + dto.getMessage();
         String content = chatClient.call(prompt);
         LocalDateTime now = LocalDateTime.now();
@@ -125,7 +126,7 @@ public class ChatRestController {
         post.setTitle(title);
         post.setContent(content);
         post.setDate(now);
-        post.setTag(tag.getMessage());
+        post.setTag(dto.getMessage());
         post.setImage(LLM_IMAGE_PATH);
         post.setUsr(user);
 

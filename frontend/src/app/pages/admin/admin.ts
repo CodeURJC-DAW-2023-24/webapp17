@@ -8,14 +8,13 @@ import { CommonModule } from '@angular/common';
   selector: 'app-admin',
   templateUrl: './admin.html',
   imports: [FormsModule,CommonModule],
-  styleUrls: ['./admin.css']  // opcional, si tienes CSS separado
+  styleUrls: ['./admin.css']  
 })
 export class Admin implements OnInit {
 
   issues: any[] = [];
   users: UserInfoDTO[] = [];
 
-  // Campos para el formulario nuevo usuario
   newUser: CreateUserRequestDTO = {
     username: '',
     email: '',
