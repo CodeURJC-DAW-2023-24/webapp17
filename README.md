@@ -45,7 +45,12 @@ La aplicación  dispondrá de un LLM local para que los administradores puedan e
 
 ### 🔧 Diagrama de clases
 ![Diagrama de clases](https://raw.githubusercontent.com/CodeURJC-DAW-2023-24/webapp17/main/webapp17/src/main/resources/static/diagrams/class_diagram.png)
+
+### 🔧 Diagrama de clases APIRest
 ![Diagrama de clases APIRest](https://raw.githubusercontent.com/CodeURJC-DAW-2023-24/webapp17/main/webapp17/src/main/resources/static/diagrams/rest.png)
+
+### 🔧 Diagrama de clases Angular
+![Diagrama de clases Angular](https://raw.githubusercontent.com/CodeURJC-DAW-2023-24/webapp17/main/webapp17/src/main/resources/static/diagrams/angular.png)
 ## 🚀 Guía de Despliegue
 
 ### ✅ Requisitos Previos
