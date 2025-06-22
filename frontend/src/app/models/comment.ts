@@ -6,5 +6,5 @@ export interface Comment {
   user: User;
   post: Post;
   date: string; 
-  text: string;
+  content: string;
 }

@@ -4,10 +4,11 @@ import { PostService } from '../../services/post.service';
 import { CommonModule } from '@angular/common';
 import { CommentService } from '../../services/comment.service';
 import { FormsModule } from '@angular/forms';
+import { CustomDatePipe } from "../../Pipes/custom-date.pipe";
 
 @Component({
   selector: 'app-my-posts',
-  imports: [CommonModule,FormsModule], standalone: true,
+  imports: [CommonModule, FormsModule, CustomDatePipe], standalone: true,
   templateUrl: './myposts.html',
   styleUrl: './myposts.css'
 })
@@ -21,21 +22,21 @@ export class MyPosts {
   commentsVisible: { [postId: number]: boolean } = {};
   newComments: { [postId: number]: string } = {};
 
-  constructor(private postService: PostService, private commentService :  CommentService) { }
+  constructor(private postService: PostService, private commentService: CommentService) { }
 
   ngOnInit(): void {
     this.loadMyPosts(this.currentPage);
   }
 
-loadMyPosts(page: number): void {
-  this.postService.getMyPosts(page, this.size).subscribe(response => {
-    this.posts = response.content;
-    this.currentPage = page;
-    this.totalPages = response.totalPages;
-    this.hasPrevious = !response.first;
-    this.hasNext = !response.last;
-  });
-}
+  loadMyPosts(page: number): void {
+    this.postService.getMyPosts(page, this.size).subscribe(response => {
+      this.posts = response.content;
+      this.currentPage = page;
+      this.totalPages = response.totalPages;
+      this.hasPrevious = !response.first;
+      this.hasNext = !response.last;
+    });
+  }
 
 
   toggleComments(postId: number) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
-import { ActivatedRoute, Router ,RouterModule} from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { AuthService } from '../../services/auth.service';
 import { ChatService, Message } from '../../services/chat.service';
@@ -12,23 +12,21 @@ import { CustomDatePipe } from '../../Pipes/custom-date.pipe';
 
 @Component({
   selector: 'app-home',
-  imports: [ReactiveFormsModule, CommonModule, FormsModule,RouterModule,CustomDatePipe], standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, RouterModule, CustomDatePipe], standalone: true,
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class Home implements OnInit, AfterViewChecked {
   @ViewChild('chatBox') chatBox!: ElementRef;
 
-  // Pagination properties
   posts: Post[] = [];
-  currentPage: number = 0;
-  pageSize: number = 10;
-  totalPages: number = 0;
-  hasPrevious: boolean = false;
-  hasNext: boolean = false;
-  previousPage: number = 0;
-  nextPage: number = 0;
-
+  currentPage = 0;
+  totalPages = 0;
+  size = 3;
+  hasNext = false;
+  hasPrevious = false;
+  commentsVisible: { [postId: number]: boolean } = {};
+  newComments: { [postId: number]: string } = {};
   // User and authentication
   currentUser: User | null = null;
   isAdmin: boolean = false;
@@ -41,7 +39,7 @@ export class Home implements OnInit, AfterViewChecked {
     imageName: '',
     image: null as File | null
   };
-  
+
 
   // AI post generation
   aiPostTag: string = '';
@@ -70,12 +68,9 @@ export class Home implements OnInit, AfterViewChecked {
       this.currentUser = user;
       this.isAdmin = user?.role === 'ADMIN';
     });
-    // Load posts with pagination from query params
-    this.route.queryParams.subscribe(params => {
-      this.currentPage = +(params['page'] || 0);
-      this.pageSize = +(params['size'] || 10);
-      this.loadPosts();
-    });
+    
+    this.loadPosts(this.currentPage);
+  
   }
 
   ngAfterViewChecked(): void {
@@ -88,29 +83,27 @@ export class Home implements OnInit, AfterViewChecked {
 
 
   // Posts loading and pagination
-  private loadPosts(): void {
-    this.postService.getPosts(this.currentPage, this.pageSize).subscribe({
-      next: (response: { content: Post[]; totalPages: number; first: any; last: any; }) => {
-        this.posts = response.content;
-        this.totalPages = response.totalPages;
-        this.hasPrevious = !response.first;
-        this.hasNext = !response.last;
-        this.previousPage = this.currentPage - 1;
-        this.nextPage = this.currentPage + 1;
-      },
-      error: (error: any) => {
-        console.error('Error loading posts:', error);
-      }
+  loadPosts(page: number): void {
+    this.postService.getPosts(page, this.size).subscribe(response => {
+      this.posts = response.content;
+      this.currentPage = page;
+      this.totalPages = response.totalPages;
+      this.hasPrevious = !response.first;
+      this.hasNext = !response.last;
     });
   }
 
-  // Comments functionality
-  toggleComments(postId: number): void {
-    if (this.visibleComments.has(postId)) {
-      this.visibleComments.delete(postId);
-    } else {
-      this.visibleComments.add(postId);
-    }
+  nextPage() {
+    if (this.hasNext) this.loadPosts(this.currentPage + 1);
+  }
+
+  previousPage() {
+    if (this.hasPrevious) this.loadPosts(this.currentPage - 1);
+  }
+
+
+  toggleComments(postId: number) {
+    this.commentsVisible[postId] = !this.commentsVisible[postId];
   }
 
   isCommentsVisible(postId: number): boolean {

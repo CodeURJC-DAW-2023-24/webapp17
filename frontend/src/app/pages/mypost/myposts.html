@@ -1,33 +1,67 @@
 <div class="content">
 
-  <div class="pagenav">
-    <button (click)="previousPage()" [disabled]="!hasPrevious">Página Anterior</button>
-    <button (click)="nextPage()" [disabled]="!hasNext">Mostrar más posts</button>
+  <div class="pagenav" style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;">
+    <button (click)="previousPage()" [disabled]="!hasPrevious" style="padding: 8px 16px; font-size: 14px; border: none; border-radius: 6px; 
+                 background-color: #3498db; color: white; cursor: pointer;
+                 transition: background-color 0.3s ease;">
+      Página Anterior
+    </button>
+
+    <button (click)="nextPage()" [disabled]="!hasNext" style="padding: 8px 16px; font-size: 14px; border: none; border-radius: 6px; 
+                 background-color: #2ecc71; color: white; cursor: pointer;
+                 transition: background-color 0.3s ease;">
+      Mostrar más posts
+    </button>
   </div>
+
 
   <div *ngFor="let post of posts" class="entry">
     <h2>📌 {{ post.title }}</h2>
 
-    <img *ngIf="post.image" [src]="post.image" class="entryphoto" />
+    <img *ngIf="post.image" class="entryphoto" [src]="'https://localhost:8443' + post.image"
+      style="max-width: 35%; height: auto; border-radius: 10px; margin-bottom: 10px;" />
 
-    <p>{{ post.content }}</p>
+    <p style="text-align:left; font-size: 16px; color: #333;">{{ post.content }}</p>
 
     <p class="meta">
-      📅 {{ post.date }} | 👤 Posted by {{ post.user?.username }} | 🏷️ Tags: {{ post.tag }} | 💬 {{ post.comments?.length }} comentarios
+      📅 {{ post.date ? (post.date | customDate | date:'short') : '' }} | 👤 Posted by {{ post.user?.username }} | 🏷️
+      Tags: {{ post.tag }} | 💬 {{ post.comments?.length }} comentarios
     </p>
 
-    <button (click)="toggleComments(post.id)">💬 Ver Comentarios</button>
+    <button (click)="toggleComments(post.id)" style="
+          padding: 10px 20px;
+          font-size: 16px;
+          color: white;
+          background-color: #3498db; /* azul agradable */
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          user-select: none;
+        ">
+      💬 Ver Comentarios
+    </button>
+
 
     <div class="comments-container" *ngIf="commentsVisible[post.id]">
       <div *ngFor="let comment of post.comments" class="comment">
-        <p>🗨️ <strong>{{ comment.text }}</strong></p>
+        <p>🗨️ <strong>{{ comment.content }}</strong></p>
         <p class="meta">👤 {{ comment.user.username }}</p>
       </div>
     </div>
 
-    <div *ngIf="commentsVisible[post.id]" class="comment-form">
-      <textarea *ngIf="post.id !== undefined" [(ngModel)]="newComments[post.id]" placeholder="🖊️ Escribe tu comentario aquí..."></textarea>
-      <button (click)="submitComment(post.id)">💬 Comentar</button>
+    <div  class="comment-form">
+      <textarea *ngIf="post.id !== undefined" [(ngModel)]="newComments[post.id]"
+        placeholder="🖊️ Escribe tu comentario aquí..."></textarea>
+      <button style="
+          padding: 10px 20px;
+          font-size: 16px;
+          color: white;
+          background-color: #3498db; /* azul agradable */
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          user-select: none;
+        " (click)="submitComment(post.id)">💬 Comentar</button>
     </div>
   </div>
 
