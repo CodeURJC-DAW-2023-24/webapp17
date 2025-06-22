@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { PostService} from '../../services/post.service';
+import { PostService } from '../../services/post.service';
 import { PostCreationDTO } from '../../models/post';
 
 @Component({
   selector: 'app-edit-post',
   templateUrl: './editpost.html',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule], 
+  imports: [ReactiveFormsModule, CommonModule],
 })
 export class EditPost implements OnInit {
 
@@ -19,7 +19,13 @@ export class EditPost implements OnInit {
   loading = false;
   errorMessage = '';
   hovered = false;
-  newPost: any;
+  newPost = {
+    title: '',
+    content: '',
+    tag: '',
+    imageName: '',
+    image: null as File | null
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -62,6 +68,9 @@ export class EditPost implements OnInit {
     }
   }
 
+
+
+
   onSubmit(): void {
     if (this.postForm.invalid) {
       return;
@@ -69,24 +78,24 @@ export class EditPost implements OnInit {
     this.loading = true;
 
     const formData = new FormData();
-    formData.append('title', this.newPost.title);
-    formData.append('content', this.newPost.content);
-    formData.append('tag', this.newPost.tag || '');
+    formData.append('title', this.postForm.get('title')?.value);
+    formData.append('content', this.postForm.get('content')?.value);
+    formData.append('tag', this.postForm.get('tag')?.value || '');
 
-    if (this.newPost.image) {
-      formData.append('image', this.newPost.image, this.newPost.image.name);
+    if (this.selectedImage) {
+      formData.append('image', this.selectedImage, this.selectedImage.name);
     }
-
 
     this.postService.updatePost(this.postId, formData).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/posts']); 
+        this.router.navigate(['/myposts']);
       },
       error: () => {
         this.loading = false;
-        this.errorMessage = 'Error al actualizar el post.';
+        this.router.navigate(['/myposts']);
       }
     });
   }
+
 }

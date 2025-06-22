@@ -66,7 +66,9 @@ export class MyPosts implements OnInit {
 
   }
 
-
+  editPost(postId: number): void {
+    this.router.navigate(['/editpost', postId]);
+  }
 
 
   // Posts loading and pagination
@@ -152,7 +154,7 @@ export class MyPosts implements OnInit {
     }
   }
 
-  
+
 }
 
 

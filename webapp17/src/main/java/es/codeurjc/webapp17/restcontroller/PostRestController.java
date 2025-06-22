@@ -187,7 +187,7 @@ public class PostRestController {
         }
 
         // Check if the authenticated user is not the owner of the post
-        if (!post.getUsr().equals(user)) {
+        if (!post.getUsr().getId().equals(user.getId())) {
             // User is not authorized to update this post
             return ResponseEntity.status(403).body("Not authorized.");
         }
@@ -215,12 +215,8 @@ public class PostRestController {
         // Save the updated post
         postService.updatePost(post);
 
-        // Build the Location header for the updated post
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-
         // Return 200 OK with Location header
         return ResponseEntity.ok()
-                .location(location)
                 .body(DTO);
     }
 
@@ -266,46 +262,45 @@ public class PostRestController {
     }
 
     @AllArgsConstructor
-@NoArgsConstructor
-@Data
-public static class PostResponseDTO {
-    private Long id;
-    private String title;
-    private String content;
-    private String tag;
-    private LocalDateTime date;
-    private String image;
-    private Long userId;
-    private String username;
-    private int totalComments;
-    private List<CommentDTO> comments;
-}
-private PostResponseDTO convertToDto(Post post) {
+    @NoArgsConstructor
+    @Data
+    public static class PostResponseDTO {
+        private Long id;
+        private String title;
+        private String content;
+        private String tag;
+        private LocalDateTime date;
+        private String image;
+        private Long userId;
+        private String username;
+        private int totalComments;
+        private List<CommentDTO> comments;
+    }
 
-    List<CommentDTO> commentDTOs = post.getComments().stream()
-        .map(comment -> new CommentDTO(
-            comment.getId(),
-            comment.getText(),
-            comment.getUsr().getId(),
-            comment.getUsr().getUsername(),
-            comment.getDate()
-        ))
-        .collect(Collectors.toList());
+    private PostResponseDTO convertToDto(Post post) {
 
-    return new PostResponseDTO(
-            post.getId(),
-            post.getTitle(),
-            post.getContent(),
-            post.getTag(),
-            post.getDate(),
-            post.getImage(),
-            post.getUsr().getId(),
-            post.getUsr().getUsername(),
-            post.getComments().size(),
-            commentDTOs // aquí añadimos la lista mapeada
-    );
-}
+        List<CommentDTO> commentDTOs = post.getComments().stream()
+                .map(comment -> new CommentDTO(
+                        comment.getId(),
+                        comment.getText(),
+                        comment.getUsr().getId(),
+                        comment.getUsr().getUsername(),
+                        comment.getDate()))
+                .collect(Collectors.toList());
 
+        return new PostResponseDTO(
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getTag(),
+                post.getDate(),
+                post.getImage(),
+                post.getUsr().getId(),
+                post.getUsr().getUsername(),
+                post.getComments().size(),
+                commentDTOs // aquí añadimos la lista mapeada
+        );
+    }
 
     /**
      * Get paginated posts of the currently authenticated user.

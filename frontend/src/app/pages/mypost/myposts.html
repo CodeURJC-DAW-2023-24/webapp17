@@ -57,6 +57,10 @@
           (click)="deletePost(post.id)">
           Eliminar post 🗑️
         </button>
+        <button class="button primary" *ngIf="user.role === 'ADMIN' || user.username === post.username"
+          (click)="editPost(post.id)">
+          Editar post ✏️
+        </button>
       </ng-container>
 
 
@@ -74,6 +78,6 @@
     </div>
 
     <!-- Create new post form (for logged users) -->
-    
-  
-</div>
+
+
+  </div>
