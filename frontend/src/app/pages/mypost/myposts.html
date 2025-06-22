@@ -1,5 +1,5 @@
-<div class="content">
-
+<!-- Main app component template -->
+<div id="content">
   <div class="pagenav" style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;">
     <button (click)="previousPage()" [disabled]="!hasPrevious" style="padding: 8px 16px; font-size: 14px; border: none; border-radius: 6px; 
                  background-color: #3498db; color: white; cursor: pointer;
@@ -14,53 +14,66 @@
     </button>
   </div>
 
+  <div style="display: flex; justify-content: space-between; gap: 20px;">
+    <!-- Posts list -->
+    <div *ngFor="let post of posts" class="entry"
+      style="border: 1px solid #ddd; border-radius: 12px; padding: 20px; margin-bottom: 30px; background-color: #f9f9f9; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); transition: transform 0.2s;">
 
-  <div *ngFor="let post of posts" class="entry">
-    <h2>📌 {{ post.title }}</h2>
+      <h2 style="color: #2c3e50;">📌 {{post.title}}</h2>
 
-    <img *ngIf="post.image" class="entryphoto" [src]="'https://localhost:8443' + post.image"
-      style="max-width: 35%; height: auto; border-radius: 10px; margin-bottom: 10px;" />
+      <img *ngIf="post.image" class="entryphoto" [src]="'https://localhost:8443' + post.image"
+        style="max-width: 35%; height: auto; border-radius: 10px; margin-bottom: 10px;" />
 
-    <p style="text-align:left; font-size: 16px; color: #333;">{{ post.content }}</p>
+      <p style="text-align:left; font-size: 16px; color: #333;">{{ post.content }}</p>
 
-    <p class="meta">
-      📅 {{ post.date ? (post.date | customDate | date:'short') : '' }} | 👤 Posted by {{ post.username }} | 🏷️
-      Tags: {{ post.tag }} | 💬 {{ post.comments?.length }} comentarios
-    </p>
+      <p class="meta" style="font-size: 14px; color: #666;">
+        📅 <span class="date">{{ post.date ? (post.date | customDate | date:'short') : '' }}</span> |
+        👤 Posted by {{post.username}} |
+        🏷️ Tags: {{post.tag}} |
+        💬 {{post.comments?.length || 'Sin'}} comentarios
+      </p>
 
-    <button (click)="toggleComments(post.id)" style="
-          padding: 10px 20px;
-          font-size: 16px;
-          color: white;
-          background-color: #3498db; /* azul agradable */
-          border: none;
-          border-radius: 12px;
-          cursor: pointer;
-          user-select: none;
-        ">
-      💬 Ver Comentarios
-    </button>
+      <!-- Comments container -->
+      <div [id]="'comments_' + post.id" class="comments-container">
 
+        <div *ngFor="let comment of post.comments" class="comment"
+          style="background-color: #eef6ff; border-left: 4px solid #3498db; padding: 10px; border-radius: 6px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+          <p class="meta" style="font-size: 14px; color: #666;">
+            📅 <span class="date">{{ comment.date ? (comment.date | customDate | date:'short') : '' }}</span> |
+            👤 Comment by {{comment.username}} |
+          </p>
+          <p style="margin: 0;">🗨️ <strong>{{comment.content}}</strong></p>
+          <ng-container *ngIf="(currentUser$ | async) as user">
+            <button class="button danger" *ngIf="user.role === 'ADMIN' || user.username === comment.username"
+              (click)="deleteComment(post.id,comment.id)">
+              Eliminar comentario 🗑️
+            </button>
+          </ng-container>
 
-    <div class="comments-container" *ngIf="commentsVisible[post.id]">
-      <div *ngFor="let comment of post.comments" class="comment"
-        style="border: 1px solid #ccc; margin-bottom: 8px; padding: 6px; background-color: #f9f9f9;">
-        <p>🗨️ <strong>{{ comment.content }}</strong></p>
-        <p >👤 {{ comment.username }}</p>
+        </div>
       </div>
+      <ng-container *ngIf="(currentUser$ | async) as user">
+        <button class="button danger" *ngIf="user.role === 'ADMIN' || user.username === post.username"
+          (click)="deletePost(post.id)">
+          Eliminar post 🗑️
+        </button>
+      </ng-container>
+
+
+      <!-- Add comment form for logged users -->
+      <form *ngIf="(currentUser$ | async) as user" (ngSubmit)="addComment(post.id, commentText)"
+        style="margin-top: 10px;">
+        <textarea [(ngModel)]="commentText" name="comment" rows="3" cols="50"
+          placeholder="🖊️ Escribe tu comentario aquí..."
+          style="width: 100%; border-radius: 6px; padding: 8px;"></textarea><br>
+        <button class="button" type="submit"
+          style="background-color: #2ecc71; color: white; border: none; padding: 8px 14px; border-radius: 8px;">
+          💬 Comentar
+        </button>
+      </form>
     </div>
 
-    <form (ngSubmit)="submitComment(post.id)" style="margin-top: 10px;">
-      <textarea [(ngModel)]="newComments[post.id]" name="comment" rows="3" cols="50"
-        placeholder="🖊️ Escribe tu comentario aquí..."
-        style="width: 100%; border-radius: 6px; padding: 8px;"></textarea><br>
-      <button class="button" type="submit"
-        style="background-color: #2ecc71; color: white; border: none; padding: 8px 14px; border-radius: 8px;">
-        💬 Comentar
-      </button>
-    </form>
-
-  </div>
-
-
+    <!-- Create new post form (for logged users) -->
+    
+  
 </div>
