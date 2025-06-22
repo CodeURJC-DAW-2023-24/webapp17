@@ -13,8 +13,8 @@
       Mostrar más posts
     </button>
   </div>
-  <div id="left">
 
+  <div id="left">
     <!-- Posts list -->
     <div *ngFor="let post of posts" class="entry"
       style="border: 1px solid #ddd; border-radius: 12px; padding: 20px; margin-bottom: 30px; background-color: #f9f9f9; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); transition: transform 0.2s;">
@@ -33,57 +33,36 @@
         💬 {{post.comments?.length || 'Sin'}} comentarios
       </p>
 
-      <button (click)="toggleComments(post.id)" style="
-          padding: 10px 20px;
-          font-size: 16px;
-          color: white;
-          background-color: #3498db; /* azul agradable */
-          border: none;
-          border-radius: 12px;
-          cursor: pointer;
-          user-select: none;
-        ">
-        💬 Ver Comentarios
-      </button>
-
-
       <!-- Comments container -->
-      <div [id]="'comments_' + post.id" class="comments-container"
-        [style.max-height]="isCommentsVisible(post.id) ? 'none' : '0px'"
-        [style.opacity]="isCommentsVisible(post.id) ? '1' : '0'"
-        style="margin-top: 10px; overflow: hidden; transition: max-height 0.5s ease-out, opacity 0.5s ease-out;">
+      <div [id]="'comments_' + post.id" class="comments-container">
 
         <div *ngFor="let comment of post.comments" class="comment"
           style="background-color: #eef6ff; border-left: 4px solid #3498db; padding: 10px; border-radius: 6px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-
+          <p class="meta" style="font-size: 14px; color: #666;">
+            📅 <span class="date">{{ comment.date ? (comment.date | customDate | date:'short') : '' }}</span> |
+            👤 Comment by {{comment.username}} |
+          </p>
           <p style="margin: 0;">🗨️ <strong>{{comment.content}}</strong></p>
-          <p  style="font-size: 12px; color: #555;">👤 {{comment.user.username}}</p>
-
-          <!-- Admin delete comment button -->
-          <!-- Admin delete comment button -->
-          <form *ngIf="isAdmin" (ngSubmit)="deleteComment(comment.id)" style="margin-top: 5px;">
-            <button ...>❌ Borrar comentario</button>
-          </form>
-
-          <!-- Owner delete comment button -->
-          <form *ngIf="comment.user?.id === currentUser?.id" (ngSubmit)="deleteComment(comment.id)"
-            style="margin-top: 5px;">
-            <button ...>🗑️ Eliminar comentario</button>
-          </form>
+          <ng-container *ngIf="(currentUser$ | async) as user">
+            <button class="button danger" *ngIf="user.role === 'ADMIN' || user.username === comment.username"
+              (click)="deleteComment(post.id,comment.id)">
+              Eliminar comentario 🗑️
+            </button>
+          </ng-container>
 
         </div>
       </div>
-
-      <!-- Admin delete post button -->
-      <form *ngIf="isAdmin" (ngSubmit)="deletePost(post.id)" style="margin-top: 10px;">
-        <button class="button danger" type="submit"
-          style="background-color: #c0392b; color: white; padding: 6px 12px; border: none; border-radius: 6px;">
-          🗑️ Borrar Post
+      <ng-container *ngIf="(currentUser$ | async) as user">
+        <button class="button danger" *ngIf="user.role === 'ADMIN' || user.username === post.username"
+          (click)="deletePost(post.id)">
+          Eliminar post 🗑️
         </button>
-      </form>
+      </ng-container>
+
 
       <!-- Add comment form for logged users -->
-      <form *ngIf="currentUser" (ngSubmit)="addComment(post.id, commentText)" style="margin-top: 10px;">
+      <form *ngIf="(currentUser$ | async) as user" (ngSubmit)="addComment(post.id, commentText)"
+        style="margin-top: 10px;">
         <textarea [(ngModel)]="commentText" name="comment" rows="3" cols="50"
           placeholder="🖊️ Escribe tu comentario aquí..."
           style="width: 100%; border-radius: 6px; padding: 8px;"></textarea><br>
@@ -92,20 +71,10 @@
           💬 Comentar
         </button>
       </form>
-
-      <!-- Owner delete post button -->
-      <form *ngIf="(currentUser != null) && (post.user?.id === currentUser.id)" (ngSubmit)="deletePost(post.id)"
-        style="margin-top: 10px;">
-        <button class="button danger" type="submit"
-          style="background-color: #d35400; color: white; padding: 6px 12px; border-radius: 6px;">
-          🗑️ Borrar mi Post
-        </button>
-      </form>
-
     </div>
 
     <!-- Create new post form (for logged users) -->
-    <div *ngIf="currentUser">
+    <div *ngIf="(currentUser$ | async) as user">
       <h1 style="color: #34495e; text-align:center; margin-bottom: 20px;">📝 Publica un nuevo Post</h1>
 
       <form (ngSubmit)="createPost()"
@@ -136,26 +105,27 @@
         </button>
       </form>
     </div>
+    <ng-container *ngIf="(currentUser$ | async) as user">
+      <!-- AI post generation form (for admins only) -->
+      <div *ngIf="(currentUser$ | async) as user">
+        <br>
+        <hr style="width: 100%; border-top: 1px dashed #ccc;"><br>
+        <h1 style="color: #34495e; text-align:center; margin-bottom: 20px;">🤖 Genera un nuevo Post</h1>
 
-    <!-- AI post generation form (for admins only) -->
-    <div *ngIf="isAdmin">
-      <br>
-      <hr style="width: 100%; border-top: 1px dashed #ccc;"><br>
-      <h1 style="color: #34495e; text-align:center; margin-bottom: 20px;">🤖 Genera un nuevo Post</h1>
+        <form (ngSubmit)="generateAIPost()"
+          style="max-width: 600px; margin: auto; background: #ffffffdd; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
 
-      <form (ngSubmit)="generateAIPost()"
-        style="max-width: 600px; margin: auto; background: #ffffffdd; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <label for="aiTag" style="font-weight: bold;">🏷️ Temática:</label><br>
+          <input type="text" [(ngModel)]="aiPostTag" name="aiTag"
+            style="width: 100%; padding: 10px; margin-bottom: 20px; border: 2px solid #dfe6e9; border-radius: 10px;"><br>
 
-        <label for="aiTag" style="font-weight: bold;">🏷️ Temática:</label><br>
-        <input type="text" [(ngModel)]="aiPostTag" name="aiTag"
-          style="width: 100%; padding: 10px; margin-bottom: 20px; border: 2px solid #dfe6e9; border-radius: 10px;"><br>
-
-        <button class="button" type="submit"
-          style="background-color: #3b82f6; color: white; padding: 12px 20px; font-size: 16px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s ease;">
-          ✨ Autogenerar Post
-        </button>
-      </form>
-    </div>
+          <button class="button" type="submit"
+            style="background-color: #3b82f6; color: white; padding: 12px 20px; font-size: 16px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s ease;">
+            ✨ Autogenerar Post
+          </button>
+        </form>
+      </div>
+    </ng-container>
   </div>
 
   <!-- Right sidebar -->

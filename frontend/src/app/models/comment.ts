@@ -3,8 +3,9 @@ import { Post } from './post';
 
 export interface Comment {
   id: number;
-  user: User;
+  userId: number;
   post: Post;
   date: string; 
   content: string;
+  username: string;
 }

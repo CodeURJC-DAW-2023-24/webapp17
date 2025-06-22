@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { User } from '../../models/user';
 import { CustomDatePipe } from '../../Pipes/custom-date.pipe';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-home',
@@ -47,6 +48,8 @@ export class Home implements OnInit, AfterViewChecked {
   // Comments functionality
   commentText: string = '';
   visibleComments: Set<number> = new Set();
+  currentUser$!: Observable<User | null>;
+
 
   // Chat functionality
   chatMessages: Message[] = [];
@@ -64,10 +67,7 @@ export class Home implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     // Initialize user data
-    this.authService.currentUser$.subscribe(user => {
-      this.currentUser = user;
-      this.isAdmin = user?.role === 'ADMIN';
-    });
+    this.currentUser$ = this.authService.currentUser$;
 
     this.loadPosts(this.currentPage);
 
@@ -90,6 +90,7 @@ export class Home implements OnInit, AfterViewChecked {
       this.totalPages = response.totalPages;
       this.hasPrevious = !response.first;
       this.hasNext = !response.last;
+      console.log('Posts loaded:', this.posts);
     });
   }
 
@@ -99,16 +100,6 @@ export class Home implements OnInit, AfterViewChecked {
 
   previousPage() {
     if (this.hasPrevious) this.loadPosts(this.currentPage - 1);
-  }
-
-
-  toggleComments(postId: number) {
-    this.visibleComments.has(postId)
-      ? this.visibleComments.delete(postId)
-      : this.visibleComments.add(postId);
-  }
-  isCommentsVisible(postId: number): boolean {
-    return this.visibleComments.has(postId);
   }
 
 
@@ -122,9 +113,17 @@ export class Home implements OnInit, AfterViewChecked {
 
   }
 
-  deleteComment(commentId: number): void {
-    this.commentService.deleteComment(commentId).subscribe()
+  deleteComment(postId: number, commentId: number): void {
+    this.commentService.deleteComment(commentId).subscribe(() => {
+      const post = this.posts.find(p => p.id === postId);
+      if (post && post.comments) {
+        post.comments = post.comments.filter(c => c.id !== commentId);
+      };
+      this.loadPosts(this.currentPage);
+    });
   }
+
+
 
 
   createPost(): void {
