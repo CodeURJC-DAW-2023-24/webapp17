@@ -9,7 +9,7 @@
           <a routerLink="/statistics">Estadísticas</a>
           <a routerLink="/admin">Admin</a>
         </ng-container>
-        <a routerLink="/myposts">Mis posts</a>
+        <a *ngIf="(authService.currentUser$ | async);" routerLink="/myposts">Mis posts</a>
         <a routerLink="/contact">Contacto</a>
     </div>
 </div>

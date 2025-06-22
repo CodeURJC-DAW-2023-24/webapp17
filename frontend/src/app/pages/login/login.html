@@ -5,15 +5,8 @@
 
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
-      <input 
-        type="email"
-        class="form-control"
-        id="email"
-        name="email"
-        [(ngModel)]="email"
-        #emailInput="ngModel"
-        required
-      >
+      <input type="email" class="form-control" id="email" name="email" [(ngModel)]="email" #emailInput="ngModel"
+        required>
       <div *ngIf="emailInput.invalid && emailInput.touched" class="text-danger">
         Email requerido
       </div>
@@ -21,15 +14,8 @@
 
     <div class="mb-3">
       <label for="password" class="form-label">Contraseña</label>
-      <input 
-        type="password"
-        class="form-control"
-        id="password"
-        name="password"
-        [(ngModel)]="password"
-        #passwordInput="ngModel"
-        required
-      >
+      <input type="password" class="form-control" id="password" name="password" [(ngModel)]="password"
+        #passwordInput="ngModel" required>
       <div *ngIf="passwordInput.invalid && passwordInput.touched" class="text-danger">
         Contraseña requerida
       </div>
@@ -43,6 +29,6 @@
 
 <ng-template #loggedInTemplate>
   <form (ngSubmit)="onLogout()">
-    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+    <button type="submit" class="btn btn-primary">Cerrar Sesión</button>
   </form>
 </ng-template>

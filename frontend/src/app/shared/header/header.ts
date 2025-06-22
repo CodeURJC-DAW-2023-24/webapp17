@@ -15,10 +15,11 @@ export class Header implements OnInit {
   isAdmin: boolean=  false;
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
+
     
   }
 
-  constructor(private authService: AuthService) {}
+  constructor(public authService: AuthService) {}
 
   get currentUser() {
     return this.authService.currentUser$;

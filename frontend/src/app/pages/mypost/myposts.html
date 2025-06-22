@@ -43,26 +43,24 @@
 
 
     <div class="comments-container" *ngIf="commentsVisible[post.id]">
-      <div *ngFor="let comment of post.comments" class="comment">
+      <div *ngFor="let comment of post.comments" class="comment"
+        style="border: 1px solid #ccc; margin-bottom: 8px; padding: 6px; background-color: #f9f9f9;">
         <p>🗨️ <strong>{{ comment.content }}</strong></p>
-        <p class="meta">👤 {{ comment.user.username }}</p>
+        <p >👤 {{ comment.user.username }}</p>
       </div>
     </div>
 
-    <div  class="comment-form">
-      <textarea *ngIf="post.id !== undefined" [(ngModel)]="newComments[post.id]"
-        placeholder="🖊️ Escribe tu comentario aquí..."></textarea>
-      <button style="
-          padding: 10px 20px;
-          font-size: 16px;
-          color: white;
-          background-color: #3498db; /* azul agradable */
-          border: none;
-          border-radius: 12px;
-          cursor: pointer;
-          user-select: none;
-        " (click)="submitComment(post.id)">💬 Comentar</button>
-    </div>
+    <form (ngSubmit)="submitComment(post.id)" style="margin-top: 10px;">
+      <textarea [(ngModel)]="newComments[post.id]" name="comment" rows="3" cols="50"
+        placeholder="🖊️ Escribe tu comentario aquí..."
+        style="width: 100%; border-radius: 6px; padding: 8px;"></textarea><br>
+      <button class="button" type="submit"
+        style="background-color: #2ecc71; color: white; border: none; padding: 8px 14px; border-radius: 8px;">
+        💬 Comentar
+      </button>
+    </form>
+
   </div>
+
 
 </div>

@@ -43,11 +43,12 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<any> {
-    return this.http.post(this.apiUrl + "/logout", {}, { withCredentials: true }).pipe(
-      tap(() => this.logoutLocal())
-    );
-  }
+  logout(): Observable<string> {
+  return this.http.post(this.apiUrl + "/logout", {}, { withCredentials: true, responseType: 'text' }).pipe(
+    tap(() => this.logoutLocal())
+  );
+}
+
 
   private logoutLocal() {
     this.saveUser(null);

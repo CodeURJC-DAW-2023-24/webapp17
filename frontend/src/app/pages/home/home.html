@@ -98,12 +98,14 @@
       </form>
 
       <!-- Owner delete post button -->
-      <form *ngIf="post.user?.id === currentUser?.id" (ngSubmit)="deletePost(post.id)" style="margin-top: 10px;">
+      <form *ngIf="(currentUser != null) && (post.user?.id === currentUser.id)" (ngSubmit)="deletePost(post.id)"
+        style="margin-top: 10px;">
         <button class="button danger" type="submit"
           style="background-color: #d35400; color: white; padding: 6px 12px; border-radius: 6px;">
           🗑️ Borrar mi Post
         </button>
       </form>
+
     </div>
 
     <!-- Create new post form (for logged users) -->

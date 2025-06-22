@@ -68,9 +68,9 @@ export class Home implements OnInit, AfterViewChecked {
       this.currentUser = user;
       this.isAdmin = user?.role === 'ADMIN';
     });
-    
+
     this.loadPosts(this.currentPage);
-  
+
   }
 
   ngAfterViewChecked(): void {
@@ -111,7 +111,13 @@ export class Home implements OnInit, AfterViewChecked {
   }
 
   addComment(postId: number, commentText: string): void {
-    this.commentService.addComment(postId, commentText).subscribe()
+    this.commentService.addComment(postId, commentText).subscribe({
+      next: () => {
+        window.location.reload();
+      },
+      error: (err) => console.error('Error al añadir comentario', err)
+    });
+
   }
 
   deleteComment(commentId: number): void {

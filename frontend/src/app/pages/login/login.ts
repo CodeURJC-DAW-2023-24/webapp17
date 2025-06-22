@@ -26,9 +26,17 @@ export class LogIn {
       }
     });
   }
-
+  
   onLogout(): void {
-    this.authService.logout().subscribe(() => {
+  console.log('onLogout llamado');
+  this.authService.logout().subscribe({
+    next: () => {
+      console.log('Ejecutando logout');
+    },
+    error: (err) => {
+      console.error('Error en logout:', err);
+    }
   });
-  }
+}
+
 }
