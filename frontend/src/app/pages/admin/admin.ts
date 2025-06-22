@@ -4,6 +4,7 @@ import { UsersService, UserInfoDTO, CreateUserRequestDTO, ApiResponse } from '..
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -33,11 +34,15 @@ export class Admin implements OnInit {
     private usersService: UsersService,
     private router: Router,
     private route: ActivatedRoute,
+    private auth: AuthService 
   ) { }
 
   ngOnInit(): void {
     this.loadIssues();
     this.loadUsers();
+    if (!(this.auth.isAdmin())) {
+      this.router.navigate(['noadmin']);
+    }
   }
 
   loadIssues(): void {

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Chart, registerables } from 'chart.js';
 import { StatisticsService } from '../../services/statistics.services';
+import { AuthService } from '../../services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
 Chart.register(...registerables);
 @Component({
   selector: 'app-statistics',
@@ -11,10 +14,14 @@ Chart.register(...registerables);
   styleUrl: './statistics.css'
 })
 export class Statistics {
-  constructor(private statsService: StatisticsService) { }
+  constructor(private statsService: StatisticsService, private auth: AuthService, private router: Router,
+    private route: ActivatedRoute,) { }
 
   ngOnInit() {
     this.loadCharts();
+    if (!(this.auth.isAdmin())) {
+      this.router.navigate(['noadmin']);
+    }
   }
 
   async loadCharts() {
