@@ -109,15 +109,15 @@ public class ChatRestController {
     @ApiResponse(responseCode = "201", description = "Post created")
     @ApiResponse(responseCode = "403", description = "No right permissions")
     @PostMapping(value = "ai-post")
-    public ResponseEntity<String> generatePost(HttpSession session, @RequestBody SimpleMessageDTO tag) {
+    public ResponseEntity<String> generatePost(HttpSession session, @RequestBody SimpleMessageDTO dto) {
 
         Usr user = (Usr) session.getAttribute("user");
         if (user == null || user.getRole() != Usr.Role.ADMIN) {
             return ResponseEntity.status(403).body("No right permissions");
         }
 
-        String prompt = postGeneratorPrompt + tag;
-        String title = "LLM Post about " + tag;
+        String prompt = postGeneratorPrompt + dto.getMesagge();
+        String title = "LLM Post about " + dto.getMessage();
         String content = chatClient.call(prompt);
         LocalDateTime now = LocalDateTime.now();
 

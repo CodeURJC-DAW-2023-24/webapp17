@@ -3,6 +3,9 @@ import { IssueService } from '../../services/issue.service';
 import { Issue } from '../../models/issue';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'app-contacto',
   templateUrl: './contacto.html',
@@ -18,13 +21,14 @@ export class Contacto {
 
   enviado = false;
 
-  constructor(private issueService: IssueService) {}
+  constructor(private issueService: IssueService,  private router: Router) {}
 
   onSubmit(): void {
     this.issueService.createIssue(this.issue).subscribe({
       next: () => {
         this.enviado = true;
         this.issue = { name: '', email: '', content: '' };
+        this.router.navigate(['/contacto']);
       },
       error: err => console.error('Error al enviar el mensaje:', err)
     });

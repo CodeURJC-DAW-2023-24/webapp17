@@ -182,9 +182,10 @@ export class Home implements OnInit, AfterViewChecked {
     this.chatService.generateAIPost(this.aiPostTag).subscribe({
       next: (post: any) => {
         // Add AI generated post to the beginning of the list
-        this.posts.unshift(post);
-        this.aiPostTag = ''; // Reset form
         alert('Post generado exitosamente por IA');
+
+        this.router.navigate(['/']); // Navigate to the new post
+        this.aiPostTag = ''; // Reset form
       },
       error: (error: any) => {
         console.error('Error generating AI post:', error);

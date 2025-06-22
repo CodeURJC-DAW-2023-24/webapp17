@@ -1,1 +1,46 @@
-<p>admin works!</p>
+<div id="content">
+  <div id="left">
+
+    <!-- Issues -->
+    <div *ngFor="let issue of issues" class="entry" style="border: 2px solid #f39c12; padding: 1em; margin-bottom: 1em; border-radius: 10px; background-color: #fffbea; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+      <h2 style="color: #e67e22;">📢 Mensaje importante</h2>
+      <p style="font-size: 1.1em;">📝 {{issue.content}}</p>
+      <p class="meta" style="color: #7f8c8d;"><span class="date">📅 Fecha: {{issue.date}}</span> | 🧑 Emitido por <strong>{{issue.name}}</strong></p>
+      <button (click)="deleteIssue(issue.id)" class="button" style="background-color: #e74c3c; color: white; border: none; padding: 0.5em 1em; border-radius: 5px; cursor: pointer;">🗑️ Borrar</button>
+    </div>
+
+    <!-- Users -->
+    <h1 style="color: #3498db;">👥 Lista de Usuarios</h1>
+    <div *ngFor="let user of users" class="entry" style="border: 2px solid #2980b9; padding: 1em; margin-bottom: 1em; border-radius: 10px; background-color: #ecf9ff; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+      <h2 style="color: #2c3e50;">🙋 Usuario: {{user.username}}</h2>
+      <p>🆔 ID: {{user.id}}</p>
+      <p>📧 Correo: {{user.email}}</p>
+      <p>📝 Publicaciones: {{user.postsCount}}</p>
+      <p>💬 Comentarios: {{user.commentsCount}}</p>
+      <button (click)="deleteUser(user.id)" class="button" style="background-color: #c0392b; color: white; border: none; padding: 0.5em 1em; border-radius: 5px; cursor: pointer;">🗑️ Borrar</button>
+    </div>
+
+    <!-- Crear nuevo usuario -->
+    <h1 style="color: #2ecc71;">🆕 Crear nuevo usuario</h1>
+    <form (ngSubmit)="createUser()" style="background-color: #eaffea; padding: 1em; border: 2px solid #27ae60; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+
+      <label for="username">👤 Nombre de usuario:</label><br>
+      <input type="text" id="username" name="username" required [(ngModel)]="newUser.username" #username="ngModel" /><br><br>
+
+      <label for="email">📧 Correo electrónico:</label><br>
+      <input type="email" id="email" name="email" required [(ngModel)]="newUser.email" #email="ngModel" /><br><br>
+
+      <label for="password">🔒 Contraseña:</label><br>
+      <input type="password" id="password" name="password" required [(ngModel)]="newUser.password" #password="ngModel" /><br><br>
+
+      <label for="role">🧩 Rol:</label><br>
+      <select id="role" name="role" [(ngModel)]="newUser.role">
+        <option value="USER">👤 Usuario</option>
+        <option value="ADMIN">🛡️ Administrador</option>
+      </select><br><br>
+
+      <button type="submit" style="background-color: #2ecc71; color: white; border: none; padding: 0.6em 1.2em; border-radius: 5px; cursor: pointer;">🚀 Crear usuario</button>
+    </form>
+
+  </div>
+</div>
