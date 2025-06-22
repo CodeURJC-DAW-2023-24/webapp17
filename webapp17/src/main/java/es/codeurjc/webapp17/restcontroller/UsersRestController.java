@@ -1,6 +1,5 @@
 package es.codeurjc.webapp17.restcontroller;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.UsrService;
@@ -56,7 +54,7 @@ public class UsersRestController {
         }
 
         userService.deleteUsr(id);
-        return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -81,14 +79,9 @@ public class UsersRestController {
 
         sendCredentialsByEmail(request.getEmail(), request.getUsername(), request.getPassword());
 
-        // Construir la URI para acceder al nuevo usuario
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/users/{username}")
-                .buildAndExpand(newUser.getUsername())
-                .toUri();
+   
 
-        return ResponseEntity.created(location).body("User successfully created.");
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -113,7 +106,8 @@ public class UsersRestController {
                 u.getUsername(),
                 u.getEmail(),
                 u.getPosts().size(),
-                u.getComments().size())).collect(Collectors.toList());
+                u.getComments().size(),
+                u.getRole().toString())).collect(Collectors.toList());
 
         return ResponseEntity.ok(userInfoDTOs);
     }
@@ -154,6 +148,8 @@ public class UsersRestController {
         private int postsCount;
 
         private int commentsCount;
+
+        private String role;
     }
 
     /**

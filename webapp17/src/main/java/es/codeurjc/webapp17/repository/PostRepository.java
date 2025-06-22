@@ -43,4 +43,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Transactional
     @Query(value = "DELETE FROM post WHERE id = :id", nativeQuery = true)
     void deleteById(@Param("id") Long id);
+
 }

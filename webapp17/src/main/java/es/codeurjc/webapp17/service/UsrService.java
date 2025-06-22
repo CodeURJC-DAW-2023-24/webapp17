@@ -1,12 +1,14 @@
 package es.codeurjc.webapp17.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.repository.UsrRepository;
 
@@ -14,6 +16,12 @@ import es.codeurjc.webapp17.repository.UsrRepository;
 public class UsrService {
     @Autowired
     private UsrRepository userRepository;
+
+    @Autowired
+    private PostService postService;
+
+
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -41,13 +49,17 @@ public class UsrService {
     }
 
     @Transactional
-    public void deleteUsr(Long id) {
+    public void deleteUsr(Long userId) {
         try {
-            userRepository.deleteCommentsByUsrId(id);
-            userRepository.deletePostsByUsrId(id);
-            userRepository.deleteById(id);
+            userRepository.deleteCommentsByUsrId(userId);
+            List<Post> posts = postService.getPostsByUser(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
+            for (Post post : posts) {
+                postService.deletePost(post.getId());
+            }
+            userRepository.deleteById(userId);
         } catch (Exception ex) {
             ex.printStackTrace();
+            throw ex; 
         }
     }
 

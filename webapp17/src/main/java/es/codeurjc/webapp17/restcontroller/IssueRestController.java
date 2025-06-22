@@ -74,7 +74,7 @@ public class IssueRestController {
         }
 
         issueService.deleteIssue(id);
-        return ResponseEntity.ok("Issue successfully deleted.");
+        return ResponseEntity.ok().build();
     }
 
     /**

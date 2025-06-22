@@ -1,6 +1,8 @@
 package es.codeurjc.webapp17.service;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +29,10 @@ public class PostService {
     public Page<Post> getPostsbyUsr(int page, int size, Usr user) {
         PageRequest pageable = PageRequest.of(page, size);
         return postRepository.findByUsr(user, pageable);
+    }
+
+    public List<Post> getPostsByUser(Usr user) {
+        return postRepository.findByUsr(user, PageRequest.of(0, Integer.MAX_VALUE)).getContent();
     }
 
     public ArrayList<Post> getAllPosts() {

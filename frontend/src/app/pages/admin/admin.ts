@@ -3,12 +3,14 @@ import { IssueService } from '../../services/issue.service';
 import { UsersService, UserInfoDTO, CreateUserRequestDTO, ApiResponse } from '../../services/user.services';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.html',
-  imports: [FormsModule,CommonModule],
-  styleUrls: ['./admin.css']  
+  imports: [FormsModule, CommonModule],
+  styleUrls: ['./admin.css']
 })
 export class Admin implements OnInit {
 
@@ -28,7 +30,9 @@ export class Admin implements OnInit {
 
   constructor(
     @Inject(IssueService) private issueService: IssueService,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -43,7 +47,7 @@ export class Admin implements OnInit {
         this.issues = data;
         this.loadingIssues = false;
       },
-      error: (err:any) => {
+      error: (err: any) => {
         this.errorMessage = 'Error cargando avisos';
         this.loadingIssues = false;
       }
@@ -84,12 +88,10 @@ export class Admin implements OnInit {
     if (!confirm('¿Seguro que quieres borrar este usuario?')) return;
 
     this.usersService.deleteUser(id).subscribe({
-      next: (response: ApiResponse) => {
-        if (response.error) {
-          alert('Error: ' + response.error);
-        } else {
-          this.users = this.users.filter(user => user.id !== id);
-        }
+      next: () => {
+
+        this.router.navigate(['/admin']);
+
       },
       error: () => alert('Error borrando usuario')
     });

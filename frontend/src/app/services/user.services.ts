@@ -9,6 +9,7 @@ export interface UserInfoDTO {
   email: string;
   postsCount: number;
   commentsCount: number;
+  role: string; // 'ADMIN' or 'USER'
 }
 
 export interface CreateUserRequestDTO {
@@ -61,8 +62,8 @@ export class UsersService {
    * @param userId ID of the user to delete
    * @returns Observable<ApiResponse> API response
    */
-  deleteUser(userId: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(`${this.baseUrl}/users/${userId}`, this.httpOptions);
+  deleteUser(userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/users/${userId}`, this.httpOptions);
   }
 
   // Helper methods for error handling and validation
