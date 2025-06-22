@@ -2,29 +2,21 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule,RouterModule], 
   standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.html',
   styleUrl: './header.css'
 })
 export class Header implements OnInit {
-  
-  isAdmin: boolean=  false;
-  ngOnInit(): void {
-    this.isAdmin = this.authService.isAdmin();
-
-    
-  }
-
+  currentUser$!: Observable<User | null>; 
   constructor(public authService: AuthService) {}
 
-  get currentUser() {
-    return this.authService.currentUser$;
+  ngOnInit(): void {
+    this.currentUser$ = this.authService.currentUser$; 
   }
-
- 
-
 }

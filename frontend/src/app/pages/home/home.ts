@@ -103,12 +103,14 @@ export class Home implements OnInit, AfterViewChecked {
 
 
   toggleComments(postId: number) {
-    this.commentsVisible[postId] = !this.commentsVisible[postId];
+    this.visibleComments.has(postId)
+      ? this.visibleComments.delete(postId)
+      : this.visibleComments.add(postId);
   }
-
   isCommentsVisible(postId: number): boolean {
     return this.visibleComments.has(postId);
   }
+
 
   addComment(postId: number, commentText: string): void {
     this.commentService.addComment(postId, commentText).subscribe({

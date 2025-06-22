@@ -5,7 +5,7 @@
     <div id="menu">
         <a routerLink="/">Home</a>
         <a routerLink="/login">Usuario</a>
-        <ng-container *ngIf="isAdmin">
+        <ng-container *ngIf="(currentUser$ | async)?.role === 'ADMIN'">
           <a routerLink="/statistics">Estadísticas</a>
           <a routerLink="/admin">Admin</a>
         </ng-container>
