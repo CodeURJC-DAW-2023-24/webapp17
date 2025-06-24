@@ -121,7 +121,8 @@ La configuración de `docker-compose.yml` asegura que los siguientes datos se co
 - Base de datos MySQL → volumen en `/var/lib/mysql`
 
 ### 🌐 Demos en Youtube
-- [Demo 1](https://youtu.be/cso8NQsyryM)
+- [Demo Fase 1 - Springboot App](https://youtu.be/cso8NQsyryM)
+- [Demo Angular](https://youtu.be/KoPP3sRImKQ)
 
   
 ### 👥 Colaboradores
