@@ -44,7 +44,7 @@
           </p>
           <p style="margin: 0;">🗨️ <strong>{{comment.content}}</strong></p>
           <ng-container *ngIf="(currentUser$ | async) as user">
-            <button class="button danger" *ngIf="user.role === 'ADMIN' || user.username === comment.username"
+            <button class="button danger" 
               (click)="deleteComment(post.id,comment.id)">
               Eliminar comentario 🗑️
             </button>
@@ -53,11 +53,11 @@
         </div>
       </div>
       <ng-container *ngIf="(currentUser$ | async) as user">
-        <button class="button danger" *ngIf="user.role === 'ADMIN' || user.username === post.username"
+        <button class="button danger" 
           (click)="deletePost(post.id)">
           Eliminar post 🗑️
         </button>
-        <button class="button primary" *ngIf="user.role === 'ADMIN' || user.username === post.username"
+        <button class="button primary" 
           (click)="editPost(post.id)">
           Editar post ✏️
         </button>

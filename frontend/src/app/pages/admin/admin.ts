@@ -98,7 +98,7 @@ export class Admin implements OnInit {
         this.router.navigate(['/admin']);
 
       },
-      error: () => alert('Error borrando usuario')
+      error: () => this.router.navigate(['/admin'])
     });
   }
 

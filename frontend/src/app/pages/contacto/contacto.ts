@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-contacto',
   templateUrl: './contacto.html',
   styleUrls: ['./contacto.css'],
-  imports: [FormsModule,CommonModule]
+  imports: [FormsModule, CommonModule]
 })
 export class Contacto {
   issue: Issue = {
@@ -21,16 +21,21 @@ export class Contacto {
 
   enviado = false;
 
-  constructor(private issueService: IssueService,  private router: Router) {}
+  constructor(private issueService: IssueService, private router: Router) { }
 
   onSubmit(): void {
     this.issueService.createIssue(this.issue).subscribe({
       next: () => {
         this.enviado = true;
         this.issue = { name: '', email: '', content: '' };
-        this.router.navigate(['/contacto']);
+        alert('Mensaje enviado correctamente');
+        this.router.navigate(['/contact']);
       },
-      error: err => console.error('Error al enviar el mensaje:', err)
+      error: err => {
+        this.enviado = true;
+        this.issue = { name: '', email: '', content: '' };
+        this.router.navigate(['/contact']);
+      }
     });
   }
 }

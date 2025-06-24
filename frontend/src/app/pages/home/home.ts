@@ -106,7 +106,7 @@ export class Home implements OnInit, AfterViewChecked {
   addComment(postId: number, commentText: string): void {
     this.commentService.addComment(postId, commentText).subscribe({
       next: () => {
-        window.location.reload();
+        this.loadPosts(this.currentPage); // Reload posts to get new comment
       },
       error: (err) => console.error('Error al añadir comentario', err)
     });
@@ -146,6 +146,7 @@ export class Home implements OnInit, AfterViewChecked {
         this.posts.unshift(post);
         this.resetNewPostForm();
         alert('Post creado exitosamente');
+        this.loadPosts(this.currentPage); // Reload posts to include new post
       },
       error: (error: any) => {
         console.error('Error creating post:', error);
@@ -183,7 +184,7 @@ export class Home implements OnInit, AfterViewChecked {
       next: (post: any) => {
         // Add AI generated post to the beginning of the list
         alert('Post generado exitosamente por IA');
-
+        this.loadPosts(this.currentPage); // Reload posts to include new AI post
         this.router.navigate(['/']); // Navigate to the new post
         this.aiPostTag = ''; // Reset form
       },

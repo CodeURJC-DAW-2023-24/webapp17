@@ -107,7 +107,7 @@
     </div>
     <ng-container *ngIf="(currentUser$ | async) as user">
       <!-- AI post generation form (for admins only) -->
-      <div *ngIf="(currentUser$ | async) as user">
+      <div *ngIf="user.role === 'ADMIN'">
         <br>
         <hr style="width: 100%; border-top: 1px dashed #ccc;"><br>
         <h1 style="color: #34495e; text-align:center; margin-bottom: 20px;">🤖 Genera un nuevo Post</h1>
