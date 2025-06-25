@@ -124,7 +124,54 @@ La configuración de `docker-compose.yml` asegura que los siguientes datos se co
 - [Demo Fase 1 - Springboot App](https://youtu.be/cso8NQsyryM)
 - [Demo Angular](https://youtu.be/KoPP3sRImKQ)
 
+## 🛠️ Guía de Clonación de Repositorio y Despliegue posterior
+
+### 📋 Requisitos previos
+
+Antes de desplegar la aplicación, asegúrate de tener instalado en tu máquina:
+
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### 🚀 Pasos para el despliegue en servidor 
+
+Una vez dentro de la máquina virtual asociada
+
+1. **Clona el repositorio:**
+
+   ```bash
+   git clone git@github.com:CodeURJC-DAW-2023-24/webapp17.git
+   ```
+
+2. **Accede a la carpeta del proyecto:**
+
+   ```bash
+   cd webapp17/
+   ```
+
+3. **Construye y levanta los contenedores (solo la primera vez):**
+
+   ```bash
+   docker compose up --build
+   ```
+
+   > Este comando construirá las imágenes necesarias a partir de los `Dockerfile` y levantará los servicios definidos en `docker-compose.yml`.
+
+4. **En posteriores ejecuciones, simplemente levanta los servicios:**
+
+   ```bash
+   docker compose up
+   ```
+
+   También puedes usar variantes como:
+
+   ```bash
+   docker compose up -d   # para ejecutarlo en segundo plano
+   docker compose down    # para detener y eliminar los contenedores
+   ```
+- La aplicación estará disponible en `https://localhost:8443`
   
+
 ### 👥 Colaboradores
 
 | Nombre | Email | Github |
