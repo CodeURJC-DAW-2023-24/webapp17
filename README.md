@@ -124,52 +124,126 @@ La configuración de `docker-compose.yml` asegura que los siguientes datos se co
 - [Demo Fase 1 - Springboot App](https://youtu.be/cso8NQsyryM)
 - [Demo Angular](https://youtu.be/KoPP3sRImKQ)
 
-## 🛠️ Guía de Clonación de Repositorio y Despliegue posterior
+## 🛠️ Guía de Despliegue de la aplicación en una máquina virtual 
 
-### 📋 Requisitos previos
+### ✅ Requisitos previos
 
-Antes de desplegar la aplicación, asegúrate de tener instalado en tu máquina:
+- Tener descargada la clave privada proporcionada por los docentes (`appWeb22.key`)
+- Conexión a la VPN de la Universidad (GlobalProtect) o uso del Escritorio de Desarrollo
+- Tener Docker y Docker Compose instalados en la máquina virtual (ver más abajo)
 
-- [Docker](https://www.docker.com/get-started)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+---
 
-### 🚀 Pasos para el despliegue en servidor 
+### 🔐 Conexión a la máquina virtual
 
-Una vez dentro de la máquina virtual asociada
+Conéctate a la máquina virtual mediante SSH con:
 
-1. **Clona el repositorio:**
+```bash
+ssh -i ssh-keys/appWeb22.key vmuser@10.100.139.147
+```
 
-   ```bash
-   git clone git@github.com:CodeURJC-DAW-2023-24/webapp17.git
-   ```
+o también:
 
-2. **Accede a la carpeta del proyecto:**
+```bash
+ssh -i ssh-keys/appWeb22.key vmuser@appWeb22.dawgis.etsii.urjc.es
+```
 
-   ```bash
-   cd webapp17/
-   ```
+> ⚠️ Si usas Windows, asegúrate de cambiar los permisos de la clave `.key`:
+> ```bash
+> chmod 400 ssh-keys/appWeb22.key
+> ```
 
-3. **Construye y levanta los contenedores (solo la primera vez):**
+---
 
-   ```bash
-   docker compose up --build
-   ```
+### 🐳 Instalación de Docker y Docker Compose en la VM
 
-   > Este comando construirá las imágenes necesarias a partir de los `Dockerfile` y levantará los servicios definidos en `docker-compose.yml`.
+Ejecuta los siguientes comandos en la máquina virtual:
 
-4. **En posteriores ejecuciones, simplemente levanta los servicios:**
+```bash
+# Instalar dependencias
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
 
-   ```bash
-   docker compose up
-   ```
+# Añadir clave GPG oficial de Docker
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc > /dev/null
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-   También puedes usar variantes como:
+# Añadir repositorio de Docker
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-   ```bash
-   docker compose up -d   # para ejecutarlo en segundo plano
-   docker compose down    # para detener y eliminar los contenedores
-   ```
-- La aplicación estará disponible en `https://localhost:8443`
+# Instalar Docker y Docker Compose
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+> 📝 Fuente oficial: [Docker Docs](https://docs.docker.com/engine/install/ubuntu/)
+
+---
+
+### 📥 Clonar el repositorio
+
+Una vez dentro de la VM:
+
+```bash
+git clone https://github.com/CodeURJC-DAW-2023-24/webapp17.git
+cd webapp17/
+```
+
+---
+
+### 🚀 Despliegue con Docker Compose
+
+Ejecuta:
+
+```bash
+sudo docker compose up --build -d
+```
+
+- El parámetro `-d` lo lanza en segundo plano.
+- Si quieres ver los logs en tiempo real, puedes omitir `-d`.
+
+---
+
+### 🌐 Acceso a la aplicación
+
+Una vez lanzada la aplicación, accede desde tu navegador a:
+
+```
+https://10.100.139.147:8443
+```
+
+---
+
+### 🛑 Detener la aplicación
+
+Para detener los contenedores, ejecuta:
+
+```bash
+sudo docker compose stop
+```
+
+---
+
+### 🔁 Volver a arrancar la aplicación
+
+Para volver a iniciar la aplicación tras haberla detenido:
+
+```bash
+sudo docker compose up -d
+```
+
+---
+
+### ✅ Capacidades de IA generativa (opcional)
+
+Revisar apartado de configuración de ollama anterior. 
+
+```
+
   
 
 ### 👥 Colaboradores
