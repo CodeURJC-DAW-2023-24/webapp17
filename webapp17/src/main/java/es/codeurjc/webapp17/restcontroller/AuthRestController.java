@@ -31,7 +31,7 @@ public class AuthRestController {
         if (userService.authenticate(email, password)) {
             currentUsr = userService.getUsr(email);
             session.setAttribute("user", currentUsr);
-            return ResponseEntity.ok().body(new UsrDto(currentUsr)); // Utilizamos el DTO
+            return ResponseEntity.ok().body(new UsrDto(currentUsr)); // uses  DTO
         } else {
             return ResponseEntity.badRequest().body("Invalid credentials.");
         }
@@ -53,7 +53,7 @@ public class AuthRestController {
         if (user == null) {
             return ResponseEntity.status(401).body("Not authenticated.");
         } else {
-            return ResponseEntity.ok().body(new UsrDto(user)); // Utilizamos el DTO
+            return ResponseEntity.ok().body(new UsrDto(user)); // uses  DTO
         }
     }
 

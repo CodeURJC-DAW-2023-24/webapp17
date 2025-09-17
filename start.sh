@@ -2,7 +2,7 @@
 
 # 1. Start 'ollama serve' with the environment variable OLLAMA_HOST=0.0.0.0 in the background
 echo "Starting ollama serve..."
-OLLAMA_HOST=0.0.0.0 ollama serve &
+OLLAMA_HOST=0.0.0.0 ollama serve 
 
 # Save the process ID of 'ollama serve' (optional, in case you want to control it later)
 OLLAMA_PID=$!

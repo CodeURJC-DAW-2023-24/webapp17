@@ -10,34 +10,30 @@
     border-radius: 5px;
     margin-top: 10px;
     margin-bottom: 5px;
-    background-color: #4CAF50; /* Color de fondo */
-    color: white; /* Color del texto */
-    transition: background-color 0.3s; /* Transición suave del color de fondo */
+    background-color: #4CAF50; 
+    color: white; 
+    transition: background-color 0.3s; 
   }
   
-  /* Estilo cuando el cursor está sobre el botón */
   .button:hover {
-    background-color: #45a049; /* Cambio de color de fondo al pasar el cursor */
+    background-color: #45a049; 
   }
   
-  /* Estilo para botones secundarios */
+
   .button.secondary {
-    background-color: #008CBA; /* Color de fondo para botones secundarios */
+    background-color: #008CBA;
   }
   
-  /* Estilo cuando el cursor está sobre el botón secundario */
   .button.secondary:hover {
-    background-color: #0073e6; /* Cambio de color de fondo al pasar el cursor */
+    background-color: #0073e6; 
   }
   
-  /* Estilo para botones de peligro */
   .button.danger {
-    background-color: #f44336; /* Color de fondo para botones de peligro */
+    background-color: #f44336; 
   }
   
-  /* Estilo cuando el cursor está sobre el botón de peligro */
   .button.danger:hover {
-    background-color: #d32f2f; /* Cambio de color de fondo al pasar el cursor */
+    background-color: #d32f2f; 
   }
   /* You can add global styles to this file, and also import other style files */
 body {

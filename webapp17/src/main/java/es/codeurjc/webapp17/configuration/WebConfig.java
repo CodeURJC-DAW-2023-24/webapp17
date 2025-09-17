@@ -37,12 +37,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Recursos estáticos por defecto de Spring Boot
+        // Static resources for Spring Boot
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/", "classpath:/public/")
                 .setCachePeriod(3600);
 
-        // Archivos subidos por usuarios - CAMBIAR AQUÍ
+        // Uploads by users - Change here
         String resourceLocation = uploadPath.endsWith("/") ? uploadPath : uploadPath + "/";
         registry.addResourceHandler("/files/**")
                 .addResourceLocations("file:" + resourceLocation)
@@ -52,7 +52,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200") // Puerto por defecto de Angular
+                .allowedOrigins("http://localhost:4200") // Default port for angular
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

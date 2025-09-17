@@ -92,7 +92,11 @@ OLLAMA_HOST=0.0.0.0 ollama serve
 ---
 
 ### 🐳 Levantar la Aplicación con Docker Compose
-
+En caso de usar Mac instalar Mac y no tener instalado Docker Desktop usamos colima como sustituto:
+```bash
+brew install colima
+colima start -f
+```
 ```bash
 docker compose up --build
 ```

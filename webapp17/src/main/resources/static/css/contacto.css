@@ -1,11 +1,9 @@
-/* Estilos globales */
 
-/* Estilos para el contenido */
 #content {
-    padding: 50px 20px; /* Espacio interno */
-    background: linear-gradient(45deg, #ebebeb, #927979); /* Fondo con gradiente */
-    color: #fff; /* Color de texto */
-    font-family: 'Arial', sans-serif; /* Familia de fuente */
+    padding: 50px 20px; 
+    background: linear-gradient(45deg, #ebebeb, #927979); 
+    color: #fff; 
+    font-family: 'Arial', sans-serif; 
 }
 
 .container {
@@ -13,46 +11,45 @@
     flex-wrap: wrap;
     gap: 30px;
     justify-content: space-between;
-    align-items: stretch; /* Alinea las alturas */
+    align-items: stretch; 
     margin-bottom: 60px;
 }
 
 h2 {
-    color: #fff; /* Color de texto blanco */
+    color: #fff; 
 }
 
 
 
-/* Estilos para el formulario de contacto */
 
 
 .btn-primary {
-    padding: 10px 20px; /* Espacio interno */
-    background-color: #007bff; /* Color de fondo del botón */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    color: #fff; /* Color del texto */
-    cursor: pointer; /* Cambio de cursor al pasar */
-    transition: background-color 0.3s; /* Transición de color de fondo */
+    padding: 10px 20px; 
+    background-color: #007bff; 
+    border: none; 
+    border-radius: 5px; 
+    color: #fff; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
 }
 
 .btn-primary:hover {
-    background-color: #0056b3; /* Color de fondo al pasar el cursor */
+    background-color: #0056b3;
 }
 
-/* Estilos para el mapa */
+
 .map {
-    margin-bottom: 60px; /* Espacio inferior para el mapa */
-    flex: 1; /* Distribución flexible */
-    height: auto; /* Altura automática */
+    margin-bottom: 60px; 
+    flex: 1; 
+    height: auto; 
 }
 
 .map iframe {
     margin-left: 1rem;
-    width: 100%; /* Ancho completo para el mapa */
-    height: 100%; /* Altura ajustada */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del mapa */
-    transition: transform 0.3s; /* Transición de transformación */
+    width: 100%; 
+    height: 100%; 
+    border: none; 
+    border-radius: 5px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.3s; 
 }
