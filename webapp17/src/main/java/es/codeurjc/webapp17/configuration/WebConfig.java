@@ -37,17 +37,24 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Static resources for Spring Boot
+        // Angular application resources - serve from /new/ path
+        registry.addResourceHandler("/new/**")
+                .addResourceLocations("classpath:/static/new/")
+                .setCachePeriod(0);
+
+        // General static resources for Spring Boot (excluding /new/ path)  
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/", "classpath:/public/")
                 .setCachePeriod(3600);
 
-        // Uploads by users - Change here
+        // User uploaded files - keep existing functionality
         String resourceLocation = uploadPath.endsWith("/") ? uploadPath : uploadPath + "/";
         registry.addResourceHandler("/files/**")
                 .addResourceLocations("file:" + resourceLocation)
                 .setCachePeriod(3600);
     }
+
+
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

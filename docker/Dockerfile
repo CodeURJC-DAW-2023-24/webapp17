@@ -19,4 +19,4 @@ FROM eclipse-temurin:21-jdk
 WORKDIR /usr/src/app
 COPY --from=backend /project/target/*.jar webapp17.jar
 EXPOSE 8443
-CMD [ "java", "-jar", "webapp17.jar"]
+ENTRYPOINT ["sh", "-c", "sleep 10 && java -jar webapp17.jar"]

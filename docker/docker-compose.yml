@@ -14,7 +14,9 @@ services:
       - app-network
 
   springboot-app:
-    build: .
+    build:
+      context: ..              
+      dockerfile: docker/Dockerfile  
     image: example/lastest
     container_name: spring-app-2
     ports:
