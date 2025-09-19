@@ -7,17 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import es.codeurjc.webapp17.dto.UsrBasicDto;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.UsrService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
+    
     @Autowired
     private UsrService userService;
-
-    @Autowired(required = false)
-    private Usr currentUsr;
 
     /**
      * Displays the login form. If the user is already logged in, redirects them
@@ -29,16 +28,20 @@ public class LoginController {
      */
     @GetMapping("/log_in")
     public String showLoginForm(Model model, HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
-        if (user != null) {
-            if (user.getRole() == Usr.Role.ADMIN) {
+        // Check if user is already logged in using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
+        
+        if (userId != null && userRole != null) {
+            if (userRole == Usr.Role.ADMIN) {
                 model.addAttribute("ADMIN", true);
             }
         } else {
             model.addAttribute("ADMIN", false);
         }
+        
         model.addAttribute("loginError", "");
-        model.addAttribute("logged", session.getAttribute("user") != null);
+        model.addAttribute("logged", userId != null);
         return "log_in"; // Return the login form view
     }
 
@@ -56,13 +59,23 @@ public class LoginController {
     @PostMapping("/logg_in")
     public String processLogin(@RequestParam("email") String email, @RequestParam("password") String password,
             Model model, HttpSession session) {
+        
         if (userService.authenticate(email, password)) {
-            currentUsr = userService.getUsr(email);
-            session.setAttribute("user", currentUsr);
-            return "redirect:/"; // Redirect to the homepage or dashboard after successful login
+            // Get user information using DTO
+            UsrBasicDto userBasic = userService.getUsrByEmail(email);
+            
+            if (userBasic != null) {
+                // Store only necessary information in session
+                session.setAttribute("userId", userBasic.id());
+                session.setAttribute("userRole", userBasic.role());
+                
+                return "redirect:/"; // Redirect to the homepage after successful login
+            } else {
+                model.addAttribute("loginError", "User data not found");
+                return "log_in";
+            }
         } else {
-            model.addAttribute("loginError", "Incorrect credentials"); // Display an error message if authentication
-                                                                       // fails
+            model.addAttribute("loginError", "Incorrect credentials"); // Display error message if authentication fails
             return "log_in"; // Return to the login form view
         }
     }
@@ -75,9 +88,12 @@ public class LoginController {
      * @return a redirect to the home page after logging out
      */
     @PostMapping("/log_out")
-    public String processLogin(Model model, HttpSession session) {
-        session.setAttribute("user", null); // Clear the user session
-        return "redirect:/"; // Redirect to the homepage or dashboard after logout
+    public String processLogout(Model model, HttpSession session) {
+        // Clear the user session data
+        session.removeAttribute("userId");
+        session.removeAttribute("userRole");
+        session.invalidate(); // Invalidate the entire session for security
+        
+        return "redirect:/"; // Redirect to the homepage after logout
     }
-
 }

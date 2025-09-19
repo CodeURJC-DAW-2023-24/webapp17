@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import es.codeurjc.webapp17.entity.Post;
+import es.codeurjc.webapp17.dto.PostDto;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.PostService;
 import jakarta.servlet.http.HttpSession;
@@ -33,7 +33,9 @@ public class HomeController {
             @RequestParam(defaultValue = "3") int size,
             Model model,
             HttpSession session) {
-        Page<Post> posts = postService.getPosts(page, size);
+        
+        // Get paginated posts using DTOs
+        Page<PostDto> posts = postService.getPosts(page, size);
 
         // Add pagination data to the model
         model.addAttribute("posts", posts);
@@ -47,10 +49,12 @@ public class HomeController {
         model.addAttribute("previousPage", page > 0 ? page - 1 : null);
         model.addAttribute("nextPage", posts.hasNext() ? page + 1 : null);
 
-        // Check for user in session
-        Usr user = (Usr) session.getAttribute("user");
-        if (user != null) {
-            if (user.getRole() == Usr.Role.ADMIN) {
+        // Check for user in session using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
+        
+        if (userId != null && userRole != null) {
+            if (userRole == Usr.Role.ADMIN) {
                 model.addAttribute("ADMIN", true); // Set admin flag
                 model.addAttribute("currentUser", true); // Pass current user info
             } else {
@@ -64,5 +68,4 @@ public class HomeController {
 
         return "index"; // Return index view
     }
-
 }

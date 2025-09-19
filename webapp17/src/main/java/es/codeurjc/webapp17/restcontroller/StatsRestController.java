@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import es.codeurjc.webapp17.dto.PostDto;
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.PostService;
@@ -73,7 +73,7 @@ public class StatsRestController {
         }
 
         List<UserPostCountDTO> result = userService.getAllUsrs().stream()
-                .map(u -> new UserPostCountDTO(u.getUsername(), u.getPosts() != null ? u.getPosts().size() : 0))
+                .map(u -> new UserPostCountDTO(u.username(),u.posts() != null ?u.posts().size() : 0))
                 .sorted(Comparator.comparingInt(UserPostCountDTO::getPostCount).reversed())
                 .toList();
 
@@ -91,7 +91,7 @@ public class StatsRestController {
         }
 
         List<PostCommentCountDTO> result = postService.getAllPosts().stream()
-                .map(p -> new PostCommentCountDTO(p.getTitle(), p.getComments() != null ? p.getComments().size() : 0))
+                .map(p -> new PostCommentCountDTO(p.title(), p.comments() != null ? p.comments().size() : 0))
                 .sorted(Comparator.comparingInt(PostCommentCountDTO::getCommentCount).reversed())
                 .toList();
 
@@ -103,14 +103,17 @@ public class StatsRestController {
     @ApiResponse(responseCode = "200", description = "Tags with most posts")
     @ApiResponse(responseCode = "403", description = "No right permissions")
     public ResponseEntity<?> tagsWithMostPosts(HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
-        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+        // Check authentication and authorization using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
+        
+        if (userId == null || userRole != Usr.Role.ADMIN) {
             return ResponseEntity.status(403).body(new ErrorResponseDTO("No right permissions", "/no_admin"));
         }
 
         Map<String, Long> tagCounts = postService.getAllPosts().stream()
-                .filter(p -> p.getTag() != null)
-                .collect(Collectors.groupingBy(Post::getTag, Collectors.counting()));
+                .filter(p -> p.tag() != null)
+                .collect(Collectors.groupingBy(PostDto::tag, Collectors.counting()));
 
         List<TagCountDTO> result = tagCounts.entrySet().stream()
                 .map(e -> new TagCountDTO(e.getKey(), e.getValue()))
@@ -119,4 +122,5 @@ public class StatsRestController {
 
         return ResponseEntity.ok(result);
     }
+
 }

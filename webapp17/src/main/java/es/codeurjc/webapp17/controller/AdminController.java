@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import es.codeurjc.webapp17.entity.Issue;
+import es.codeurjc.webapp17.dto.IssueDto;
+import es.codeurjc.webapp17.dto.UsrDto;
+import es.codeurjc.webapp17.dto.CreateUsrDto;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.IssueService;
 import es.codeurjc.webapp17.service.UsrService;
@@ -45,43 +47,36 @@ public class AdminController {
      */
     @GetMapping("/admin")
     public String adminPage(HttpSession session, Model model) {
-        Boolean isAdmin = false; // Default value
+        Long userId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
 
-        // Retrieve the user from the session
-        Usr user = (Usr) session.getAttribute("user");
-        if (user != null) {
-            // Check if the user has ADMIN role
-            if (user.getRole() == Usr.Role.ADMIN) {
-                model.addAttribute("ADMIN", true);
+        if (userId != null && userRole != null) {
+            if (userRole == Usr.Role.ADMIN) {
+                model.addAttribute("ADMIN", true); // User is admin
             } else {
-                model.addAttribute("ADMIN", false);
-                return "redirect:/no_admin"; // Redirect if not admin
+                model.addAttribute("ADMIN", false); // User is not admin
+                return "/no_admin"; // Redirect non-admin users to index
             }
-            isAdmin = true;
         }
 
         // Retrieve all issues from the service and add them to the model
-        List<Issue> issues = issuesService.getAllIssues();
+        List<IssueDto> issues = issuesService.getAllIssues();
         model.addAttribute("issues", issues);
 
         // Retrieve all users and map them to UserInfo objects
-        List<Usr> users = userService.getAllUsrs();
+        List<UsrDto> users = userService.getAllUsrs();
         List<UserInfo> usersInfo = users.stream().map(usr -> new UserInfo(
-                usr.getId(),
-                usr.getUsername(),
-                usr.getEmail(),
-                usr.getPosts().size(),
-                usr.getComments().size())).collect(Collectors.toList());
+                usr.id(),
+                usr.username(),
+                usr.email(),
+                usr.posts() != null ? usr.posts().size() : 0,
+                usr.comments() != null ? usr.comments().size() : 0)).collect(Collectors.toList());
 
         // Add the list of users to the model
         model.addAttribute("users", usersInfo);
 
         // Show admin page if user is an admin, otherwise redirect
-        if (isAdmin) {
-            return "admin";
-        } else {
-            return "no_admin";
-        }
+       return "admin";
     }
 
     public static class UserInfo {
@@ -159,11 +154,17 @@ public class AdminController {
             @RequestParam("email") String email,
             @RequestParam("password") String password,
             @RequestParam("role") String role) {
-        // Create a new user with the provided data
-        Usr newUser = new Usr(username, email, password, role.equals("ADMIN"));
+        
+        // Create a CreateUsrDto with the provided data
+        CreateUsrDto createUserDto = new CreateUsrDto(
+            username, 
+            email, 
+            password, 
+            role.equals("ADMIN")
+        );
 
-        // Save the new user to the database
-        userService.createUsr(newUser);
+        // Save the new user to the database using the DTO
+        userService.createUsr(createUserDto);
 
         // Send the login credentials via email
         sendCredentialsByEmail(email, username, password);
@@ -196,5 +197,4 @@ public class AdminController {
         // Send the email using the configured email sender
         emailSender.send(message);
     }
-
 }

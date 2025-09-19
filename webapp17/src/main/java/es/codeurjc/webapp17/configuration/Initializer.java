@@ -2,7 +2,7 @@ package es.codeurjc.webapp17.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import es.codeurjc.webapp17.dto.CreateUsrDto;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.repository.UsrRepository;
 import es.codeurjc.webapp17.service.UsrService;
@@ -34,12 +34,19 @@ public class Initializer {
             // Decrypt the password
             String password = decryptPassword(ENCRYPTED_PASSWORD, SHIFT);
 
-            Usr newUser = new Usr("SUPERADMIN", "superadmin@superadmin", password, true);
+            // Create CreateUsrDto instead of Usr entity
+            CreateUsrDto newUserDto = new CreateUsrDto(
+                "SUPERADMIN", 
+                "superadmin@superadmin", 
+                password, 
+                true
+            );
 
-            // Save the new user to the database
-            userService.createUsr(newUser);
+            // Save the new user to the database using DTO
+            userService.createUsr(newUserDto);
         }
     }
+
 
     /**
      * Method to decrypt the password using reverse Caesar cipher.

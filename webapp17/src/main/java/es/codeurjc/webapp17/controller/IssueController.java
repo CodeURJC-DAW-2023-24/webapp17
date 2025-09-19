@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import es.codeurjc.webapp17.entity.Issue;
+import es.codeurjc.webapp17.dto.IssueDto;
 import es.codeurjc.webapp17.service.IssueService;
 
 @Controller
@@ -31,15 +31,18 @@ public class IssueController {
     @PostMapping("/issue")
     public String createIssue(@RequestParam String name, @RequestParam String email, @RequestParam String content,
             Model model) {
-        LocalDateTime now = LocalDateTime.now();
+        
+        // Create IssueDto with the provided details
+        IssueDto issueDto = new IssueDto(
+            null, // ID will be generated
+            name,
+            email,
+            content,
+            LocalDateTime.now()
+        );
 
-        Issue issue = new Issue();
-        issue.setName(name);
-        issue.setEmail(email);
-        issue.setContent(content);
-        issue.setDate(now);
-
-        issueService.addIssue(issue);
+        // Save the issue using the DTO
+        issueService.addIssue(issueDto);
 
         // Redirect to the contact page after creating the issue
         return "redirect:/contact"; // Redirect to the contact page after the issue is created
@@ -57,5 +60,4 @@ public class IssueController {
         // Redirect to the admin page after deleting the issue
         return "redirect:/admin";
     }
-
 }

@@ -23,17 +23,15 @@ public class ContactController {
      */
     @GetMapping("/contact")
     public String contact(Model model, HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
-
-        if (user != null) {
-            if (user.getRole() == Usr.Role.ADMIN) {
-                model.addAttribute("ADMIN", true); // User is admin
-            }
+        // Get user role from session (if using new session management)
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
+        
+        if (userRole != null && userRole == Usr.Role.ADMIN) {
+            model.addAttribute("ADMIN", true); // User is admin
         } else {
             model.addAttribute("ADMIN", false); // No user in session or not admin
         }
 
         return "contacto"; // Show contact page regardless of user role
     }
-
 }

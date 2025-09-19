@@ -17,18 +17,18 @@ public class ImageRestController {
     /**
      * Upload an image to the server.
      * 
-     * @param image The image file to upload.
+     * @param file The image file to upload.
      * @return The URL of the uploaded image.
      */
-    @PostMapping
-    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image) {
-        if (image == null || image.isEmpty()) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadImage(@RequestPart("file") MultipartFile file) {
+        if (file == null || file.isEmpty()) {
             return ResponseEntity.badRequest().body("No image provided.");
         }
 
         try {
             // Generate a unique file name
-            String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
+            String filename = file.getOriginalFilename();
 
             Path directory = Paths.get(uploadPath);
             if (!Files.exists(directory)) {
@@ -36,10 +36,10 @@ public class ImageRestController {
             }
 
             Path filepath = directory.resolve(filename);
-            Files.write(filepath, image.getBytes());
+            Files.write(filepath, file.getBytes());
 
             // URL to retrieve the image
-            String imageUrl = "/images/" +filename;
+            String imageUrl = "/images/" + filename;
 
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {

@@ -1,8 +1,10 @@
 package es.codeurjc.webapp17.restcontroller;
 
-import es.codeurjc.webapp17.entity.Post;
+import es.codeurjc.webapp17.dto.PostDto;
+import es.codeurjc.webapp17.dto.UsrBasicDto;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.PostService;
+import es.codeurjc.webapp17.service.UsrService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,6 +35,9 @@ public class ChatRestController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private UsrService usrService;
 
     private final OllamaChatClient chatClient;
     private static final String LLM_IMAGE_PATH = "/images/LLM.png";
@@ -103,7 +108,7 @@ public class ChatRestController {
      * Generates a blog post using AI and stores it in the database.
      * 
      * @param session The HTTP session used to identify the logged-in user.
-     * @param tag     The topic tag for the AI-generated post.
+     * @param dto     The message DTO containing the topic for the AI-generated post.
      * @return HTTP response indicating success or failure.
      */
     @Operation(summary = "Generate blog post using AI and save to DB")
@@ -112,9 +117,18 @@ public class ChatRestController {
     @PostMapping(value = "ai-post")
     public ResponseEntity<String> generatePost(HttpSession session, @RequestBody SimpleMessageDTO dto) {
 
-        Usr user = (Usr) session.getAttribute("user");
-        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+        // Check authentication and authorization using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
+        
+        if (userId == null || userRole != Usr.Role.ADMIN) {
             return ResponseEntity.status(403).body("No right permissions");
+        }
+
+        // Get user information
+        UsrBasicDto user = usrService.findUsrBasicById(userId);
+        if (user == null) {
+            return ResponseEntity.status(401).body("User not found");
         }
 
         String prompt = postGeneratorPrompt + dto.getMessage();
@@ -122,24 +136,29 @@ public class ChatRestController {
         String content = chatClient.call(prompt);
         LocalDateTime now = LocalDateTime.now();
 
-        Post post = new Post();
-        post.setTitle(title);
-        post.setContent(content);
-        post.setDate(now);
-        post.setTag(dto.getMessage());
-        post.setImage(LLM_IMAGE_PATH);
-        post.setUsr(user);
+        // Create PostDto instead of Post entity
+        PostDto postDto = new PostDto(
+            null, // ID will be generated
+            userId,
+            user.username(),
+            title,
+            LLM_IMAGE_PATH,
+            content,
+            now,
+            dto.getMessage(),
+            java.util.List.of() // Empty comments for new post
+        );
 
-        postService.addPost(post);
+        // Save the post using DTO
+        PostDto savedPost = postService.addPost(postDto);
 
         // Build URI like /posts/{id}
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/posts/{id}")
-                .buildAndExpand(post.getId())
+                .buildAndExpand(savedPost.id())
                 .toUri();
 
         return ResponseEntity.created(location).body("Post created successfully.");
     }
-
 }

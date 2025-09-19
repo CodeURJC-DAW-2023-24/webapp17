@@ -2,7 +2,7 @@ package es.codeurjc.webapp17.controller;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-
+import es.codeurjc.webapp17.dto.PostDto;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.ollama.OllamaChatClient;
@@ -11,7 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import es.codeurjc.webapp17.dto.UsrBasicDto;
+import es.codeurjc.webapp17.service.UsrService;
 import es.codeurjc.webapp17.entity.Post;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.PostService;
@@ -27,6 +28,8 @@ public class ChatController {
     @Autowired
     private PostService postService;
     private static final String LLM_IMAGE_PATH = "/images/LLM.png";
+    @Autowired
+    private UsrService usrService;
     public ChatController(OllamaChatClient chatClient) {
         this.chatClient = chatClient;
     }
@@ -77,28 +80,39 @@ public class ChatController {
         String content = chatClient.call(prompt);
         String tag = inputString;
 
-        // Create and populate the new post
-        Post post = new Post();
-        post.setTitle(title);
-        post.setContent(content);
-        post.setDate(now);
-        post.setTag(tag);
-        post.setImage(LLM_IMAGE_PATH);
-
-        // Retrieve the user from the session
-        Usr user = (Usr) session.getAttribute("user");
-        if (user == null) {
+        // Check if user is logged in using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
             // Redirect to login if the user is not authenticated
             return "redirect:/log_in";
         }
-        post.setUsr(user);
 
-        // Save the post
-        postService.addPost(post);
+        // Get user information
+        UsrBasicDto user = usrService.findUsrBasicById(userId);
+        if (user == null) {
+            return "redirect:/log_in"; // Redirect if user not found
+        }
+
+        // Create PostDto instead of Post entity
+        PostDto postDto = new PostDto(
+            null, // ID will be generated
+            userId,
+            user.username(),
+            title,
+            LLM_IMAGE_PATH,
+            content,
+            now,
+            tag,
+            java.util.List.of() // Empty comments for new post
+        );
+
+        // Save the post using DTO
+        postService.addPost(postDto);
 
         // Redirect to home page
         return "redirect:/";
     }
+
 
     /**
      * Handles POST requests to send a message to the chatbot and get a response.

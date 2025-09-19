@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import es.codeurjc.webapp17.dto.UsrDto;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.UsrService;
 import jakarta.servlet.http.HttpSession;
@@ -13,7 +14,7 @@ import jakarta.servlet.http.HttpSession;
 public class UsrController {
 
     @Autowired
-    private UsrService UsrService;
+    private UsrService usrService;
 
     /**
      * Deletes a user by their ID. If the user is the superadmin, they cannot be
@@ -24,27 +25,42 @@ public class UsrController {
      */
     @PostMapping("user/{id}/delete")
     public String deleteUser(@PathVariable Long id, HttpSession session) {
-        // Get the user to delete
-        Usr user = UsrService.findUsrById(id);
+        
+        // Check if current user is logged in and is admin
+        Long currentUserId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
 
-        Usr userC = (Usr) session.getAttribute("user");
-
-        if (userC.getRole() != Usr.Role.ADMIN) {
+        if (currentUserId == null || userRole != Usr.Role.ADMIN) {
             return "redirect:/no_admin"; // Redirect if not admin
         }
 
-        // Check if the user's email is 'superadmin@superadmin'
-        if ("superadmin@superadmin".equals(user.getEmail())) {
-            // Redirect with an error message or handle the case differently
-            return "redirect:/admin"; // Prevent deletion of the superadmin
+        // Get the user to delete
+        UsrDto userToDelete = usrService.findUsrById(id);
+        
+        if (userToDelete == null) {
+            return "redirect:/admin"; // User not found
         }
-        if (user.getId() == userC.getId()) {
-            // Redirect with an error message or handle the case differently
-            return "redirect:/admin"; // Prevent deletion of the superadmin
-        }
-        // Proceed with deletion if not the superadmin
-        UsrService.deleteUsr(id);
-        return "redirect:/admin"; // Redirect to the admin page after deleting the user
-    }
 
+        // Check if the user's email is 'superadmin@superadmin'
+        if ("superadmin@superadmin".equals(userToDelete.email())) {
+            // Prevent deletion of the superadmin
+            return "redirect:/admin";
+        }
+
+        // Prevent user from deleting themselves
+        if (userToDelete.id().equals(currentUserId)) {
+            // Prevent self-deletion
+            return "redirect:/admin";
+        }
+
+        // Proceed with deletion
+        boolean deleted = usrService.deleteUsr(id);
+        
+        if (!deleted) {
+            // Handle deletion failure if needed
+            System.err.println("Failed to delete user with ID: " + id);
+        }
+
+        return "redirect:/admin"; // Redirect to the admin page after attempting deletion
+    }
 }

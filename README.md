@@ -239,7 +239,10 @@ Para volver a iniciar la aplicación tras haberla detenido:
 ```bash
 sudo docker compose up -d
 ```
-
+Para eliminar los docker por si hay conflictos por usar la misma BBDD
+```bash
+docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+```
 ---
 
 ### ✅ Capacidades de IA generativa (opcional)

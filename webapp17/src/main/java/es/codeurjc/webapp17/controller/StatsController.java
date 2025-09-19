@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import es.codeurjc.webapp17.entity.Post;
+import es.codeurjc.webapp17.dto.UsrDto;
+import es.codeurjc.webapp17.dto.PostDto;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.PostService;
 import es.codeurjc.webapp17.service.UsrService;
@@ -30,10 +30,12 @@ public class StatsController {
      */
     @GetMapping("/estadisticas")
     public String showStats(Model model, HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
+        // Check authentication and authorization using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
 
-        if (user != null) {
-            if (user.getRole() == Usr.Role.ADMIN) {
+        if (userId != null && userRole != null) {
+            if (userRole == Usr.Role.ADMIN) {
                 model.addAttribute("ADMIN", true); // User is admin
             } else {
                 model.addAttribute("ADMIN", false); // User is not admin
@@ -57,12 +59,12 @@ public class StatsController {
     @GetMapping("users")
     @ResponseBody
     public List<Map<String, Object>> usersWithMostPosts() {
-        List<Usr> users = userService.getAllUsrs();
+        List<UsrDto> users = userService.getAllUsrs();
         List<Map<String, Object>> result = new ArrayList<>();
 
-        for (Usr user : users) {
-            int count = user.getPosts() != null ? user.getPosts().size() : 0;
-            result.add(Map.of("user", user.getUsername(), "postCount", count));
+        for (UsrDto user : users) {
+            int count = user.posts() != null ? user.posts().size() : 0;
+            result.add(Map.of("user", user.username(), "postCount", count));
         }
 
         // Sort descending by post count
@@ -80,12 +82,12 @@ public class StatsController {
     @GetMapping("posts")
     @ResponseBody
     public List<Map<String, Object>> postsWithMostComments() {
-        List<Post> posts = postService.getAllPosts();
+        List<PostDto> posts = postService.getAllPosts();
         List<Map<String, Object>> result = new ArrayList<>();
 
-        for (Post post : posts) {
-            int count = post.getComments() != null ? post.getComments().size() : 0;
-            result.add(Map.of("title", post.getTitle(), "commentCount", count));
+        for (PostDto post : posts) {
+            int count = post.comments() != null ? post.comments().size() : 0;
+            result.add(Map.of("title", post.title(), "commentCount", count));
         }
 
         // Sort descending by comment count
@@ -104,12 +106,12 @@ public class StatsController {
     @ResponseBody
     public List<Map<String, Object>> tagsWithMostPosts() {
         // Step 1: Get all posts
-        List<Post> posts = postService.getAllPosts();
+        List<PostDto> posts = postService.getAllPosts();
 
         // Step 2: Count posts per tag
         Map<String, Long> tagCounts = new HashMap<>();
-        for (Post post : posts) {
-            String tag = post.getTag();
+        for (PostDto post : posts) {
+            String tag = post.tag();
             tagCounts.put(tag, tagCounts.getOrDefault(tag, 0L) + 1);
         }
 
@@ -128,5 +130,4 @@ public class StatsController {
         // Step 5: Return result
         return result;
     }
-
 }

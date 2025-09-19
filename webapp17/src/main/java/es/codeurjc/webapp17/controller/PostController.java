@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import es.codeurjc.webapp17.entity.Comment;
-import es.codeurjc.webapp17.entity.Post;
+import es.codeurjc.webapp17.dto.CommentDto;
+import es.codeurjc.webapp17.dto.PostDto;
+import es.codeurjc.webapp17.dto.UsrBasicDto;
 import es.codeurjc.webapp17.entity.Usr;
 import es.codeurjc.webapp17.service.CommentService;
 import es.codeurjc.webapp17.service.PostService;
+import es.codeurjc.webapp17.service.UsrService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -32,6 +35,9 @@ public class PostController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private UsrService usrService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -52,20 +58,21 @@ public class PostController {
     public String createPost(HttpSession session, @RequestParam String title, @RequestParam String content,
             @RequestParam String tag, @RequestParam(value = "image", required = false) MultipartFile image)
             throws IOException {
-        LocalDateTime now = LocalDateTime.now();
 
-        // Create a new Post object
-        Post post = new Post();
-        post.setTitle(title);
-        post.setContent(content);
-        post.setDate(now);
-        post.setTag(tag);
+        // Check if user is logged in using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/log_in"; // Redirect if not authenticated
+        }
 
-        // Get the current user from the session
-        Usr user = (Usr) session.getAttribute("user");
-        post.setUsr(user);
+        // Get user information
+        UsrBasicDto user = usrService.findUsrBasicById(userId);
+        if (user == null) {
+            return "redirect:/log_in"; // Redirect if user not found
+        }
 
         // Handle image upload if present
+        String imagePath = DEFAULT_IMAGE_PATH; // Default image
         if (image != null && !image.isEmpty()) {
             String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
             Path filepath = Paths.get(uploadPath, filename);
@@ -76,14 +83,24 @@ public class PostController {
             }
 
             Files.write(filepath, image.getBytes());
-            post.setImage("/files/" + filename); // Image path in the asset repository
-        } else {
-            // Use default image if no image is uploaded
-            post.setImage(DEFAULT_IMAGE_PATH);
+            imagePath = "/files/" + filename; // Image path in the asset repository
         }
 
+        // Create PostDto
+        PostDto postDto = new PostDto(
+            null, // ID will be generated
+            userId,
+            user.username(),
+            title,
+            imagePath,
+            content,
+            LocalDateTime.now(),
+            tag,
+            java.util.List.of() // Empty comments for new post
+        );
+
         // Add the post to the database
-        postService.addPost(post);
+        postService.addPost(postDto);
 
         return "redirect:/"; // Redirect to the homepage after the post is created
     }
@@ -99,22 +116,35 @@ public class PostController {
      */
     @PostMapping("/{postId}/comment")
     public String addComment(HttpSession session, @PathVariable Long postId, @RequestParam String comment) {
-        Post post = postService.getPostById(postId);
-        if (post != null) {
-            Comment newComment = new Comment();
-            newComment.setText(comment);
-            newComment.setPost(post);
-            newComment.setDate(LocalDateTime.now());
-
-            Usr user = (Usr) session.getAttribute("user"); // Get the user from the session
-            if (user == null) {
-                // Redirect to login if the user is not authenticated
-                return "redirect:/log_in"; // Redirect to the login page
-            }
-
-            newComment.setUsr(user); // Associate the comment with the user
-            commentService.addComment(newComment);
+        
+        // Check if user is logged in
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/log_in"; // Redirect to login if not authenticated
         }
+
+        // Get user information
+        UsrBasicDto user = usrService.findUsrBasicById(userId);
+        if (user == null) {
+            return "redirect:/log_in";
+        }
+
+        // Verify post exists
+        PostDto post = postService.getPostById(postId);
+        if (post != null) {
+            // Create CommentDto
+            CommentDto newCommentDto = new CommentDto(
+                null, // ID will be generated
+                userId,
+                user.username(),
+                postId,
+                LocalDateTime.now(),
+                comment
+            );
+
+            commentService.addComment(newCommentDto);
+        }
+        
         return "redirect:/"; // Redirect to the homepage after adding the comment
     }
 
@@ -142,19 +172,49 @@ public class PostController {
         return "redirect:/"; // Redirect to the homepage after deleting the comment
     }
 
+    /**
+     * Shows the edit form for a post.
+     *
+     * @param id      the ID of the post to edit
+     * @param model   the model to pass data to the view
+     * @param session the HTTP session
+     * @return the edit form view or redirect to homepage
+     */
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Long id, Model model, HttpSession session) {
-        Post post = postService.getPostById(id);
-        Usr user = (Usr) session.getAttribute("user");
+        
+        // Check if user is logged in
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/log_in";
+        }
+
+        // Get post
+        PostDto post = postService.getPostById(id);
         if (post == null) {
             return "redirect:/";
-        } else if (user == null || !(post.getUsr().getId() == user.getId())) {
-            return "redirect:/";
         }
+
+        // Check if user is the owner of the post
+        if (!post.userId().equals(userId)) {
+            return "redirect:/"; // Redirect if not the owner
+        }
+
         model.addAttribute("post", post);
         return "editpost";
     }
 
+    /**
+     * Updates an existing post.
+     *
+     * @param id      the ID of the post to update
+     * @param title   the new title
+     * @param content the new content
+     * @param tag     the new tag
+     * @param image   optional new image
+     * @return redirect to my posts page
+     * @throws IOException if there is an issue saving the uploaded image
+     */
     @PostMapping("/{id}/edit")
     public String updatePost(
             @PathVariable Long id,
@@ -162,29 +222,42 @@ public class PostController {
             @RequestParam String content,
             @RequestParam String tag,
             @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
-        Post post = postService.getPostById(id);
-        if (post == null) {
+        
+        // Get existing post
+        PostDto existingPost = postService.getPostById(id);
+        if (existingPost == null) {
             System.out.println("Post not found");
             return "redirect:/";
         }
 
-        post.setTitle(title);
-        post.setContent(content);
-        post.setTag(tag);
-
-        // (Optional) Handle image upload if present
+        // Handle image upload if present
+        String imagePath = existingPost.image(); // Keep existing image by default
         if (image != null && !image.isEmpty()) {
             String filename = System.currentTimeMillis() + "-" + image.getOriginalFilename();
             Path filepath = Paths.get(uploadPath, filename);
+            
             if (!Files.exists(filepath.getParent())) {
                 Files.createDirectories(filepath.getParent());
             }
+            
             Files.write(filepath, image.getBytes());
-            post.setImage("/files/"  + filename); // Update the image path
+            imagePath = "/files/" + filename; // Update the image path
         }
 
-        postService.updatePost(post);
+        // Create updated PostDto
+        PostDto updatedPostDto = new PostDto(
+            existingPost.id(),
+            existingPost.userId(),
+            existingPost.username(),
+            title,
+            imagePath,
+            content,
+            existingPost.date(), // Keep original creation date
+            tag,
+            existingPost.comments() // Keep existing comments
+        );
+
+        postService.updatePost(updatedPostDto);
         return "redirect:/myposts";
     }
-
 }
