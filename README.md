@@ -246,10 +246,6 @@ sudo docker compose up -d
 
 Revisar apartado de configuración de ollama anterior. 
 
-```
-
-  
-
 ### 👥 Colaboradores
 
 | Nombre | Email | Github |
