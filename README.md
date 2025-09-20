@@ -217,8 +217,8 @@ sudo docker compose up --build -d
 Una vez lanzada la aplicación, accede desde tu navegador a:
 
 ```
-https://10.100.139.147:8443
-```
+[https://10.100.139.147:8443
+](https://appweb01.dawgis.etsii.urjc.es:8443)```
 
 ---
 
