@@ -20,5 +20,6 @@ echo "Running 'docker compose up --build'..."
 cd docker 
 docker-compose up --build
 
+#It could be with docker-compose or docker compose depending on the version
 # Optional: Wait for the 'ollama serve' process to finish if needed
-# wait $OLLAMA_PID
+# wait $OLLAMA_PID 
