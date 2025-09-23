@@ -1,0 +1,2337 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "El Ricón del Software APIREST",
+      "description": "API documentation for El Ricón del Software web application",
+      "version": "1.0.13"
+    },
+    "servers": [
+      {
+        "url": "https://localhost:8443",
+        "description": "Generated server url"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Posts",
+        "description": "API for managing blog posts"
+      },
+      {
+        "name": "Issues",
+        "description": "API for managing user issues and support requests"
+      },
+      {
+        "name": "Statistics",
+        "description": "Operations related to users, posts, and tags statistics."
+      },
+      {
+        "name": "Comments",
+        "description": "API for managing comments"
+      },
+      {
+        "name": "Users",
+        "description": "API for user management (Admin operations)"
+      }
+    ],
+    "paths": {
+      "/api/v1/posts/{id}": {
+        "get": {
+          "tags": [
+            "Posts"
+          ],
+          "summary": "Get post by ID",
+          "description": "Retrieves a specific post by its ID",
+          "operationId": "getPostById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 1
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Post found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Post not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Posts"
+          ],
+          "summary": "Update post",
+          "description": "Updates an existing post",
+          "operationId": "updatePost",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 1
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request": {
+                      "$ref": "#/components/schemas/UpdatePostRequest"
+                    }
+                  },
+                  "required": [
+                    "request"
+                  ],
+                  "example": {
+                    "request": {
+                      "title": "Actualización de REST en Java",
+                      "content": "Contenido actualizado del post con ejemplos de código.",
+                      "tag": "java",
+                      "image": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Post updated successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "No permission to modify this post",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Post not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Posts"
+          ],
+          "summary": "Delete post",
+          "description": "Deletes a post by its ID",
+          "operationId": "deletePost",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 1
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Post deleted successfully"
+            },
+            "401": {
+              "description": "User not authenticated"
+            },
+            "403": {
+              "description": "No permission to delete this post"
+            },
+            "404": {
+              "description": "Post not found"
+            }
+          }
+        }
+      },
+      "/api/v1/issues/{id}": {
+        "get": {
+          "tags": [
+            "Issues"
+          ],
+          "summary": "Get issue by ID",
+          "description": "Retrieves a specific issue by its ID (Admin access required)",
+          "operationId": "getIssue",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 42
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Issue found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Access denied - Admin role required",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Issue not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Issues"
+          ],
+          "summary": "Update issue",
+          "description": "Updates an existing issue (Admin access required)",
+          "operationId": "updateIssue",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 42
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateIssueRequest"
+                },
+                "example": {
+                  "name": "María Pérez",
+                  "email": "maria.perez@example.com",
+                  "content": "El formulario de contacto devuelve 500 al adjuntar una imagen."
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Issue updated successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Access denied - Admin role required",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Issue not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Issues"
+          ],
+          "summary": "Delete issue",
+          "description": "Deletes an issue by its ID (Admin access required)",
+          "operationId": "deleteIssue",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 42
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Issue deleted successfully"
+            },
+            "401": {
+              "description": "User not authenticated"
+            },
+            "403": {
+              "description": "Access denied - Admin role required"
+            },
+            "404": {
+              "description": "Issue not found"
+            }
+          }
+        }
+      },
+      "/api/v1/comments/{id}": {
+        "get": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Get comment by ID",
+          "description": "Retrieves a specific comment by its ID",
+          "operationId": "getComment",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 555
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Comment found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Comment not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Update comment",
+          "description": "Updates an existing comment",
+          "operationId": "updateComment",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 555
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCommentRequest"
+                },
+                "example": {
+                  "text": "Actualizo mi comentario con una aclaración."
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Comment updated successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "No permission to modify this comment",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Comment not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Delete comment",
+          "description": "Deletes a comment by its ID",
+          "operationId": "deleteComment",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 555
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Comment deleted successfully"
+            },
+            "401": {
+              "description": "User not authenticated"
+            },
+            "403": {
+              "description": "No permission to delete this comment"
+            },
+            "404": {
+              "description": "Comment not found"
+            }
+          }
+        }
+      },
+      "/api/v1/users": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get all users",
+          "description": "Retrieves all users with detailed information (Admin only)",
+          "operationId": "getAllUsers",
+          "responses": {
+            "200": {
+              "description": "Users retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/AdminUserInfoDto"
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/AdminUserInfoDto"
+                    }
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Access denied - Admin role required",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/AdminUserInfoDto"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Create new user",
+          "description": "Creates a new user and sends login credentials via email (Admin only)",
+          "operationId": "createUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCreateUserRequest"
+                },
+                "example": {
+                  "username": "newuser",
+                  "email": "new.user@example.com",
+                  "password": "S3gura!2025",
+                  "role": "USER"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "User created successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsrDto"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsrDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsrDto"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Access denied - Admin role required",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsrDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/posts": {
+        "get": {
+          "tags": [
+            "Posts"
+          ],
+          "summary": "Get paginated posts",
+          "description": "Retrieves a paginated list of all posts",
+          "operationId": "getPosts",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 0
+              },
+              "example": 0
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              },
+              "example": 10
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Posts retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagePostDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Posts"
+          ],
+          "summary": "Create post",
+          "description": "Creates a new blog post",
+          "operationId": "createPost",
+          "parameters": [
+            {
+              "name": "title",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "Cómo diseñar una API REST"
+            },
+            {
+              "name": "content",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              },
+              "example": "Guía paso a paso con mejores prácticas y ejemplos."
+            },
+            {
+              "name": "tag",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              },
+              "example": "api"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "image": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Post created successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/issues": {
+        "get": {
+          "tags": [
+            "Issues"
+          ],
+          "summary": "Get all issues",
+          "description": "Retrieves all issues (Admin access required)",
+          "operationId": "getAllIssues",
+          "responses": {
+            "200": {
+              "description": "Issues retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/IssueDto"
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/IssueDto"
+                    }
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Access denied - Admin role required",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/IssueDto"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Issues"
+          ],
+          "summary": "Create new issue",
+          "description": "Creates a new support issue or request",
+          "operationId": "createIssue",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateIssueRequest"
+                },
+                "example": {
+                  "name": "Juan López",
+                  "email": "juan.lopez@example.com",
+                  "content": "No puedo iniciar sesión con mi cuenta de Google."
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Issue created successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssueDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/comments/posts/{postId}": {
+        "post": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Create comment",
+          "description": "Creates a new comment on a specific post",
+          "operationId": "createComment",
+          "parameters": [
+            {
+              "name": "postId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 1
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCommentRequest"
+                },
+                "example": {
+                  "text": "Excelente artículo, gracias por compartir."
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Comment created successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Post not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CommentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/chatbot/send": {
+        "post": {
+          "tags": [
+            "chat-rest-controller"
+          ],
+          "summary": "Get AI response with message history",
+          "operationId": "handleChat",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatRequest"
+                },
+                "example": {
+                  "history": [
+                    {
+                      "role": "user",
+                      "content": "Genera un resumen de este post sobre REST."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "Claro, aquí tienes un resumen..."
+                    }
+                  ]
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "reply": "Este es un ejemplo de respuesta del asistente."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/chatbot/ai-post": {
+        "post": {
+          "tags": [
+            "chat-rest-controller"
+          ],
+          "summary": "Generate blog post using AI and save to DB",
+          "operationId": "generatePost",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleMessageDTO"
+                },
+                "example": {
+                  "message": "Crea un post de blog sobre patrones de diseño en Java."
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Post created",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  },
+                  "example": "Post creado con ID 123"
+                }
+              }
+            },
+            "403": {
+              "description": "No right permissions",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  },
+                  "example": "Acceso denegado"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/images": {
+        "post": {
+          "tags": [
+            "image-rest-controller"
+          ],
+          "operationId": "uploadImage",
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "file": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "required": [
+                    "file"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  },
+                  "example": "/images/hero-abc123.png"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/logout": {
+        "post": {
+          "tags": [
+            "auth-rest-controller"
+          ],
+          "operationId": "logout",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "message": "Logout correcto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/login": {
+        "post": {
+          "tags": [
+            "auth-rest-controller"
+          ],
+          "operationId": "login",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "admin@example.com"
+            },
+            {
+              "name": "password",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "Admin!234"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/users/{id}": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get user by ID",
+          "description": "Retrieves specific user information by ID (Admin only)",
+          "operationId": "getUserById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 7
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsrDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsrDto"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Access denied - Admin role required",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsrDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsrDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Delete user",
+          "description": "Deletes a user by ID (Admin only, with restrictions)",
+          "operationId": "deleteUser",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 7
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "User deleted successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Cannot delete superadmin or yourself",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  },
+                  "example": {
+                    "error": "No se puede eliminar al superadmin"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Access denied - Admin role required",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/users/basic": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get all users basic info",
+          "description": "Retrieves basic information of all users (Admin only)",
+          "operationId": "getAllUsersBasic",
+          "responses": {
+            "200": {
+              "description": "Users retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/UsrBasicDto"
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/UsrBasicDto"
+                    }
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Access denied - Admin role required",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/UsrBasicDto"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/statistics/users": {
+        "get": {
+          "tags": [
+            "Statistics"
+          ],
+          "summary": "Users with most posts",
+          "operationId": "usersWithMostPosts",
+          "responses": {
+            "200": {
+              "description": "Users with most posts",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "topUsers": [
+                      {
+                        "userId": 7,
+                        "username": "alice",
+                        "posts": 12
+                      },
+                      {
+                        "userId": 9,
+                        "username": "bob",
+                        "posts": 10
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "No right permissions",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "error": "Acceso denegado"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/statistics/tags": {
+        "get": {
+          "tags": [
+            "Statistics"
+          ],
+          "summary": "Tags with most posts",
+          "operationId": "tagsWithMostPosts",
+          "responses": {
+            "200": {
+              "description": "Tags with most posts",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "topTags": [
+                      {
+                        "tag": "api",
+                        "posts": 20
+                      },
+                      {
+                        "tag": "java",
+                        "posts": 15
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "No right permissions",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "error": "Acceso denegado"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/statistics/posts": {
+        "get": {
+          "tags": [
+            "Statistics"
+          ],
+          "summary": "Posts with most comments",
+          "operationId": "postsWithMostComments",
+          "responses": {
+            "200": {
+              "description": "Posts with most comments",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "topPosts": [
+                      {
+                        "postId": 1,
+                        "title": "Cómo diseñar una API REST",
+                        "comments": 34
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "No right permissions",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "error": "Acceso denegado"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/posts/user/{userId}": {
+        "get": {
+          "tags": [
+            "Posts"
+          ],
+          "summary": "Get posts by user",
+          "description": "Retrieves paginated posts by a specified user",
+          "operationId": "getPostsByUserId",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "example": 7
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 0
+              },
+              "example": 0
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              },
+              "example": 10
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Posts retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagePostDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagePostDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/posts/tag/{tag}": {
+        "get": {
+          "tags": [
+            "Posts"
+          ],
+          "summary": "Get posts by tag",
+          "description": "Retrieves paginated posts filtered by tag",
+          "operationId": "getPostsByTag",
+          "parameters": [
+            {
+              "name": "tag",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "api"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 0
+              },
+              "example": 0
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              },
+              "example": 10
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Posts retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagePostDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/posts/me": {
+        "get": {
+          "tags": [
+            "Posts"
+          ],
+          "summary": "Get my posts",
+          "description": "Retrieves paginated posts of the currently authenticated user",
+          "operationId": "getMyPosts",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 0
+              },
+              "example": 0
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              },
+              "example": 10
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Posts retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagePostDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "User not authenticated",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagePostDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/comments": {
+        "get": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Get all comments",
+          "description": "Retrieves a list of all comments",
+          "operationId": "getAllComments",
+          "responses": {
+            "200": {
+              "description": "Successfully retrieved comments",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/CommentDto"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/images/{fileName}": {
+        "get": {
+          "tags": [
+            "image-rest-controller"
+          ],
+          "operationId": "getImage",
+          "parameters": [
+            {
+              "name": "fileName",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "hero-abc123.png"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string",
+                    "format": "byte"
+                  },
+                  "example": "<binary image bytes>"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/profile": {
+        "get": {
+          "tags": [
+            "auth-rest-controller"
+          ],
+          "operationId": "getProfile",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "id": 7,
+                    "username": "alice",
+                    "email": "alice@example.com",
+                    "role": "ADMIN"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/me": {
+        "get": {
+          "tags": [
+            "auth-rest-controller"
+          ],
+          "operationId": "me",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  },
+                  "example": {
+                    "id": 7,
+                    "username": "alice",
+                    "email": "alice@example.com",
+                    "role": "ADMIN"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "UpdatePostRequest": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string",
+              "format": "binary"
+            }
+          },
+          "example": {
+            "title": "Buenas prácticas REST",
+            "content": "En este post veremos cómo diseñar endpoints consistentes.",
+            "tag": "api",
+            "image": null
+          }
+        },
+        "CommentDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "userId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "username": {
+              "type": "string"
+            },
+            "postId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "id": 101,
+            "userId": 7,
+            "username": "alice",
+            "postId": 1,
+            "date": "2025-09-23T10:15:30Z",
+            "text": "Gran artículo, muy claro."
+          }
+        },
+        "PostDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "userId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "username": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "tag": {
+              "type": "string"
+            },
+            "comments": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CommentDto"
+              }
+            }
+          },
+          "example": {
+            "id": 1,
+            "userId": 7,
+            "username": "alice",
+            "title": "Cómo diseñar una API REST",
+            "image": "/images/1.png",
+            "content": "Contenido del post con ejemplos de endpoints y status codes.",
+            "date": "2025-09-23T09:00:00Z",
+            "tag": "api",
+            "comments": [
+              {
+                "id": 101,
+                "userId": 7,
+                "username": "alice",
+                "postId": 1,
+                "date": "2025-09-23T10:15:30Z",
+                "text": "Gran artículo, muy claro."
+              }
+            ]
+          }
+        },
+        "UpdateIssueRequest": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "name": "Soporte QA",
+            "email": "qa.support@example.com",
+            "content": "Error 500 al crear un post con imagen."
+          }
+        },
+        "IssueDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "example": {
+            "id": 42,
+            "name": "Juan López",
+            "email": "juan.lopez@example.com",
+            "content": "No puedo iniciar sesión con mi cuenta de Google.",
+            "date": "2025-09-23T11:20:00Z"
+          }
+        },
+        "UpdateCommentRequest": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "text": "Actualizo mi comentario con una corrección."
+          }
+        },
+        "AdminCreateUserRequest": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "username": "newuser",
+            "email": "new.user@example.com",
+            "password": "S3gura!2025",
+            "role": "USER"
+          }
+        },
+        "UsrDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string",
+              "enum": [
+                "USER",
+                "ADMIN"
+              ]
+            },
+            "posts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PostDto"
+              }
+            },
+            "comments": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CommentDto"
+              }
+            }
+          },
+          "example": {
+            "id": 7,
+            "username": "alice",
+            "email": "alice@example.com",
+            "role": "ADMIN",
+            "posts": [
+              {
+                "id": 1,
+                "userId": 7,
+                "username": "alice",
+                "title": "Cómo diseñar una API REST",
+                "image": "/images/1.png",
+                "content": "Contenido del post con ejemplos de endpoints y status codes.",
+                "date": "2025-09-23T09:00:00Z",
+                "tag": "api",
+                "comments": []
+              }
+            ],
+            "comments": [
+              {
+                "id": 101,
+                "userId": 7,
+                "username": "alice",
+                "postId": 1,
+                "date": "2025-09-23T10:15:30Z",
+                "text": "Gran artículo, muy claro."
+              }
+            ]
+          }
+        },
+        "CreateIssueRequest": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "name": "Juan López",
+            "email": "juan.lopez@example.com",
+            "content": "No puedo iniciar sesión con mi cuenta de Google."
+          }
+        },
+        "CreateCommentRequest": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "text": "Excelente artículo, gracias por compartir."
+          }
+        },
+        "ChatRequest": {
+          "type": "object",
+          "properties": {
+            "history": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          },
+          "example": {
+            "history": [
+              {
+                "role": "user",
+                "content": "Resume el post sobre REST."
+              },
+              {
+                "role": "assistant",
+                "content": "Resumen: ..."
+              }
+            ]
+          }
+        },
+        "Message": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "role": "user",
+            "content": "¿Puedes explicar los códigos de estado?"
+          }
+        },
+        "SimpleMessageDTO": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "message": "Crea un post de blog sobre patrones de diseño en Java."
+          }
+        },
+        "AdminUserInfoDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string",
+              "enum": [
+                "USER",
+                "ADMIN"
+              ]
+            },
+            "postsCount": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "commentsCount": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "example": {
+            "id": 7,
+            "username": "alice",
+            "email": "alice@example.com",
+            "role": "ADMIN",
+            "postsCount": 12,
+            "commentsCount": 34
+          }
+        },
+        "UsrBasicDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "username": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string",
+              "enum": [
+                "USER",
+                "ADMIN"
+              ]
+            }
+          },
+          "example": {
+            "id": 9,
+            "username": "bob",
+            "role": "USER"
+          }
+        },
+        "PagePostDto": {
+          "type": "object",
+          "properties": {
+            "totalPages": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "totalElements": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "size": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "content": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PostDto"
+              }
+            },
+            "number": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "sort": {
+              "$ref": "#/components/schemas/SortObject"
+            },
+            "numberOfElements": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "pageable": {
+              "$ref": "#/components/schemas/PageableObject"
+            },
+            "first": {
+              "type": "boolean"
+            },
+            "last": {
+              "type": "boolean"
+            },
+            "empty": {
+              "type": "boolean"
+            }
+          },
+          "example": {
+            "totalPages": 1,
+            "totalElements": 1,
+            "size": 10,
+            "content": [
+              {
+                "id": 1,
+                "userId": 7,
+                "username": "alice",
+                "title": "Cómo diseñar una API REST",
+                "image": "/images/1.png",
+                "content": "Contenido del post con ejemplos de endpoints y status codes.",
+                "date": "2025-09-23T09:00:00Z",
+                "tag": "api",
+                "comments": []
+              }
+            ],
+            "number": 0,
+            "sort": {
+              "empty": false,
+              "sorted": true,
+              "unsorted": false
+            },
+            "numberOfElements": 1,
+            "pageable": {
+              "offset": 0,
+              "sort": {
+                "empty": false,
+                "sorted": true,
+                "unsorted": false
+              },
+              "paged": true,
+              "pageNumber": 0,
+              "pageSize": 10,
+              "unpaged": false
+            },
+            "first": true,
+            "last": true,
+            "empty": false
+          }
+        },
+        "PageableObject": {
+          "type": "object",
+          "properties": {
+            "offset": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "sort": {
+              "$ref": "#/components/schemas/SortObject"
+            },
+            "paged": {
+              "type": "boolean"
+            },
+            "pageNumber": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "pageSize": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "unpaged": {
+              "type": "boolean"
+            }
+          },
+          "example": {
+            "offset": 0,
+            "sort": {
+              "empty": false,
+              "sorted": true,
+              "unsorted": false
+            },
+            "paged": true,
+            "pageNumber": 0,
+            "pageSize": 10,
+            "unpaged": false
+          }
+        },
+        "SortObject": {
+          "type": "object",
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            },
+            "sorted": {
+              "type": "boolean"
+            },
+            "unsorted": {
+              "type": "boolean"
+            }
+          },
+          "example": {
+            "empty": false,
+            "sorted": true,
+            "unsorted": false
+          }
+        },
+        "ErrorResponse": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "error": "Operación inválida"
+          }
+        }
+      }
+    }
+  }
+  

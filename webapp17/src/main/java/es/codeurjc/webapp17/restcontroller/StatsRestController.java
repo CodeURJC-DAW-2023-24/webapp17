@@ -67,8 +67,11 @@ public class StatsRestController {
     @ApiResponse(responseCode = "200", description = "Users with most posts")
     @ApiResponse(responseCode = "403", description = "No right permissions")
     public ResponseEntity<?> usersWithMostPosts(HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
-        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+        // Check authentication and authorization using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
+        
+        if (userId == null || userRole != Usr.Role.ADMIN) {
             return ResponseEntity.status(403).body(new ErrorResponseDTO("No right permissions", "/no_admin"));
         }
 
@@ -85,11 +88,13 @@ public class StatsRestController {
     @ApiResponse(responseCode = "200", description = "Posts with most comments")
     @ApiResponse(responseCode = "403", description = "No right permissions")
     public ResponseEntity<?> postsWithMostComments(HttpSession session) {
-        Usr user = (Usr) session.getAttribute("user");
-        if (user == null || user.getRole() != Usr.Role.ADMIN) {
+        // Check authentication and authorization using new session management
+        Long userId = (Long) session.getAttribute("userId");
+        Usr.Role userRole = (Usr.Role) session.getAttribute("userRole");
+        
+        if (userId == null || userRole != Usr.Role.ADMIN) {
             return ResponseEntity.status(403).body(new ErrorResponseDTO("No right permissions", "/no_admin"));
         }
-
         List<PostCommentCountDTO> result = postService.getAllPosts().stream()
                 .map(p -> new PostCommentCountDTO(p.title(), p.comments() != null ? p.comments().size() : 0))
                 .sorted(Comparator.comparingInt(PostCommentCountDTO::getCommentCount).reversed())
